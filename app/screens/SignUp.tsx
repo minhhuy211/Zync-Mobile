@@ -49,6 +49,11 @@ const SignUp = () => {
         <Image source={require("../../assets/logo.png")} style={styles.logo} />
       </View>
 
+      <View style={styles.row}>
+        <TextInput style={styles.textInputsub} placeholder="First Name" />
+        <TextInput style={styles.textInputsub} placeholder="Last Name" />
+      </View>
+
       <View>
         <TextInput
           style={styles.textInput}
@@ -56,6 +61,7 @@ const SignUp = () => {
           keyboardType="email-address"
         />
       </View>
+
       <View>
         <TextInput
           style={styles.textInput}
@@ -125,6 +131,22 @@ const styles = StyleSheet.create({
     elevation: 10,
     fontSize: 16,
     height: 60,
+    marginTop: 30,
+    paddingLeft: 20,
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  textInputsub: {
+    backgroundColor: "#ffffff",
+    flexDirection: "row",
+    borderRadius: 10,
+    marginHorizontal: 20,
+    elevation: 10,
+    fontSize: 16,
+    height: 60,
+    width: "40%",
     marginTop: 20,
     paddingLeft: 20,
   },
@@ -145,7 +167,7 @@ const styles = StyleSheet.create({
   subSignin: {
     fontSize: 17,
     alignSelf: "center",
-    marginTop: 130,
+    marginTop: 50,
   },
   socialMedia: {
     display: "flex",
