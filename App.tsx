@@ -5,6 +5,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from "./app/screens/Login";
 import SignUp from "./app/screens/SignUp";
+import api from "./app/api/api";
 
 // Define an interface to type the response data
 interface Post {
