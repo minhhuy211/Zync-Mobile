@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, ActivityIndicator, ScrollView } from "react-native";
 import axios from "axios";
+import store from "./app/store";
+import {Provider} from "react-redux";
 
 // Define an interface to type the response data
 interface Post {
@@ -38,13 +40,10 @@ const App: React.FC = () => {
   }
 
   return (
-    <ScrollView>
-      <View>
-        {posts.map((post) => (
-          <Text key={post.id}>{post.title}</Text>
-        ))}
-      </View>
-    </ScrollView>
+      <Provider store={store}>
+        <>
+        </>
+      </Provider>
   );
 };
 
