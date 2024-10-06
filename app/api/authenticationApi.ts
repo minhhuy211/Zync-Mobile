@@ -11,9 +11,11 @@ export const authenticationApi = {
   register: (data: RegisterRequest) => {
     return api.post("/api/v1/auth/register", data);
   },
+  checkEmail: (data: String) => {
+    return api.get<boolean>("/api/v1/auth/check-email", { params:{ "email" : data}});
+  }
   authenticate: (data: AuthenticateRequest) => {
     return api.post<AuthenticateResponse>("/api/v1/auth/authenticate", data);
   }
-
 
 };
