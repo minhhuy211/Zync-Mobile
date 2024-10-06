@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, ActivityIndicator, ScrollView } from "react-native";
 import api from "./app/api/api";
 
+
 // Define an interface to type the response data
 interface Post {
   userId: number;
@@ -38,6 +39,7 @@ const App: React.FC = () => {
         <Text>End of the list</Text>
       </View>
     </ScrollView>
+
   );
 };
 
