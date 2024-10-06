@@ -21,8 +21,8 @@ const App: React.FC = () => {
 
   useEffect(() => {
     // Make API request
-    api.get<string>("/test").then((response) => {
-      setPosts(response);
+    axios.get<string>("/test").then((response) => {
+      setPosts(response.data);
       setLoading(false);
     })
   }, []);
