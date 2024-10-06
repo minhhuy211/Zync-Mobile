@@ -12,7 +12,7 @@ export const authenticationApi = {
 
   register: (data: RegisterRequest) => {
     return api.post<string>("/api/v1/auth/register", data);
-
+  },
   login: (data: AuthenticateRequest) => {
     return api.post<AuthenticateResponse>("/api/v1/auth/authenticate", data);
   },
@@ -33,7 +33,5 @@ export const authenticationApi = {
   },
   verification: (data: VerificationRequest) => {
     return api.post("/api/v1/auth/verify-email", data);
-  }
-
-
+  },
 };
