@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, ActivityIndicator, ScrollView } from "react-native";
-import axios from "axios";
+import api from "./app/api/api";
 
 // Define an interface to type the response data
 interface Post {
@@ -11,22 +11,16 @@ interface Post {
 }
 
 const App: React.FC = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     // Make API request
-    axios
-      .get<Post[]>("https://jsonplaceholder.typicode.com/posts")
-      .then((response: any) => {
-        setPosts(response.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message);
-        setLoading(false);
-      });
+    api.get<string>("/test").then((response) => {
+      setPosts(response);
+      setLoading(false);
+    })
   }, []);
 
   if (loading) {
@@ -40,9 +34,8 @@ const App: React.FC = () => {
   return (
     <ScrollView>
       <View>
-        {posts.map((post) => (
-          <Text key={post.id}>{post.title}</Text>
-        ))}
+        <Text>{posts}</Text>
+        <Text>End of the list</Text>
       </View>
     </ScrollView>
   );
