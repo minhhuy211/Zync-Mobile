@@ -4,9 +4,12 @@ import api from "./api";
 
 export const authenticationApi = {
   login: (data: LoginRequest) => {
-    return api.post("/auth/authenticate", data);
+    return api.post("/api/v1/auth/authenticate", data);
   },
   register: (data: RegisterRequest) => {
-    return api.post("/auth/register", data);
+    return api.post("/api/v1/auth/register", data);
   },
+  checkEmail: (data: String) => {
+    return api.get<boolean>("/api/v1/auth/check-email", { params:{ "email" : data}});
+  }
 };

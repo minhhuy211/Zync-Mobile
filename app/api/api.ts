@@ -3,7 +3,7 @@ import axios, {AxiosRequestConfig} from "axios";
 
 //@ts-ignore
 // const DOMAIN = "https://api.muemp3.site";
-const DOMAIN = "https://jsonplaceholder.typicode.com/";
+const DOMAIN = "http://192.168.1.130:8080";
 
 const request = axios.create({
   baseURL: DOMAIN,

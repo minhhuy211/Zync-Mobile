@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, ActivityIndicator, ScrollView } from "react-native";
 import axios from "axios";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Login from "./app/screens/Login";
+import SignUp from "./app/screens/SignUp";
 
 // Define an interface to type the response data
 interface Post {
@@ -29,22 +32,23 @@ const App: React.FC = () => {
       });
   }, []);
 
-  if (loading) {
-    return <ActivityIndicator size="large" color="#0000ff" />;
-  }
+  // if (loading) {
+  //   return <ActivityIndicator size="large" color="#0000ff" />;
+  // }
 
-  if (error) {
-    return <Text>Error: {error}</Text>;
-  }
+  // if (error) {
+  //   return <Text>Error: {error}</Text>;
+  // }
+
+  const Stack = createNativeStackNavigator();
 
   return (
-    <ScrollView>
-      <View>
-        {posts.map((post) => (
-          <Text key={post.id}>{post.title}</Text>
-        ))}
-      </View>
-    </ScrollView>
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        {/* <Stack.Screen name="Login" component={Login} /> */}
+        <Stack.Screen name="Signup" component={SignUp} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
