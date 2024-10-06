@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+
 import axios from "axios";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -14,22 +15,16 @@ interface Post {
 }
 
 const App: React.FC = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     // Make API request
-    axios
-      .get<Post[]>("https://jsonplaceholder.typicode.com/posts")
-      .then((response: any) => {
-        setPosts(response.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message);
-        setLoading(false);
-      });
+    api.get<string>("/test").then((response) => {
+      setPosts(response);
+      setLoading(false);
+    })
   }, []);
 
   // if (loading) {
@@ -49,6 +44,7 @@ const App: React.FC = () => {
         <Stack.Screen name="Signup" component={SignUp} />
       </Stack.Navigator>
     </NavigationContainer>
+
   );
 };
 
