@@ -31,7 +31,7 @@ export const authenticationApi = {
   requestVerificationCode: (data: string) => {
     return api.put("/api/v1/auth/verify-email", {params: { email: data }});
   },
-  verification: (data: VerificationRequest) => {
+  verify: (data: VerificationRequest) => {
     return api.post("/api/v1/auth/verify-email", data);
   },
 };

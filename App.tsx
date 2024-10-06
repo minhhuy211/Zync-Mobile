@@ -6,6 +6,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from "./app/screens/Login";
 import SignUp from "./app/screens/SignUp";
 import api from "./app/api/api";
+import SplashScreen from "./app/components/SplashScreen";// Nhập khẩu component SplashScreen
 
 // Define an interface to type the response data
 interface Post {
@@ -15,10 +16,13 @@ interface Post {
   body: string;
 }
 
+const Stack = createNativeStackNavigator();
+
 const App: React.FC = () => {
   const [posts, setPosts] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [appIsReady, setAppIsReady] = useState(false);
 
   useEffect(() => {
     // Make API request
@@ -28,7 +32,7 @@ const App: React.FC = () => {
     })
   }, []);
 
-  // if (loading) {
+   // if (loading) {
   //   return <ActivityIndicator size="large" color="#0000ff" />;
   // }
 
@@ -36,7 +40,14 @@ const App: React.FC = () => {
   //   return <Text>Error: {error}</Text>;
   // }
 
-  const Stack = createNativeStackNavigator();
+  // Hàm ẩn splash screen
+  const handleHideSplash = () => {
+    setAppIsReady(true);
+  };
+
+  if (!appIsReady) {
+    return <SplashScreen onHide={handleHideSplash} />; // Hiển thị splash screen
+  }
 
   return (
     <NavigationContainer>
@@ -45,7 +56,6 @@ const App: React.FC = () => {
         <Stack.Screen name="Signup" component={SignUp} />
       </Stack.Navigator>
     </NavigationContainer>
-
   );
 };
 
