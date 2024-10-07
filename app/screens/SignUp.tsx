@@ -15,21 +15,19 @@ const SignUp = () => {
   const [emailExists, setEmailExists] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (emailExists) {
-      Alert.alert("Email already exists!");
-    } else {
-      Alert.alert("Email is valid");
-    }
-  }, [emailExists]);
+  useEffect(() => {}, [emailExists]);
 
   const checkEmail = async () => {
     try {
       setLoading(true);
       console.log("Checking");
       const data = await authenticationApi.checkEmail(email);
-      // Alert.alert(data + " is not a valid email")    ;x
       setEmailExists(data);
+      if (data) {
+        Alert.alert("Email already exists!");
+      } else {
+        Alert.alert("Email is valid");
+      }
     } catch (error) {
       console.error(error);
     } finally {

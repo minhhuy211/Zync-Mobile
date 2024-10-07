@@ -25,7 +25,7 @@ const App: React.FC = () => {
     axios.get<string>("/test").then((response) => {
       setPosts(response.data);
       setLoading(false);
-    })
+    });
   }, []);
 
   // if (loading) {
@@ -41,11 +41,10 @@ const App: React.FC = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {/* <Stack.Screen name="Login" component={Login} /> */}
+        <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Signup" component={SignUp} />
       </Stack.Navigator>
     </NavigationContainer>
-
   );
 };
 
