@@ -1,14 +1,15 @@
 
 import axios, {AxiosRequestConfig} from "axios";
+import store from "../store";
 
 //@ts-ignore
 // const DOMAIN = "https://api.muemp3.site";
-const DOMAIN = "http://192.168.1.130:8080";
+const DOMAIN = "http://192.168.1.108:8080";
 
-const request = axios.create({
+const api = axios.create({
   baseURL: DOMAIN,
 });
-request.interceptors.response.use(
+api.interceptors.response.use(
   function (response) {
     return response.data;
   },
@@ -35,36 +36,55 @@ request.interceptors.response.use(
     //Something happened in setting up the request and triggered an Error
   }
 );
+// Add a request interceptor
+api.interceptors.request.use(
+    (config) => {
+      // Get the token from Redux state
+      const state = store.getState();
+      const token = state.auth.accessToken;
+
+      // If the token exists, set the Authorization header
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+        config.headers["User-Agent"] = navigator.userAgent
+      }
+
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+);
 
 export default {
   async get<T>(
     endpoint: string,
     option?: AxiosRequestConfig<never>
   ): Promise<T> {
-    return await request.get(endpoint, option);
+    return await api.get(endpoint, option);
   },
   async post<T>(
     endpoint: string,
     data?: any,
     option?: AxiosRequestConfig<never>
   ): Promise<T> {
-    return await request.post(endpoint, data, option);
+    return await api.post(endpoint, data, option);
   },
   async put<T>(
     endpoint: string,
     data?: any,
     option?: AxiosRequestConfig<never>
   ): Promise<T> {
-    return await request.put(endpoint, data, option);
+    return await api.put(endpoint, data, option);
   },
   async delete<T>(
     endpoint: string,
     option?: AxiosRequestConfig<never>
   ): Promise<T> {
-    return request.delete(endpoint, option);
+    return api.delete(endpoint, option);
   },
   setDefaultHeader(key: string, data?: string) {
-    request.defaults.headers.common[key] = data;
+    api.defaults.headers.common[key] = data;
     console.log(data);
     
   },

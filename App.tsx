@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 
-import axios from "axios";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Login from "./app/screens/Login";
-import SignUp from "./app/screens/SignUp";
-import api from "./app/api/api";
+import {Provider} from "react-redux";
+import store from "./app/store";
+import Layout from "./app/navigation/Layout";
+import Toast from "react-native-toast-message";
 
 // Define an interface to type the response data
 interface Post {
@@ -21,30 +19,16 @@ const App: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Make API request
-    axios.get<string>("/test").then((response) => {
-      setPosts(response.data);
-      setLoading(false);
-    })
+
   }, []);
 
-  // if (loading) {
-  //   return <ActivityIndicator size="large" color="#0000ff" />;
-  // }
 
-  // if (error) {
-  //   return <Text>Error: {error}</Text>;
-  // }
-
-  const Stack = createNativeStackNavigator();
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {/* <Stack.Screen name="Login" component={Login} /> */}
-        <Stack.Screen name="Signup" component={SignUp} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <Layout/>
+      <Toast position='bottom'/>
+    </Provider>
 
   );
 };
