@@ -1,4 +1,4 @@
-export interface ProfileResquest {
+export interface ProfileRequest {
     firstName: string;
     lastName: string;
     middleName: string;
