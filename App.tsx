@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
 
+import {Provider} from "react-redux";
+import store from "./app/store";
+import Layout from "./app/navigation/Layout";
+import Toast from "react-native-toast-message";
 import axios from "axios";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -25,20 +29,20 @@ const App: React.FC = () => {
   const [appIsReady, setAppIsReady] = useState(false);
 
   useEffect(() => {
-    // Make API request
-    axios.get<string>("/test").then((response) => {
-      setPosts(response.data);
-      setLoading(false);
-    })
-  }, []);
 
+  }, []);
    // if (loading) {
   //   return <ActivityIndicator size="large" color="#0000ff" />;
   // }
 
-  // if (error) {
-  //   return <Text>Error: {error}</Text>;
-  // }
+
+
+  return (
+    <Provider store={store}>
+      <Layout/>
+      <Toast position='bottom'/>
+    </Provider>
+
 
   // Hàm ẩn splash screen
   const handleHideSplash = () => {

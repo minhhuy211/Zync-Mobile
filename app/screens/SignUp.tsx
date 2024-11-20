@@ -9,19 +9,23 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { authenticationApi } from "../api/authenticationApi";
+import {NavigationProp} from "@react-navigation/native";
 
-const SignUp = () => {
+const SignUp = ({ navigation }: { navigation: NavigationProp<any> }) => {
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
   const [emailExists, setEmailExists] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (emailExists) {
-      Alert.alert("Email already exists!");
-    } else {
-      Alert.alert("Email is valid");
-    }
+
   }, [emailExists]);
+
+  const handleRegister = () =>{
+    authenticationApi.register({email, password})
+        .then(() => navigation.navigate("Verify", {email: email}))
+  }
 
   const checkEmail = async () => {
     try {
@@ -48,17 +52,13 @@ const SignUp = () => {
       <View>
         <Image source={require("../../assets/logo.png")} style={styles.logo} />
       </View>
-
-      <View style={styles.row}>
-        <TextInput style={styles.textInputsub} placeholder="First Name" />
-        <TextInput style={styles.textInputsub} placeholder="Last Name" />
-      </View>
-
       <View>
         <TextInput
           style={styles.textInput}
           placeholder="Username, email or mobile number"
           keyboardType="email-address"
+          onChangeText={v => setEmail(v)}
+          value={email}
         />
       </View>
 
@@ -67,17 +67,21 @@ const SignUp = () => {
           style={styles.textInput}
           placeholder="Password"
           secureTextEntry
+          onChangeText={v => setPassword(v)}
+          value={password}
         />
       </View>
       <View>
         <TextInput
-          style={styles.textInput}
-          placeholder="Confirm Password"
+            style={styles.textInput}
+            onChangeText={v => setConfirmPassword(v)}
+            value={confirmPassword}
+            placeholder="Confirm Password"
           secureTextEntry
         />
       </View>
 
-      <TouchableOpacity onPress={checkEmail} disabled={loading}>
+      <TouchableOpacity onPress={handleRegister} disabled={loading}>
         <View style={styles.buttonLogin}>
           <Text style={styles.signIn}>Sign In</Text>
         </View>
@@ -97,12 +101,7 @@ const SignUp = () => {
           source={require("../../assets/login-signup/ins-logo.png")}
         />
       </View>
-      <View>
-        <Image
-          source={require("../../assets/logo-meta.png")}
-          style={styles.logoMeta}
-        />
-      </View>
+
     </View>
   );
 };
@@ -152,7 +151,7 @@ const styles = StyleSheet.create({
   },
   buttonLogin: {
     height: 50,
-    backgroundColor: "#0064E0",
+    backgroundColor: "#000",
     alignItems: "center",
     justifyContent: "center",
     marginHorizontal: 20,
