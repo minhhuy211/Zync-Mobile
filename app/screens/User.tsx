@@ -1,12 +1,8 @@
-import React from 'react';
-import {Text} from "react-native";
+import React from "react";
+import { Text } from "react-native";
 
-const Home = () => {
-    return (
-        <Text>
-            Home
-        </Text>
-    );
+const User = () => {
+  return <Text>User</Text>;
 };
 
-export default Home;
+export default User;

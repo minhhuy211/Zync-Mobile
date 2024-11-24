@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import {Provider} from "react-redux";
+import { Provider } from "react-redux";
 import store from "./app/store";
 import Layout from "./app/navigation/Layout";
 import Toast from "react-native-toast-message";
@@ -10,7 +10,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from "./app/screens/Login";
 import SignUp from "./app/screens/SignUp";
 import api from "./app/api/api";
-import SplashScreen from "./app/components/SplashScreen";// Nhập khẩu component SplashScreen
+import SplashScreen from "./app/components/SplashScreen"; // Nhập khẩu component SplashScreen
+import { SafeAreaView } from "react-native";
 
 // Define an interface to type the response data
 interface Post {
@@ -28,22 +29,10 @@ const App: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [appIsReady, setAppIsReady] = useState(false);
 
-  useEffect(() => {
-
-  }, []);
-   // if (loading) {
+  useEffect(() => {}, []);
+  // if (loading) {
   //   return <ActivityIndicator size="large" color="#0000ff" />;
   // }
-
-
-
-  return (
-    <Provider store={store}>
-      <Layout/>
-      <Toast position='bottom'/>
-    </Provider>
-
-
   // Hàm ẩn splash screen
   const handleHideSplash = () => {
     setAppIsReady(true);
@@ -54,13 +43,20 @@ const App: React.FC = () => {
   }
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {/* <Stack.Screen name="Login" component={Login} /> */}
-        <Stack.Screen name="Signup" component={SignUp} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <Layout />
+      <Toast position="bottom" />
+    </Provider>
   );
+
+  // return (
+  //   <NavigationContainer>
+  //     <Stack.Navigator screenOptions={{ headerShown: false }}>
+  //       <Stack.Screen name="Login" component={Login} />
+  //       <Stack.Screen name="Signup" component={SignUp} />
+  //     </Stack.Navigator>
+  //   </NavigationContainer>
+  // );
 };
 
 export default App;
