@@ -29,7 +29,18 @@ const App: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [appIsReady, setAppIsReady] = useState(false);
 
+<<<<<<< HEAD
   useEffect(() => {}, []);
+=======
+  useEffect(() => {
+    // Make API request
+    axios.get<string>("/test").then((response) => {
+      setPosts(response.data);
+      setLoading(false);
+    });
+  }, []);
+
+>>>>>>> 3d2048bf778dec555c99be826d555b32a491475a
   // if (loading) {
   //   return <ActivityIndicator size="large" color="#0000ff" />;
   // }
@@ -43,10 +54,19 @@ const App: React.FC = () => {
   }
 
   return (
+<<<<<<< HEAD
     <Provider store={store}>
       <Layout />
       <Toast position="bottom" />
     </Provider>
+=======
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Signup" component={SignUp} />
+      </Stack.Navigator>
+    </NavigationContainer>
+>>>>>>> 3d2048bf778dec555c99be826d555b32a491475a
   );
 
   // return (

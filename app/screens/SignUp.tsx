@@ -18,9 +18,13 @@ const SignUp = ({ navigation }: { navigation: NavigationProp<any> }) => {
   const [emailExists, setEmailExists] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
 
+<<<<<<< HEAD
   useEffect(() => {
 
   }, [emailExists]);
+=======
+  useEffect(() => {}, [emailExists]);
+>>>>>>> 3d2048bf778dec555c99be826d555b32a491475a
 
   const handleRegister = () =>{
     authenticationApi.register({email, password})
@@ -32,8 +36,12 @@ const SignUp = ({ navigation }: { navigation: NavigationProp<any> }) => {
       setLoading(true);
       console.log("Checking");
       const data = await authenticationApi.checkEmail(email);
-      // Alert.alert(data + " is not a valid email")    ;x
       setEmailExists(data);
+      if (data) {
+        Alert.alert("Email already exists!");
+      } else {
+        Alert.alert("Email is valid");
+      }
     } catch (error) {
       console.error(error);
     } finally {
