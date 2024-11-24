@@ -1,72 +1,80 @@
-import {Image, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
-import React, {useState} from "react";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import React, { useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import {NavigationProp} from "@react-navigation/native";
-import {authenticationApi} from "../api/authenticationApi";
-import {Key} from "../constants/Key";
-import {useAppDispatch} from "../store";
-import {useAuthAction} from "../features/auth";
-import {ApiError, ErrorCode} from "../models/Error";
+import { NavigationProp } from "@react-navigation/native";
+import { authenticationApi } from "../api/authenticationApi";
+import { Key } from "../constants/Key";
+import { useAppDispatch } from "../store";
+import { useAuthAction } from "../features/auth";
+import { ApiError, ErrorCode } from "../models/Error";
 import Toast from "react-native-toast-message";
 
 const Login = ({ navigation }: { navigation: NavigationProp<any> }) => {
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const [error, setError] = useState({
-        password: "",
-        email: ""
-    })
-    const [loading, setLoading] = useState(false);
-    const dispatch = useAppDispatch();
-    const {authenticate} = useAuthAction();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState({
+    password: "",
+    email: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const dispatch = useAppDispatch();
+  const { authenticate } = useAuthAction();
 
-    function validateEmail() {
-        if (!email) setError({...error, "email": "Email must not be blank"})
+  function validateEmail() {
+    if (!email) setError({ ...error, email: "Email must not be blank" });
+  }
 
+  function validatePassword() {
+    if (!password)
+      setError({ ...error, password: "Password must not be blank" });
+  }
+
+  function handleError(e: ApiError) {
+    console.log(e);
+    switch (e.code) {
+      case ErrorCode.ACCOUNT_DISABLED:
+        navigation.navigate("Verify", {
+          email: email,
+        });
+        Toast.show({
+          type: "info",
+          text2: "Account is not verify",
+        });
+        break;
+      default:
+        Toast.show({ type: "error", text2: e.message });
     }
+  }
 
-    function validatePassword() {
-        if (!password) setError({...error, "password": "Password must not be blank"})
-    }
+  const isValid = () => {
+    return Object.values(error).every((value) => !value);
+  };
 
-    function handleError(e: ApiError) {
-        console.log(e)
-        switch (e.code) {
-            case ErrorCode.ACCOUNT_DISABLED:
-                navigation.navigate("Verify", {
-                    email: email
-                })
-                Toast.show({
-                    type: "info",
-                    text2: "Account is not verify"
-                })
-                break
-            default:
-                Toast.show({type: "error", text2: e.message})
-        }
-    }
-
-    const isValid = () => {
-        return Object.values(error).every(value => !value);
-    }
-
-    function handleLogin() {
-        if (!password || !email )
-            return
-        if (isValid())
-            authenticationApi.login({email, password, twoFactorCode: ""})
-                .then((data) => {
-                    dispatch(authenticate(data.accessToken))
-                    return AsyncStorage.setItem(Key.REFRESH_TOKEN, data.refreshToken)
-                }).then(() => {
-                Toast.show({
-                    type: 'success',
-                    text2: 'This is some something 👋'
-                });
-            })
-                .catch((e: ApiError) => handleError(e))
-    }
+  function handleLogin() {
+    if (!password || !email) return;
+    if (isValid())
+      authenticationApi
+        .login({ email, password, twoFactorCode: "" })
+        .then((data) => {
+          dispatch(authenticate(data.accessToken));
+          return AsyncStorage.setItem(Key.REFRESH_TOKEN, data.refreshToken);
+        })
+        .then(() => {
+          Toast.show({
+            type: "success",
+            text2: "This is some something 👋",
+          });
+        })
+        .catch((e: ApiError) => handleError(e));
+  }
 
   return (
     <View style={styles.container}>
@@ -86,39 +94,34 @@ const Login = ({ navigation }: { navigation: NavigationProp<any> }) => {
         <TextInput
           style={styles.textInput}
           onBlur={() => validateEmail()}
-          onFocus={() => setError({...error, email: ""})}
+          onFocus={() => setError({ ...error, email: "" })}
           placeholder="Username, email or mobile number"
           value={email}
           onChangeText={(text) => setEmail(text)}
           keyboardType="email-address"
         />
-          <Text>
-              {error["email"]}
-          </Text>
+        <Text>{error["email"]}</Text>
       </View>
       <View>
         <TextInput
           style={styles.textInput}
           onChangeText={(text) => setPassword(text)}
-          onFocus={e => setError({...error, password: ""})}
+          onFocus={(e) => setError({ ...error, password: "" })}
           value={password}
           onBlur={validatePassword}
           placeholder="Password"
           secureTextEntry
         />
-          <Text>
-              {error?.password}
-          </Text>
+        <Text>{error?.password}</Text>
       </View>
       <View>
-          <Text style={styles.forgotPassword}>Forgot your Password?</Text>
+        <Text style={styles.forgotPassword}>Forgot your Password?</Text>
       </View>
-        <TouchableOpacity onPress={() => handleLogin()} disabled={loading}>
-
-            <View style={styles.buttonLogin}>
-        <Text style={styles.signIn}>Log in</Text>
-      </View>
-        </TouchableOpacity>
+      <TouchableOpacity onPress={() => handleLogin()} disabled={loading}>
+        <View style={styles.buttonLogin}>
+          <Text style={styles.signIn}>Log in</Text>
+        </View>
+      </TouchableOpacity>
 
       <View>
         <Text style={styles.createAcc}>
@@ -150,7 +153,7 @@ const styles = StyleSheet.create({
   },
   topImg: {
     width: "100%",
-      height: 225,
+    height: 150,
   },
   logo: {
     width: 50,
@@ -173,7 +176,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     paddingLeft: 20,
   },
-    forgotPassword: {
+  forgotPassword: {
     alignSelf: "flex-end",
     marginRight: 20,
     marginTop: 20,
@@ -181,11 +184,11 @@ const styles = StyleSheet.create({
   },
   buttonLogin: {
     height: 50,
-      backgroundColor: "#000",
+    backgroundColor: "#000",
     alignItems: "center",
     justifyContent: "center",
     marginHorizontal: 20,
-      borderRadius: 8,
+    borderRadius: 8,
     marginTop: 20,
     fontSize: 18,
   },
@@ -199,7 +202,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   subCreateAcc: {
-      paddingLeft: 4,
+    paddingLeft: 4,
     textDecorationLine: "underline",
   },
   logoMeta: {
