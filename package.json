@@ -2,6 +2,7 @@
   "name": "zync-mobile",
   "version": "1.0.0",
   "main": "expo/AppEntry.js",
+  "newArchEnabled": true,
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
