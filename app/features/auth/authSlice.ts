@@ -4,7 +4,8 @@ import {Key} from "../../constants/Key";
 
 export interface AuthSate {
     accessToken: string | null,
-    isAuthenticated: boolean
+    isAuthenticated: boolean,
+
 }
 
 const initialState: AuthSate = {
