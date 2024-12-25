@@ -6,7 +6,7 @@ import Icon from "react-native-vector-icons/Ionicons"; // Import the icon set
 import Search from "../screens/Search";
 import Post from "../screens/Post";
 import Follow from "../screens/Follow";
-import User from "../screens/User";
+import User from "../screens/UserProfile";
 
 const AuthenticatedNavigator = () => {
   const Tab = createBottomTabNavigator();
