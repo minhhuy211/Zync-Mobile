@@ -1,23 +1,35 @@
-import {FlatList, Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import ActivityInfo from "./ActivityInfo";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import React from "react";
 import {ActivityProps} from "../../screens/Activity";
+import {NotifyIconColor} from "../../constants/notify/NotifyIconColor";
+import {NotifyType} from "../../constants/notify/NotifyType";
+import FontAwesome6Icon from "react-native-vector-icons/FontAwesome6";
+import {NotifyIcon} from "../../constants/notify/NotifyIcon";
 
 interface ActivityPieceProps {
     data: ActivityProps;
 }
 
 const ActivityPiece = (pieces: ActivityPieceProps) => {
+    const backgroundIcon: string = getBackgroundIcon(pieces.data.type);
+    const iconName: string | null = pieces.data.type === NotifyType.MENTIONED ? null : getIcon(pieces.data.type);
+
     return (
         <TouchableOpacity style={styles.piece}>
             <View style={styles.avatarContainer}>
                 <View style={styles.avatarBox}>
                     <Image source={require('../../../assets/logo.png')} style={styles.avatar}/>
                 </View>
-                <View style={styles.iconBox}>
-                    <Ionicons name="person" size={16} color="white"/>
-                </View>
+                {iconName !== '' ?
+                    (<View style={[styles.iconBox,
+                        {backgroundColor: backgroundIcon}]}>
+                        {(pieces.data.type !== NotifyType.MENTIONED && iconName !== null) ?
+                            <Ionicons name={iconName} size={10} color="white"/> :
+                            <FontAwesome6Icon name="threads" size={10} color="white"/>}
+                    </View>) : null
+                }
             </View>
             <View style={styles.contentComponent}>
                 <ActivityInfo data={pieces.data}/>
@@ -30,14 +42,13 @@ const styles = StyleSheet.create({
     piece: {
         display: 'flex',
         flexDirection: 'row',
-        alignItems: 'center',
         backgroundColor: '#fff',
-        paddingVertical: 10,  // Tạo khoảng cách trên dưới cho phần tử
+        paddingVertical: 4,  // Tạo khoảng cách trên dưới cho phần tử
     },
 
     avatarContainer: {
         position: 'relative',
-        top: 0,
+        top: 10,
         left: 0
     },
 
@@ -61,8 +72,9 @@ const styles = StyleSheet.create({
         left: 22,
         width: 20,
         height: 20,
-        borderRadius: 50,
-        backgroundColor: 'black',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 50
     },
 
     contentComponent: {
@@ -70,5 +82,38 @@ const styles = StyleSheet.create({
         marginLeft: 10,
     },
 });
+
+// Mapping để lấy ra String tương ứng với NotifyType
+const getBackgroundIcon: ((type: NotifyType) => string) = (type: NotifyType) => {
+    const mapping: Record<NotifyType, string> = {
+        [NotifyType.FIRST_POST]: NotifyIconColor.FIRST_POST,
+        [NotifyType.FOLLOWED]: NotifyIconColor.FOLLOWED,
+        [NotifyType.FOLLOW_REQUESTED]: NotifyIconColor.FOLLOW_REQUEST,
+        [NotifyType.FOLLOW_APPROVED]: NotifyIconColor.FOLLOW_APPROVED,
+        [NotifyType.COMMENT]: NotifyIconColor.COMMENT,
+        [NotifyType.LIKED]: NotifyIconColor.LIKED,
+        [NotifyType.REPOSTED]: NotifyIconColor.REPOSTED,
+        [NotifyType.MENTIONED]: NotifyIconColor.MENTIONED,
+        [NotifyType.POLL_RESULT_READY]: NotifyIconColor.POLL_RESULT_READY,
+        [NotifyType.PICKED_FOR_U]: 'transparent'
+    };
+    return mapping[type] || '#CCCCCC';
+}
+
+const getIcon: ((type: NotifyType) => string | null) = (type: NotifyType) => {
+    const mapping: Record<NotifyType, string> = {
+        [NotifyType.FIRST_POST]: NotifyIcon.FIRST_POST,
+        [NotifyType.FOLLOWED]: NotifyIcon.FOLLOWED,
+        [NotifyType.FOLLOW_REQUESTED]: NotifyIcon.FOLLOW_REQUEST,
+        [NotifyType.FOLLOW_APPROVED]: NotifyIcon.FOLLOW_APPROVED,
+        [NotifyType.COMMENT]: NotifyIcon.COMMENT,
+        [NotifyType.LIKED]: NotifyIcon.LIKED,
+        [NotifyType.REPOSTED]: NotifyIcon.REPOSTED,
+        [NotifyType.MENTIONED]: NotifyIcon.MENTIONED,
+        [NotifyType.POLL_RESULT_READY]: NotifyIcon.POLL_RESULT_READY,
+        [NotifyType.PICKED_FOR_U]: ''
+    };
+    return mapping[type] || '';
+}
 
 export default ActivityPiece;

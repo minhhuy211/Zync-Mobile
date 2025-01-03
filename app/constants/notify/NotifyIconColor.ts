@@ -1,11 +1,11 @@
 export enum NotifyIconColor {
     FIRST_POST = "#007AFF",
-    FOLLOW = "#7441F5",
+    FOLLOWED = "#7441F5",
     FOLLOW_REQUEST = "#FFC632",
-    COMMENT = "#000000",
-    LIKE = "#000000",
-    REPOST = "#000000",
-    MENTION = "#000000",
-    POLL_RESULT_READY = "#000000",
-    PICKED_FOR_U = "#000000",
+    FOLLOW_APPROVED = "#7441F5",
+    COMMENT = "#24C3FF",
+    LIKED = "#FF007A",
+    REPOSTED = "#C329BF",
+    MENTIONED = "#20C584",
+    POLL_RESULT_READY = "#007AFF",
 }

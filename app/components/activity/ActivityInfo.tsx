@@ -1,23 +1,38 @@
 import React, {useState} from "react";
 import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {ActivityProps} from "../../screens/Activity";
+import {NotifyType} from "../../constants/notify/NotifyType";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import FontAwesome6Icon from "react-native-vector-icons/FontAwesome6";
 
 interface FollowButtonInfo {
     title: string,
     isFollowed: boolean
 }
+
 interface ActivityInfoProps {
     data: ActivityProps;
 }
 
 
 const ActivityInfo = (info: ActivityInfoProps) => {
-    const [followButtonInfo, setFollowButtonInfo] = useState<FollowButtonInfo>({title: "Follow", isFollowed: false});
+    const [followButtonInfo, setFollowButtonInfo] = useState<FollowButtonInfo>({title: "Follow back", isFollowed: false});
+    const [confirmed, setConfirmed] = useState<boolean>(false);
 
-    const handleFollowClick = () => {
+    const handleFollow = () => {
         followButtonInfo.isFollowed ?
-            setFollowButtonInfo({title: "Follow", isFollowed: false}) :
+            setFollowButtonInfo({title: "Follow back", isFollowed: false}) :
             setFollowButtonInfo({title: "Following", isFollowed: true});
+    }
+
+    const handleFollowBack = () => {
+
+    }
+
+    const handleConfirm = (isConfirm: boolean) => {
+        isConfirm ?
+            setConfirmed(false) :
+            setConfirmed(true);
     }
 
     return (
@@ -33,11 +48,67 @@ const ActivityInfo = (info: ActivityInfoProps) => {
                     </View>
                 </View>
 
-                <TouchableOpacity style={styles.button}
-                                  onPress={handleFollowClick}>
-                    <Text style={[styles.buttonText, followButtonInfo.isFollowed && styles.followedText]}>{followButtonInfo.title}</Text>
-                </TouchableOpacity>
+                {info.data.type === NotifyType.FOLLOWED ? (
+                    // Kiểm tra xem type có là FOLLOWED
+                    <TouchableOpacity style={styles.button} onPress={handleFollow}>
+                        <Text style={[styles.buttonText, followButtonInfo.isFollowed && styles.followedText]}>
+                            {followButtonInfo.title}
+                        </Text>
+                    </TouchableOpacity>
+                ) : (info.data.type === NotifyType.FOLLOW_REQUESTED) ? (
+                    // Trường hợp type là FOLLOW_REQUESTED
+                    (confirmed ?
+                            <TouchableOpacity style={styles.button} onPress={handleFollowBack}>
+                                <Text style={[styles.buttonText, followButtonInfo.isFollowed && styles.followedText]}>
+                                    Follow Back
+                                </Text>
+                            </TouchableOpacity> :
+                            <View style={styles.followReqBox}>
+                                <TouchableOpacity style={[styles.buttonReq, {marginRight: 4}]}
+                                                  onPress={() => setConfirmed(true)}>
+                                    <Text
+                                        style={[styles.buttonText, followButtonInfo.isFollowed && styles.followedText]}>
+                                        Confirm
+                                    </Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity style={styles.buttonReq} onPress={() => setConfirmed(false)}>
+                                    <Text
+                                        style={[styles.buttonText, followButtonInfo.isFollowed && styles.followedText]}>
+                                        X
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                    )
+                ) : null}
             </View>
+            {info.data.content ?
+                <View style={styles.contentContainer}>
+                    <Text>{info.data.content}</Text>
+
+                    <View style={styles.interaction}>
+                        <TouchableOpacity style={[styles.interactBox, {paddingLeft: 0}]}>
+                            <Ionicons name="heart-outline" size={22} color="#7e7e7e"/>
+                            <Text style={styles.interactCount}>0</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.interactBox}>
+                            <Ionicons name="chatbubble-outline" size={20} color="#7e7e7e"/>
+                            <Text style={styles.interactCount}>0</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.interactBox}>
+                            <FontAwesome6Icon name="repeat" size={16} color="#7e7e7e"/>
+                            <Text style={styles.interactCount}>0</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.interactBox}>
+                            <Ionicons name="paper-plane-outline" size={20} color="#7e7e7e"/>
+                            <Text style={styles.interactCount}>0</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View> :
+                null}
         </View>
     )
 };
@@ -51,6 +122,7 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
         borderBottomWidth: .75,
         borderBottomColor: "#ccc",
+        flex: 1
     },
 
     infoContainer: {
@@ -109,7 +181,7 @@ const styles = StyleSheet.create({
     },
 
     buttonText: {
-        color: '#000',
+        color: '#3c3c3c',
         fontFamily: 'SF Pro',
         fontWeight: 'bold',
         fontSize: 14,
@@ -118,6 +190,49 @@ const styles = StyleSheet.create({
 
     followedText: {
         color: '#7e7e7e'
+    },
+
+    followReqBox: {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+    },
+
+    buttonReq: {
+        backgroundColor: 'transparent',
+        display: 'flex',
+        paddingHorizontal: 12,
+        paddingVertical: 4,
+        borderStyle: 'solid',
+        borderWidth: 1.5,
+        borderColor: 'rgba(221,221,221,0.7)',
+        borderRadius: 8,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
+    contentContainer: {},
+
+    interaction: {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center"
+    },
+
+    interactBox: {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        color: "#7e7e7e",
+        padding: 10,
+        maxHeight: 40
+    },
+
+    interactCount: {
+        fontFamily: "SF Pro",
+        fontSize: 14,
+        color: "#7e7e7e",
+        marginLeft: 5
     },
 });
 
