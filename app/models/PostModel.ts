@@ -1,10 +1,10 @@
-import User from "./User";
+import UserModel from "./UserModel";
 import {TimeModel} from "./TimeModel";
 import MediaModel from "./MediaModel";
 
 export interface PostModel {
     id: string; // Assuming ZID maps to string
-    author: User;
+    author: UserModel;
     type: string;
     content: string;
     createdAt: string; // Use `Date` type if the input will be deserialized into a JS Date object
