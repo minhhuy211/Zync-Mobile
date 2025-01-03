@@ -1,39 +1,31 @@
-import { User } from "./User";
+import { MediaModel } from "./MediaModel";
+import { Time } from "./TimeModel";
+import { UserModel } from "./UserModel";
 
 export interface PostModel{
     id: string,
-    type: string,
-    title: string,
-    content: string,
-    createdAt: String,
-    createdBy: User,
-    likes: number,
-    numberOfComments: number,
-    media: PostMedia[],
-    liked: boolean,
-    comments: Comment[];
-    mentions: User[];
-
-}
-
-export interface PostMedia{
-    id: string,
-    url: string,
-    type: MediaType
-}
-
-export enum MediaType{
-    IMAGE = "IMAGE",
-    VIDEO = "VIDEO",
-    AUDIO = "AUDIO"
-}
-
-export interface Comment{
-    id: string,
+    author: UserModel,
+    type: PostType,
     content: string,
     createdAt: string,
-    createdBy: User,
     likes: number,
+    relies: number,
+    reposts: number,
+    media: MediaModel[],
+    time: Time[],
     liked: boolean,
-    mentions: User[]
+    parent: PostModel | null,
+
 }
+
+export enum PostType{
+    POST = "POST",
+    REPOST = "REPOST",
+    REPLY = "REPLY"
+}
+
+
+
+
+
+
