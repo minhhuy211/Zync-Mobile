@@ -12,6 +12,7 @@ import SignUp from "./app/screens/SignUp";
 import api from "./app/api/api";
 import SplashScreen from "./app/components/SplashScreen"; // Nhập khẩu component SplashScreen
 import { SafeAreaView } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 // Define an interface to type the response data
 interface Post {
@@ -51,7 +52,9 @@ const App: React.FC = () => {
 
   return (
     <Provider store={store}>
-      <Layout />
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <Layout />
+      </GestureHandlerRootView>
       <Toast position="bottom" />
     </Provider>
   );
@@ -67,3 +70,4 @@ const App: React.FC = () => {
 };
 
 export default App;
+

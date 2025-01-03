@@ -9,10 +9,16 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import CommentHome from "../../components/Home/CommentHome";
+import { PostModel } from "../../models/PostModel";
 
-const PostHome = ({ item }: { item: any }) => {
+interface PostHomeProps {
+  post: PostModel
+};
+
+
+const PostHome = ({post }: PostHomeProps) => {
   const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(item.likes);
+  const [likeCount, setLikeCount] = useState(post.likes);
 
   const handleLike = () => {
     setLiked(!liked);
@@ -23,16 +29,16 @@ const PostHome = ({ item }: { item: any }) => {
       <View style={styles.postContainer}>
         <View style={styles.headerPost}>
           <View style={styles.headerpost_left}>
-            <Image source={item.avatar} style={styles.avatarPost} />
+            <Image source={post.author.avatar}  style={styles.avatarPost} />
 
             <TouchableOpacity style={styles.addFollow}>
               <Icon name="add-circle" size={20}></Icon>
             </TouchableOpacity>
 
-            <Text style={styles.usernamePost}>{item.username}</Text>
+            {/* <Text style={styles.usernamePost}>{post.title}</Text> */}
           </View>
           <View style={styles.headerpost_right}>
-            <Text style={styles.timePost}>{item.time}</Text>
+            <Text style={styles.timePost}>{post.createdAt}</Text>
 
             <TouchableOpacity style={styles.otherButton}>
               <Icon name="ellipsis-horizontal" size={20}></Icon>
@@ -41,7 +47,7 @@ const PostHome = ({ item }: { item: any }) => {
         </View>
 
         <View style={styles.post}>
-          <Text style={styles.contextPost}>{item.content}</Text>
+          <Text style={styles.contextPost}>{post.content}</Text>
 
           <View style={styles.actionPost}>
             <TouchableOpacity style={styles.iconButton} onPress={handleLike}>
@@ -61,17 +67,17 @@ const PostHome = ({ item }: { item: any }) => {
               <Icon name="paper-plane-outline" size={25}></Icon>
             </TouchableOpacity>
           </View>
-          <Text style={styles.likes}>{item.likes} like</Text>
+          <Text style={styles.likes}>{post.likes} like</Text>
         </View>
       </View>
-      {item.comments && item.comments.length > 0 && (
+      {/* {post.comments && post.comments.length > 0 && (
         <View style={styles.verticalLine}></View>
-      )}
-      <FlatList
-        data={item.comments}
+      )} */}
+      {/* <FlatList
+        data={post.comments}
         keyExtractor={(comment) => comment.id.toString()}
         renderItem={({ item }) => <CommentHome item={item} />}
-      />
+      /> */}
 
       <View style={styles.crossbar}></View>
     </View>

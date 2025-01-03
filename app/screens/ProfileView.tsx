@@ -19,6 +19,8 @@ import meApi from "../api/meApi";
 import Post from "./Post";
 import { PostModel } from "../models/PostModel";
 import Tabs from "../components/Tabs";
+import PostHome from "../components/Home/PostHome";
+
 
 type ProfileProps = {
   userId?: string;
@@ -73,16 +75,14 @@ export const ProfileView = ({
   const getPostsByTab = () => {
     switch (activeTab) {
       case "Threads":
-        return posts.filter((post) => post.type === "thread"); // Giả sử posts có thuộc tính 'type'
+        return posts; // Giả sử posts có thuộc tính 'type'
       case "Replies":
-        return posts.filter((post) => post.type === "reply");
+        return posts;
       case "Reposts":
-        return posts.filter((post) => post.type === "repost");
+        return posts;
       default:
         return posts.filter((post) => post.type === activeTab.toLowerCase());    }
   };
-  const threads = getPostsByTab().filter(post => post.type === "thread");
-console.log(threads);
 
   return (
     <View style={[styles.container, { paddingTop: top }]}>
@@ -92,7 +92,7 @@ console.log(threads);
         renderItem={({ item }) => (
           <Link href={`/feed/${item.id}`} asChild>
             <TouchableOpacity>
-            {/* <Post post={item} /> */}
+            <PostHome post={item} />
             </TouchableOpacity>
           </Link>
         )}
@@ -148,7 +148,7 @@ console.log(threads);
             )}
           </View>
 
-            <Tabs onTabChange={handleTabChange} />
+            {/* <Tabs onTabChange={handleTabChange} /> */}
           </>
         }
       />

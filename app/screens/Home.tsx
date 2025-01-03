@@ -14,6 +14,7 @@ import { useAppDispatch } from "../store";
 import { useAuthAction } from "../features/auth";
 import { accountApi } from "../api/accountApi";
 import PostHome from "../components/Home/PostHome";
+import ProfileView from "./ProfileView";
 
 const initialPosts = [
   {
@@ -139,12 +140,12 @@ const Home = () => {
       </View>
 
       {/* Danh sách bài viết */}
-      <FlatList
+      {/* <FlatList
         data={currentPosts}
         keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => <PostHome item={item} />}
+        renderItem={({ item }) => <ProfileView />}
         showsVerticalScrollIndicator={false} // Ẩn thanh cuộn
-      />
+      /> */}
     </View>
   );
 };

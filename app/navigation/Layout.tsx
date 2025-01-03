@@ -19,6 +19,7 @@ import Loader from "../screens/Loader";
 import Splash from "../screens/Splash";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+
 const Layout = () => {
   const [loading, setLoading] = useState(false);
   const { isAuthenticated, accessToken } = useAuthSelector();
@@ -48,11 +49,15 @@ const Layout = () => {
   }, []);
 
   if (loading) return <Splash />;
-  if (isAuthenticated) return <AuthenticatedNavigator />;
+  if (isAuthenticated)
+    return (
+        <AuthenticatedNavigator />
+    );
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <AnonymousNavigator />
-    </SafeAreaView>
+    
+      <SafeAreaView style={{ flex: 1 }}>
+        <AnonymousNavigator />
+      </SafeAreaView>
   );
 };
 

@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
-
 import meApi from "../api/meApi";
 // import { Colors } from '@/constants/Colors';
 import { Link } from "expo-router";
-import { Profile } from "../models/ProfileModel";
-import { useEffect, useState } from "react";
+
+import React, { useEffect, useState } from "react";
 import Modal from "react-native-modal"; // Import thư viện modal
+import PostTab from "../components/Profile/PostTab";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useAppDispatch } from "../store";
@@ -13,44 +13,34 @@ import { useAuthAction } from "../features/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Key } from "../constants/Key";
 import Icon from "react-native-vector-icons/Ionicons";
-import PostTab from "../components/Profile/PostTab";
+import { UserModel } from "../models/UserModel";
+import AvatarGroup from "../components/AvatarGroup";
+import { TextInput } from "react-native-paper";
+import ProfileEditor from "../components/Profile/ProfileEditor";
+import { ProfileModel } from "../models/ProfileModel";
 
+export const SelfProfile = () => {
+  const [profile, setprofile] = useState({} as ProfileModel);
+  const [followers, setFollowers] = useState<UserModel[]>([]);
+  const [editProfileVisible, setEditProfileVisible] = useState(false);
 
-type UserProfileProps = {
-  userId?: string;
-};
+  useEffect(() => {
+   loadProfile();
+  }, []);
 
-export const UserProfile = ({ userId }: UserProfileProps) => {
-  const [profile, setprofile] = useState({} as Profile);
-  const [isFollowed, setFollowed] = useState(false);
-  
-
-  const isSelf = userId == null;
-
-  useState(() => {
-    if (isSelf) {
-      meApi.getProfile().then((data) => {
-        setprofile(data);
-        console.log(data);
-      });
-    } else {
-    }
-  });
-
-  const handleFollowToggle = async () => {
-    try {
-      if (isFollowed) {
-        await meApi.unfollow(userId!);
-        setFollowed(false);
-      } else {
-        await meApi.follow(userId!);
-        setFollowed(true);
-      }
-    } catch (error) {
-      console.error("Error toggling follow:", error);
-    }
-  };
-
+  function loadProfile(): void {
+    meApi
+    .getProfile()
+    .then((data) => {
+      setprofile(data);
+      console.log(data);
+    })
+    .then(() => meApi.getFollowers(5, 1))
+    .then((data) => {
+      setFollowers(data);
+      console.log(data);
+    });
+  }
 
   return (
     <View style={styles.container}>
@@ -65,25 +55,25 @@ export const UserProfile = ({ userId }: UserProfileProps) => {
       <Text style={styles.bio}>
         {profile?.bio ? profile?.bio : "No bio yet"}
       </Text>
-      <Text>
-        {profile?.numberOfFollowers} followers · {profile?.links} links
-      </Text>
+      <View style={styles.avatarFollowers}>
+        <AvatarGroup users={followers} />
+        <Text style={{ color: "gray" }}>
+          {profile?.numberOfFollowers} người theo dõi · {profile?.links} 
+        </Text>
+      </View>
 
       <View style={styles.buttonRow}>
         <>
-          <TouchableOpacity
-            style={styles.fullButton}
-            onPress={handleFollowToggle}
-          >
-            <Text style={styles.fullButtonText}>
-              {isFollowed ? "Followed" : "Follow"}
-            </Text>
+          <TouchableOpacity style={styles.button} onPress={() => setEditProfileVisible(true)}>
+            <Text style={styles.buttonText}>Edit profile</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Mention</Text>
+            <Text style={styles.buttonText}>Share profile</Text>
           </TouchableOpacity>
         </>
       </View>
+
+      <ProfileEditor profile={profile} visible ={editProfileVisible} onclose={() => setEditProfileVisible(false)} onUpdated={loadProfile}/>
       <PostTab
         onChangeType={() => {}}
         onLoadMore={() => {}}
@@ -138,6 +128,11 @@ const styles = StyleSheet.create({
     marginTop: 16,
     marginBottom: 16,
   },
+  avatarFollowers: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
   buttonRow: {
     flexDirection: "row",
     justifyContent: "space-evenly",
@@ -174,18 +169,49 @@ const styles = StyleSheet.create({
     // marginRight: 10,
   },
   modal: {
-    justifyContent: "flex-end", // Modal sẽ xuất hiện từ dưới lên
-    margin: 0, // Không có margin để modal chiếm toàn bộ chiều rộng
+    justifyContent: "flex-start", // Chỉnh sửa cho modal bắt đầu từ trên cùng
+    margin: 0, // Không có margin
+    flex: 1, // Chiếm toàn bộ không gian màn hình
   },
   modalContent: {
+    flex: 1, // Đảm bảo modalContent chiếm toàn bộ không gian trong modal
     backgroundColor: "white",
     padding: 20,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
+    justifyContent: "flex-start", // Chỉnh sửa cho nội dung bắt đầu từ trên cùng
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 16,
+    textAlign: "center",
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 12,
+    fontSize: 16,
+  },
+  avatarPreview: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    alignSelf: "center",
+    marginBottom: 16,
+  },
+  saveButton: {
+    backgroundColor: "#000",
+    borderColor: "#000",
+  },
+  saveButtonText: {
+    color: "white",
   },
 });
 
-UserProfile.HeaderLeft = () => {
+SelfProfile.HeaderLeft = () => {
   const dispatch = useAppDispatch();
   const { logout } = useAuthAction();
   async function handleLogout() {
@@ -196,13 +222,13 @@ UserProfile.HeaderLeft = () => {
   return (
     <View style={styles.headerIconsLeft}>
       <TouchableOpacity style={styles.iconButton} onPress={handleLogout}>
-        <Ionicons name="chevron-back" size={28} color="#000" />
+        <MaterialCommunityIcons name="web" size={28} color="black" />
       </TouchableOpacity>
     </View>
   );
 };
 
-UserProfile.HeaderRight = () => {
+SelfProfile.HeaderRight = () => {
   const dispatch = useAppDispatch();
   const { logout } = useAuthAction();
   async function handleLogout() {
@@ -216,12 +242,11 @@ UserProfile.HeaderRight = () => {
         <Ionicons name="logo-instagram" size={28} color="black" />
       </TouchableOpacity>
       <TouchableOpacity style={styles.iconButton} onPress={handleLogout}>
-        <Ionicons name="notifications-outline" size={28} color="black" />
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.iconButton} onPress={handleLogout}>
-        <Ionicons name="ellipsis-horizontal-circle" size={28} color="black" />
+        {/* <Ionicons name="log-out-outline" size={28} color="black" /> */}
+        <Ionicons name="options-outline" size={28} color="black"></Ionicons>
       </TouchableOpacity>
     </View>
   );
 };
-export default UserProfile;
+
+export default SelfProfile;

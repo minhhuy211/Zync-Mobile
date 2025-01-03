@@ -6,7 +6,9 @@ import Icon from "react-native-vector-icons/Ionicons"; // Import the icon set
 import Search from "../screens/Search";
 import Post from "../screens/Post";
 import Follow from "../screens/Follow";
-import User from "../screens/UserProfile";
+import User, { UserProfile } from "../screens/UserProfile";
+import ProfileView from "../screens/ProfileView";
+import SelfProfile from "../screens/SelfProfile";
 
 const AuthenticatedNavigator = () => {
   const Tab = createBottomTabNavigator();
@@ -18,7 +20,6 @@ const AuthenticatedNavigator = () => {
   }) => {
     return <Icon name={name} size={28} color={color} />;
   };
-
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -32,7 +33,11 @@ const AuthenticatedNavigator = () => {
           },
           tabBarActiveTintColor: "#000",
           tabBarShowLabel: false,
-          headerRight: Home.Header,
+          // headerRight: Home.Header,
+          headerBackgroundContainerStyle: {
+            backgroundColor: "#fff",
+          },
+          headerShadowVisible: false,
         }}
       >
         <Tab.Screen
@@ -62,15 +67,33 @@ const AuthenticatedNavigator = () => {
           component={Follow}
           options={{
             tabBarIcon: (props) => <TabIcon name="heart" {...props} />,
+            headerShown: false,
           }}
         />
-        <Tab.Screen
+        {/* <Tab.Screen
           name="USER"
-          component={User}
+          component={UserProfile}
           options={{
             tabBarIcon: (props) => (
               <TabIcon name="person-circle-outline" {...props} />
             ),
+            headerShown: true,
+            headerTitle: "",
+            headerLeft: UserProfile.HeaderLeft,
+            headerRight: UserProfile.HeaderRight,
+          }}
+        /> */}
+        <Tab.Screen
+          name="SELF"
+          component={SelfProfile}
+          options={{
+            tabBarIcon: (props) => (
+              <TabIcon name="person-circle-outline" {...props} />
+            ),
+            headerShown: true,
+            headerTitle: "",
+            headerLeft: SelfProfile.HeaderLeft,
+            headerRight: SelfProfile.HeaderRight,
           }}
         />
       </Tab.Navigator>

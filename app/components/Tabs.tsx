@@ -1,31 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 
 type TabsProps = {
-  onTabChange: (tab: string) => void;
+  onTabChange: (value: any) => void;
+  items: TabItem[];
+  defaultIndex?: number;
+  value: any;
 };
 
-const Tabs = ({ onTabChange }: TabsProps) => {
-  const [activeTab, setActiveTab] = useState("Threads");
+type TabItem = {
+  value: any;
+  label: string;
+}
 
-  const handleTabPress = (tab: string) => {
-    setActiveTab(tab);
+const Tabs = ({ onTabChange, items, defaultIndex = 0 , value}: TabsProps) => {
+
+
+  const handleTabPress = (tab: TabItem) => {
     onTabChange(tab);
   };
 
   return (
     <View style={styles.container}>
-      {["Threads", "Replies", "Reposts"].map((tab) => (
+      {items.map((tab) => (
         <TouchableOpacity
-          key={tab}
-          style={[styles.tab, activeTab === tab && styles.activeTab]}
+          key={tab.value}
+          style={[styles.tab, value === tab.value && styles.activeTab]}
           onPress={() => handleTabPress(tab)}
         >
           <Text
-            style={[styles.tabText, activeTab === tab && styles.activeTabText]}
+            style={[styles.tabText, value === tab.value && styles.activeTabText]}
           >
-            {tab}
+            {tab.label}
           </Text>
         </TouchableOpacity>
       ))}
@@ -41,11 +48,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flex: 1,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
+    borderBottomColor: "#ececec",
     paddingVertical: 12,
   },
   tabText: {
-    color: Colors.border,
+    color: "gray",
+    fontWeight: "bold",
   },
   activeTabText: {
     color: "black",
