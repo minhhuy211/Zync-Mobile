@@ -1,4 +1,4 @@
-export enum NotifyIconColor {
+export enum ActivityIconColor {
     FIRST_POST = "#007AFF",
     FOLLOWED = "#7441F5",
     FOLLOW_REQUEST = "#FFC632",

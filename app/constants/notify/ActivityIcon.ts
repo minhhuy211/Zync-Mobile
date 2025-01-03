@@ -1,4 +1,4 @@
-export enum NotifyIcon {
+export enum ActivityIcon {
     FIRST_POST = "star",
     FOLLOWED = "person",
     FOLLOW_REQUEST = "hand-right",

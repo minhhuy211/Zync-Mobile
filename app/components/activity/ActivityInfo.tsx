@@ -1,9 +1,10 @@
 import React, {useState} from "react";
 import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import {ActivityProps} from "../../screens/Activity";
-import {NotifyType} from "../../constants/notify/NotifyType";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import FontAwesome6Icon from "react-native-vector-icons/FontAwesome6";
+import {ActivityType} from "../../constants/notify/ActivityType";
+import {ActivityDescription} from "../../constants/notify/ActivityDescription";
+import ActivityModel from "../../models/ActivityModel";
 
 interface FollowButtonInfo {
     title: string,
@@ -11,9 +12,8 @@ interface FollowButtonInfo {
 }
 
 interface ActivityInfoProps {
-    data: ActivityProps;
+    data: ActivityModel;
 }
-
 
 const ActivityInfo = (info: ActivityInfoProps) => {
     const [followButtonInfo, setFollowButtonInfo] = useState<FollowButtonInfo>({title: "Follow back", isFollowed: false});
@@ -23,10 +23,6 @@ const ActivityInfo = (info: ActivityInfoProps) => {
         followButtonInfo.isFollowed ?
             setFollowButtonInfo({title: "Follow back", isFollowed: false}) :
             setFollowButtonInfo({title: "Following", isFollowed: true});
-    }
-
-    const handleFollowBack = () => {
-
     }
 
     const handleConfirm = (isConfirm: boolean) => {
@@ -40,41 +36,39 @@ const ActivityInfo = (info: ActivityInfoProps) => {
             <View style={styles.infoContainer}>
                 <View>
                     <View style={styles.nameBox}>
-                        <Text style={styles.name}>{info.data.name}</Text>
-                        <Text style={styles.time}>{info.data.createdAt}</Text>
+                        <Text style={styles.name}>{info.data.actor.name}</Text>
+                        <Text style={styles.time}>{info.data.time.unit + info.data.time.value + " ago"}</Text>
                     </View>
                     <View style={styles.descriptionBox}>
-                        <Text style={styles.description}>{info.data.description}</Text>
+                        <Text style={styles.description}>{getDescription(info.data.type)}</Text>
                     </View>
                 </View>
 
-                {info.data.type === NotifyType.FOLLOWED ? (
+                {info.data.type === ActivityType.FOLLOW ? (
                     // Kiểm tra xem type có là FOLLOWED
                     <TouchableOpacity style={styles.button} onPress={handleFollow}>
                         <Text style={[styles.buttonText, followButtonInfo.isFollowed && styles.followedText]}>
                             {followButtonInfo.title}
                         </Text>
                     </TouchableOpacity>
-                ) : (info.data.type === NotifyType.FOLLOW_REQUESTED) ? (
+                ) : (info.data.type === ActivityType.REQUEST_FOLLOW) ? (
                     // Trường hợp type là FOLLOW_REQUESTED
                     (confirmed ?
-                            <TouchableOpacity style={styles.button} onPress={handleFollowBack}>
+                            <TouchableOpacity style={styles.button} onPress={handleFollow}>
                                 <Text style={[styles.buttonText, followButtonInfo.isFollowed && styles.followedText]}>
-                                    Follow Back
+                                    Follow back
                                 </Text>
                             </TouchableOpacity> :
                             <View style={styles.followReqBox}>
                                 <TouchableOpacity style={[styles.buttonReq, {marginRight: 4}]}
                                                   onPress={() => setConfirmed(true)}>
-                                    <Text
-                                        style={[styles.buttonText, followButtonInfo.isFollowed && styles.followedText]}>
+                                    <Text style={[styles.buttonText, followButtonInfo.isFollowed && styles.followedText]}>
                                         Confirm
                                     </Text>
                                 </TouchableOpacity>
 
                                 <TouchableOpacity style={styles.buttonReq} onPress={() => setConfirmed(false)}>
-                                    <Text
-                                        style={[styles.buttonText, followButtonInfo.isFollowed && styles.followedText]}>
+                                    <Text style={[styles.buttonText, followButtonInfo.isFollowed && styles.followedText]}>
                                         X
                                     </Text>
                                 </TouchableOpacity>
@@ -82,29 +76,28 @@ const ActivityInfo = (info: ActivityInfoProps) => {
                     )
                 ) : null}
             </View>
-            {info.data.content ?
+            {info.data.post ?
                 <View style={styles.contentContainer}>
-                    <Text>{info.data.content}</Text>
+                    <Text>{info.data.post.content}</Text>
 
                     <View style={styles.interaction}>
                         <TouchableOpacity style={[styles.interactBox, {paddingLeft: 0}]}>
-                            <Ionicons name="heart-outline" size={22} color="#7e7e7e"/>
-                            <Text style={styles.interactCount}>0</Text>
+                            {
+                                info.data.post.liked ?
+                                    <Ionicons name="heart" size={22} color="red"/> :
+                                    <Ionicons name="heart-outline" size={22} color="#7e7e7e"/>
+                            }
+                            <Text style={styles.interactCount}>{info.data.post.likes}</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.interactBox}>
                             <Ionicons name="chatbubble-outline" size={20} color="#7e7e7e"/>
-                            <Text style={styles.interactCount}>0</Text>
+                            <Text style={styles.interactCount}>{info.data.post.replies}</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.interactBox}>
                             <FontAwesome6Icon name="repeat" size={16} color="#7e7e7e"/>
-                            <Text style={styles.interactCount}>0</Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity style={styles.interactBox}>
-                            <Ionicons name="paper-plane-outline" size={20} color="#7e7e7e"/>
-                            <Text style={styles.interactCount}>0</Text>
+                            <Text style={styles.interactCount}>{info.data.post.reposts}</Text>
                         </TouchableOpacity>
                     </View>
                 </View> :
@@ -112,6 +105,26 @@ const ActivityInfo = (info: ActivityInfoProps) => {
         </View>
     )
 };
+
+const getDescription = (type: ActivityType) => {
+    const mapping: Record<ActivityType, string> = {
+        // [NotifyType.FIRST_POST]: ActivityIcon.FIRST_POST,
+        [ActivityType.FOLLOW]: ActivityDescription.FOLLOW,
+        [ActivityType.REQUEST_FOLLOW]: ActivityDescription.FOLLOW_REQUESTED,
+        [ActivityType.ACCEPT_FOLLOW]: ActivityDescription.FOLLOW_APPROVED,
+        [ActivityType.REPLY]: ActivityDescription.COMMENT,
+        [ActivityType.LIKE]: ActivityDescription.LIKED,
+        [ActivityType.REPOST]: ActivityDescription.REPOSTED,
+        [ActivityType.MENTION]: ActivityDescription.MENTIONED,
+        [ActivityType.UNFOLLOW]: '',
+        [ActivityType.SHARE]: '',
+        [ActivityType.RECOMMEND_USER]: '',
+        [ActivityType.RECOMMEND_POST]: '',
+        [ActivityType.REPORT]: '',
+        [ActivityType.BOOKMARK]: '',
+    };
+    return mapping[type] || '';
+}
 
 const styles = StyleSheet.create({
     wrapper: {

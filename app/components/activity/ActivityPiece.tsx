@@ -2,19 +2,19 @@ import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import ActivityInfo from "./ActivityInfo";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import React from "react";
-import {ActivityProps} from "../../screens/Activity";
-import {NotifyIconColor} from "../../constants/notify/NotifyIconColor";
-import {NotifyType} from "../../constants/notify/NotifyType";
+import {ActivityIconColor} from "../../constants/notify/ActivityIconColor";
 import FontAwesome6Icon from "react-native-vector-icons/FontAwesome6";
-import {NotifyIcon} from "../../constants/notify/NotifyIcon";
+import {ActivityIcon} from "../../constants/notify/ActivityIcon";
+import {ActivityType} from "../../constants/notify/ActivityType";
+import ActivityModel from "../../models/ActivityModel";
 
 interface ActivityPieceProps {
-    data: ActivityProps;
+    data: ActivityModel;
 }
 
 const ActivityPiece = (pieces: ActivityPieceProps) => {
     const backgroundIcon: string = getBackgroundIcon(pieces.data.type);
-    const iconName: string | null = pieces.data.type === NotifyType.MENTIONED ? null : getIcon(pieces.data.type);
+    const iconName: string | null = pieces.data.type === ActivityType.MENTION ? null : getIcon(pieces.data.type);
 
     return (
         <TouchableOpacity style={styles.piece}>
@@ -25,7 +25,7 @@ const ActivityPiece = (pieces: ActivityPieceProps) => {
                 {iconName !== '' ?
                     (<View style={[styles.iconBox,
                         {backgroundColor: backgroundIcon}]}>
-                        {(pieces.data.type !== NotifyType.MENTIONED && iconName !== null) ?
+                        {(pieces.data.type !== ActivityType.MENTION && iconName !== null) ?
                             <Ionicons name={iconName} size={10} color="white"/> :
                             <FontAwesome6Icon name="threads" size={10} color="white"/>}
                     </View>) : null
@@ -83,35 +83,47 @@ const styles = StyleSheet.create({
     },
 });
 
-// Mapping để lấy ra String tương ứng với NotifyType
-const getBackgroundIcon: ((type: NotifyType) => string) = (type: NotifyType) => {
-    const mapping: Record<NotifyType, string> = {
-        [NotifyType.FIRST_POST]: NotifyIconColor.FIRST_POST,
-        [NotifyType.FOLLOWED]: NotifyIconColor.FOLLOWED,
-        [NotifyType.FOLLOW_REQUESTED]: NotifyIconColor.FOLLOW_REQUEST,
-        [NotifyType.FOLLOW_APPROVED]: NotifyIconColor.FOLLOW_APPROVED,
-        [NotifyType.COMMENT]: NotifyIconColor.COMMENT,
-        [NotifyType.LIKED]: NotifyIconColor.LIKED,
-        [NotifyType.REPOSTED]: NotifyIconColor.REPOSTED,
-        [NotifyType.MENTIONED]: NotifyIconColor.MENTIONED,
-        [NotifyType.POLL_RESULT_READY]: NotifyIconColor.POLL_RESULT_READY,
-        [NotifyType.PICKED_FOR_U]: 'transparent'
+// Mapping để lấy ra String tương ứng với ActivityType
+const getBackgroundIcon: ((type: ActivityType) => string) = (type: ActivityType) => {
+    const mapping: Record<ActivityType, string> = {
+        // [NotifyType.FIRST_POST]: ActivityIconColor.FIRST_POST,
+        [ActivityType.FOLLOW]: ActivityIconColor.FOLLOWED,
+        [ActivityType.REQUEST_FOLLOW]: ActivityIconColor.FOLLOW_REQUEST,
+        [ActivityType.ACCEPT_FOLLOW]: ActivityIconColor.FOLLOW_APPROVED,
+        [ActivityType.REPLY]: ActivityIconColor.COMMENT,
+        [ActivityType.LIKE]: ActivityIconColor.LIKED,
+        [ActivityType.REPOST]: ActivityIconColor.REPOSTED,
+        [ActivityType.MENTION]: ActivityIconColor.MENTIONED,
+        [ActivityType.UNFOLLOW]: 'transparent',
+        [ActivityType.SHARE]: 'transparent',
+        [ActivityType.RECOMMEND_USER]: 'transparent',
+        [ActivityType.RECOMMEND_POST]: 'transparent',
+        [ActivityType.REPORT]: 'transparent',
+        [ActivityType.BOOKMARK]: 'transparent',
+        // [NotifyType.POLL_RESULT_READY]: ActivityIconColor.POLL_RESULT_READY,
+        // [NotifyType.PICKED_FOR_U]: 'transparent'
     };
     return mapping[type] || '#CCCCCC';
 }
 
-const getIcon: ((type: NotifyType) => string | null) = (type: NotifyType) => {
-    const mapping: Record<NotifyType, string> = {
-        [NotifyType.FIRST_POST]: NotifyIcon.FIRST_POST,
-        [NotifyType.FOLLOWED]: NotifyIcon.FOLLOWED,
-        [NotifyType.FOLLOW_REQUESTED]: NotifyIcon.FOLLOW_REQUEST,
-        [NotifyType.FOLLOW_APPROVED]: NotifyIcon.FOLLOW_APPROVED,
-        [NotifyType.COMMENT]: NotifyIcon.COMMENT,
-        [NotifyType.LIKED]: NotifyIcon.LIKED,
-        [NotifyType.REPOSTED]: NotifyIcon.REPOSTED,
-        [NotifyType.MENTIONED]: NotifyIcon.MENTIONED,
-        [NotifyType.POLL_RESULT_READY]: NotifyIcon.POLL_RESULT_READY,
-        [NotifyType.PICKED_FOR_U]: ''
+const getIcon: ((type: ActivityType) => string) = (type: ActivityType) => {
+    const mapping: Record<ActivityType, string> = {
+        // [NotifyType.FIRST_POST]: ActivityIcon.FIRST_POST,
+        [ActivityType.FOLLOW]: ActivityIcon.FOLLOWED,
+        [ActivityType.REQUEST_FOLLOW]: ActivityIcon.FOLLOW_REQUEST,
+        [ActivityType.ACCEPT_FOLLOW]: ActivityIcon.FOLLOW_APPROVED,
+        [ActivityType.REPLY]: ActivityIcon.COMMENT,
+        [ActivityType.LIKE]: ActivityIcon.LIKED,
+        [ActivityType.REPOST]: ActivityIcon.REPOSTED,
+        [ActivityType.MENTION]: ActivityIcon.MENTIONED,
+        [ActivityType.UNFOLLOW]: '',
+        [ActivityType.SHARE]: '',
+        [ActivityType.RECOMMEND_USER]: '',
+        [ActivityType.RECOMMEND_POST]: '',
+        [ActivityType.REPORT]: '',
+        [ActivityType.BOOKMARK]: '',
+        // [NotifyType.POLL_RESULT_READY]: ActivityIcon.POLL_RESULT_READY,
+        // [NotifyType.PICKED_FOR_U]: ''
     };
     return mapping[type] || '';
 }

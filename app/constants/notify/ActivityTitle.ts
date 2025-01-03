@@ -1,4 +1,4 @@
-export enum NotifyTitle {
+export enum ActivityTitle {
     ALL = "All",
     FOLLOWS = "Follows",
     MENTIONS = "Mentions",

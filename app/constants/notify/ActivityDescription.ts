@@ -1,6 +1,6 @@
-export enum NotifyDescription {
+export enum ActivityDescription {
     FIRST_POST = "Posted their first post",
-    FOLLOWED = "Followed you",
+    FOLLOW = "Followed you",
     FOLLOW_REQUESTED = "Sent you a follow request",
     FOLLOW_APPROVED = "You're now following",
     LIKED = "Liked your post",

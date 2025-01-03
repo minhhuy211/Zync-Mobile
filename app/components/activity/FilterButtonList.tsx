@@ -1,21 +1,21 @@
 import React, {useState} from "react";
 import {View, FlatList, StyleSheet, Alert} from "react-native";
-import {NotifyTitle} from "../../constants/notify/NotifyTitle";
+import {ActivityTitle} from "../../constants/notify/ActivityTitle";
 import FilterButton from "./FilterButton";
 
 interface ButtonTitle {
-    key: NotifyTitle;
-    title: NotifyTitle
+    key: ActivityTitle;
+    title: ActivityTitle
 }
 
 const FilterButtonList = () => {
-    const [selectedButton, setSelectedButton] = useState<NotifyTitle>(NotifyTitle.ALL);
-    const renderTitles: ButtonTitle[] = Object.values(NotifyTitle).map((item) => ({
+    const [selectedButton, setSelectedButton] = useState<ActivityTitle>(ActivityTitle.ALL);
+    const renderTitles: ButtonTitle[] = Object.values(ActivityTitle).map((item) => ({
         key: item,
         title: item
     }));
 
-    const handleClick = (title: NotifyTitle) => {
+    const handleClick = (title: ActivityTitle) => {
         setSelectedButton(title);
     };
 
