@@ -40,5 +40,5 @@ export default {
 
   getPostsFollowing: (limit: number, offset: number, types: PostType) => api.get<PostModel[]>('/api/v1/me/posts/following', { params: { limit, offset , types} }),
 
-  getActivities: (limit: number, offset: number, types: ) => api.get<PostModel[]>('/api/v1/me/activities', { params: { limit, offset } }),
+  // getActivities: (limit: number, offset: number, types: ) => api.get<PostModel[]>('/api/v1/me/activities', { params: { limit, offset } }),
 };
