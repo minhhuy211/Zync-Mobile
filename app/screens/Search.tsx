@@ -1,12 +1,8 @@
-import React from 'react';
-import {Text} from "react-native";
+import React from "react";
+import { Text } from "react-native";
 
-const Home = () => {
-    return (
-        <Text>
-            Search
-        </Text>
-    );
+const Search = () => {
+  return <Text>Search</Text>;
 };
 
-export default Home;
+export default Search;

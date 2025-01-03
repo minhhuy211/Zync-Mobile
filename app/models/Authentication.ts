@@ -1,7 +1,3 @@
-export interface Principal{
-    name: string,
-    avatar: string
-}
 export interface AuthenticateResponse {
     accessToken: string;
     refreshToken: string;

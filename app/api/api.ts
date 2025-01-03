@@ -4,7 +4,7 @@ import store from "../store";
 
 //@ts-ignore
 // const DOMAIN = "https://api.muemp3.site";
-const DOMAIN = "http://192.168.91.213:8080";
+const DOMAIN = "http://192.168.88.54:8080";
 
 const api = axios.create({
   baseURL: DOMAIN,
