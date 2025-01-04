@@ -10,6 +10,7 @@ import Search from "../screens/Search";
 import Post from "../screens/Post";
 import Activity from "../screens/Activity";
 import User from "../screens/User";
+import SearchDetail from "../screens/SearchDetail";
 
 const AnonymousNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -21,7 +22,8 @@ const AnonymousNavigator = () => {
          {/*<Stack.Screen name="REGISTER" component={SignUp} /> */}
         {/* <Stack.Screen name="Verify" component={Verify} /> */}
         {/*<Stack.Screen name="HOME" component={Home} />*/}
-        {/*<Stack.Screen name="SEARCH" component={Search} />*/}
+        <Stack.Screen name="SEARCH" component={Search} />
+          <Stack.Screen name={"SEARCH_DETAIL"} component={SearchDetail}/>
         {/*<Stack.Screen name="POST" component={Post} />*/}
         <Stack.Screen name="ACTIVITY" component={Activity} />
         {/*<Stack.Screen name="USER" component={User} />*/}
