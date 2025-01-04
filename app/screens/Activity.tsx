@@ -93,15 +93,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
 
-    buttonRow: {},
-
-    profileImage: {
-        width: 50,
-        height: 50,
-        borderRadius: 25,
-        marginRight: 10,
-    },
-
     username: {
         fontWeight: 'bold',
     },

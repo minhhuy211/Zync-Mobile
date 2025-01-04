@@ -23,7 +23,7 @@ const AnonymousNavigator = () => {
         {/* <Stack.Screen name="Verify" component={Verify} /> */}
         {/*<Stack.Screen name="HOME" component={Home} />*/}
         <Stack.Screen name="SEARCH" component={Search} />
-          <Stack.Screen name={"SEARCH_DETAIL"} component={SearchDetail}/>
+        <Stack.Screen name={"SEARCH_DETAIL"} component={SearchDetail}/>
         {/*<Stack.Screen name="POST" component={Post} />*/}
         <Stack.Screen name="ACTIVITY" component={Activity} />
         {/*<Stack.Screen name="USER" component={User} />*/}
