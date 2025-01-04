@@ -4,38 +4,59 @@ import FilterButtonList from "../components/activity/FilterButtonList";
 import {StatusBar} from "expo-status-bar";
 import ActivityPiece from "../components/activity/ActivityPiece";
 import ActivityModel from "../models/ActivityModel";
-import api from "../api/api";
+import {data} from "../constants/notify/ExampleData";
 
 const apiUrl = 'http://192.168.88.54:8080/api/v1/me/activities';
+
+const xmplData: ActivityModel[] = data;
 
 const Activity = () => {
     const [data, setData] = useState<ActivityModel[]>([]); // Đảm bảo state có kiểu phù hợp
 
+    // Render example data
     useEffect(() => {
-        console.log("Fetching data...");
-        const fetchActivity = async () => {
+        const fetchXmplData = async () => {
             try {
-                const response= await api.get<ActivityModel[]>(apiUrl);
-                console.log(response);
-                setData(response); // Cập nhật state đúng kiểu
-                console.log(response);
+                console.log("Fetching data...");
+                // Giả lập gọi API
+                await new Promise(resolve => setTimeout(resolve, 3000));
+                console.log("Call API success");
+                setData(xmplData);
+                console.log(xmplData);
             } catch (error) {
-                console.error('Error fetching data:', error);
+                console.error("Error fetching data:", error);
             }
         };
 
-        fetchActivity(); // Gọi hàm fetchData
-    }, []);
+        fetchXmplData();
+    }, [xmplData, data]); // Chạy lại nếu `xmplData` hoặc `data` thay đổi
 
-    useEffect(() => {
-        console.log("Updated data:", data); // Lắng nghe sự thay đổi của `data`
-    }, [data]);
+
+    // useEffect(() => {
+    //     console.log("Fetching data...");
+    //     const fetchActivity = async () => {
+    //         try {
+    //             const response = await api.get<ActivityModel[]>(apiUrl);
+    //             console.log(response);
+    //             setData(response); // Cập nhật state đúng kiểu
+    //             console.log(response);
+    //         } catch (error) {
+    //             console.error('Error fetching data:', error);
+    //         }
+    //     };
+    //
+    //     fetchActivity(); // Gọi hàm fetchData
+    // }, []);
+    //
+    // useEffect(() => {
+    //     console.log("Updated data:", data); // Lắng nghe sự thay đổi của `data`
+    // }, [data]);
 
     return (
         <View style={styles.container}>
             <StatusBar backgroundColor="transparent" translucent={true}/>
             <Text style={styles.title}>Activity</Text>
-            <View style={{flex: 1}}>
+            <View>
                 <FilterButtonList/>
                 <FlatList
                     showsVerticalScrollIndicator={false}

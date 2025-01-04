@@ -12,12 +12,64 @@ interface ActivityPieceProps {
     data: ActivityModel;
 }
 
-const ActivityPiece = (pieces: ActivityPieceProps) => {
-    const backgroundIcon: string = getBackgroundIcon(pieces.data.type);
-    const iconName: string | null = pieces.data.type === ActivityType.MENTION ? null : getIcon(pieces.data.type);
+const ActivityPiece = (piece: ActivityPieceProps) => {
+    const backgroundIcon: string = getBackgroundIcon(piece.data.type);
+    const iconName: string | null = piece.data.type === ActivityType.MENTION ? null : getIcon(piece.data.type);
+
+    const handleClick = () => {
+        const id: string = piece.data.id;
+        sendRequest(id);
+    }
+
+    // Gửi dữ liệu về Backend
+    const sendRequest = (id: string) => {
+        switch (piece.data.type) {
+            case ActivityType.FOLLOW:
+                console.log("Follow");
+                break;
+            case ActivityType.MENTION:
+                console.log("Mention");
+                break;
+            case ActivityType.LIKE:
+                console.log("Like");
+                break;
+            case ActivityType.REQUEST_FOLLOW:
+                console.log("Request follow");
+                break;
+            case ActivityType.REPLY:
+                console.log("Reply");
+                break;
+            case ActivityType.SHARE:
+                console.log("Share");
+                break;
+            case ActivityType.ACCEPT_FOLLOW:
+                console.log("Accept follow");
+                break;
+            case ActivityType.UNFOLLOW:
+                console.log("Unfollow");
+                break;
+            case ActivityType.REPOST:
+                console.log("Repost");
+                break;
+            case ActivityType.BOOKMARK:
+                console.log("Bookmark");
+                break;
+            case ActivityType.REPORT:
+                console.log("Report");
+                break;
+            case ActivityType.RECOMMEND_USER:
+                console.log("Recommend user");
+                break;
+            case ActivityType.RECOMMEND_POST:
+                console.log("Recommend post");
+                break;
+            default:
+                console.log("Default");
+        }
+    }
 
     return (
-        <TouchableOpacity style={styles.piece}>
+        <TouchableOpacity style={styles.piece} onPress={handleClick}>
             <View style={styles.avatarContainer}>
                 <View style={styles.avatarBox}>
                     <Image source={require('../../../assets/logo.png')} style={styles.avatar}/>
@@ -25,14 +77,14 @@ const ActivityPiece = (pieces: ActivityPieceProps) => {
                 {iconName !== '' ?
                     (<View style={[styles.iconBox,
                         {backgroundColor: backgroundIcon}]}>
-                        {(pieces.data.type !== ActivityType.MENTION && iconName !== null) ?
+                        {(piece.data.type !== ActivityType.MENTION && iconName !== null) ?
                             <Ionicons name={iconName} size={10} color="white"/> :
                             <FontAwesome6Icon name="threads" size={10} color="white"/>}
                     </View>) : null
                 }
             </View>
             <View style={styles.contentComponent}>
-                <ActivityInfo data={pieces.data}/>
+                <ActivityInfo data={piece.data}/>
             </View>
         </TouchableOpacity>
     );

@@ -5,7 +5,7 @@ export enum ActivityDescription {
     FOLLOW_APPROVED = "You're now following",
     LIKED = "Liked your post",
     REPOSTED = "Reposted your post",
-    COMMENT = "Content will be displayed here",
+    REPLY = "Replied on your post",
     MENTIONED = "Mentioned you in a post",
     POLL_RESULT_READY = "Poll results are ready",
     PICKED_FOR_U = "Picked for you",

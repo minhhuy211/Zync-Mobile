@@ -14,5 +14,6 @@ export interface PostModel {
     media: MediaModel[];
     time: TimeModel;
     liked: boolean;
+    reposted: boolean;
     parent?: PostModel;
 }

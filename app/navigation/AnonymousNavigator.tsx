@@ -17,7 +17,7 @@ const AnonymousNavigator = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-         <Stack.Screen name="LOGIN" component={Login} />
+         {/*<Stack.Screen name="LOGIN" component={Login} />*/}
          {/*<Stack.Screen name="REGISTER" component={SignUp} /> */}
         {/* <Stack.Screen name="Verify" component={Verify} /> */}
         {/*<Stack.Screen name="HOME" component={Home} />*/}

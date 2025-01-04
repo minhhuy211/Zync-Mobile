@@ -5,6 +5,8 @@ import FontAwesome6Icon from "react-native-vector-icons/FontAwesome6";
 import {ActivityType} from "../../constants/notify/ActivityType";
 import {ActivityDescription} from "../../constants/notify/ActivityDescription";
 import ActivityModel from "../../models/ActivityModel";
+import Content from "../Content";
+import {PostModel} from "../../models/PostModel";
 
 interface FollowButtonInfo {
     title: string,
@@ -18,6 +20,7 @@ interface ActivityInfoProps {
 const ActivityInfo = (info: ActivityInfoProps) => {
     const [followButtonInfo, setFollowButtonInfo] = useState<FollowButtonInfo>({title: "Follow back", isFollowed: false});
     const [confirmed, setConfirmed] = useState<boolean>(false);
+    const [post, setPost] = useState<PostModel | undefined | null>(info.data.post);
 
     const handleFollow = () => {
         followButtonInfo.isFollowed ?
@@ -31,13 +34,37 @@ const ActivityInfo = (info: ActivityInfoProps) => {
             setConfirmed(true);
     }
 
+    const handleLike = () => {
+        if (post) {
+            console.log("Handle like");
+            const updatedPost = { ...post };  // Tạo bản sao mới của post
+            updatedPost.liked = !updatedPost.liked;
+            updatedPost.likes = updatedPost.liked ? updatedPost.likes + 1 : updatedPost.likes - 1;
+            console.log(updatedPost.liked, updatedPost.likes);
+            setPost(updatedPost);
+        }
+    }
+
+    const handleRepost = () => {
+        if (post) {
+            const updatedPost = { ...post };  // Tạo bản sao mới của post
+            updatedPost.reposted = !updatedPost.reposted;
+            updatedPost.reposts = updatedPost.reposted ? updatedPost.reposts + 1 : updatedPost.reposts - 1;
+            setPost(updatedPost);
+        }
+    }
+
+    const formatUnit = (unit: string) => {
+        return unit.charAt(0).toLowerCase();
+    }
+
     return (
         <View style={styles.wrapper}>
             <View style={styles.infoContainer}>
                 <View>
                     <View style={styles.nameBox}>
-                        <Text style={styles.name}>{info.data.actor.name}</Text>
-                        <Text style={styles.time}>{info.data.time.unit + info.data.time.value + " ago"}</Text>
+                        <Text style={styles.name}>{info.data.actor.username}</Text>
+                        <Text style={styles.time}>{info.data.time.value + formatUnit(info.data.time.unit)}</Text>
                     </View>
                     <View style={styles.descriptionBox}>
                         <Text style={styles.description}>{getDescription(info.data.type)}</Text>
@@ -61,13 +88,13 @@ const ActivityInfo = (info: ActivityInfoProps) => {
                             </TouchableOpacity> :
                             <View style={styles.followReqBox}>
                                 <TouchableOpacity style={[styles.buttonReq, {marginRight: 4}]}
-                                                  onPress={() => setConfirmed(true)}>
+                                                  onPress={() => handleConfirm(true)}>
                                     <Text style={[styles.buttonText, followButtonInfo.isFollowed && styles.followedText]}>
                                         Confirm
                                     </Text>
                                 </TouchableOpacity>
 
-                                <TouchableOpacity style={styles.buttonReq} onPress={() => setConfirmed(false)}>
+                                <TouchableOpacity style={styles.buttonReq} onPress={() => handleConfirm(false)}>
                                     <Text style={[styles.buttonText, followButtonInfo.isFollowed && styles.followedText]}>
                                         X
                                     </Text>
@@ -76,28 +103,44 @@ const ActivityInfo = (info: ActivityInfoProps) => {
                     )
                 ) : null}
             </View>
-            {info.data.post ?
+            {post ?
                 <View style={styles.contentContainer}>
-                    <Text>{info.data.post.content}</Text>
+                    <Text><Content value={post.content}/></Text>
 
                     <View style={styles.interaction}>
-                        <TouchableOpacity style={[styles.interactBox, {paddingLeft: 0}]}>
+                        <TouchableOpacity style={[styles.interactBox, {paddingLeft: 0}]} onPress={handleLike}>
                             {
-                                info.data.post.liked ?
-                                    <Ionicons name="heart" size={22} color="red"/> :
-                                    <Ionicons name="heart-outline" size={22} color="#7e7e7e"/>
+                                post.liked ?
+                                    <>
+                                        <Ionicons name="heart" size={22} color="red" />
+                                        <Text style={[styles.interactCount, {color: "red"}]}>{post.likes}</Text>
+                                    </> :
+                                    <>
+                                        <Ionicons name="heart-outline" size={22} color="#7E7E7E"/>
+                                        <Text style={styles.interactCount}>{post.likes}</Text>
+                                    </>
                             }
-                            <Text style={styles.interactCount}>{info.data.post.likes}</Text>
+
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.interactBox}>
-                            <Ionicons name="chatbubble-outline" size={20} color="#7e7e7e"/>
-                            <Text style={styles.interactCount}>{info.data.post.replies}</Text>
+                            <Ionicons name="chatbubble-outline" size={20} color="#7E7E7E"/>
+                            <Text style={styles.interactCount}>{post.replies}</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.interactBox}>
-                            <FontAwesome6Icon name="repeat" size={16} color="#7e7e7e"/>
-                            <Text style={styles.interactCount}>{info.data.post.reposts}</Text>
+                        <TouchableOpacity style={styles.interactBox} onPress={handleRepost}>
+                            {
+                                post.reposted ?
+                                    <>
+                                        <FontAwesome6Icon name="repeat" size={16} color="#FFE700"/>
+                                        <Text style={[styles.interactCount, {color: "#FFE700"}]}>{post.reposts}</Text>
+                                    </> :
+                                    <>
+                                        <FontAwesome6Icon name="repeat" size={16} color="#7E7E7E"/>
+                                        <Text style={styles.interactCount}>{post.reposts}</Text>
+                                    </>
+                            }
+
                         </TouchableOpacity>
                     </View>
                 </View> :
@@ -112,7 +155,7 @@ const getDescription = (type: ActivityType) => {
         [ActivityType.FOLLOW]: ActivityDescription.FOLLOW,
         [ActivityType.REQUEST_FOLLOW]: ActivityDescription.FOLLOW_REQUESTED,
         [ActivityType.ACCEPT_FOLLOW]: ActivityDescription.FOLLOW_APPROVED,
-        [ActivityType.REPLY]: ActivityDescription.COMMENT,
+        [ActivityType.REPLY]: ActivityDescription.REPLY,
         [ActivityType.LIKE]: ActivityDescription.LIKED,
         [ActivityType.REPOST]: ActivityDescription.REPOSTED,
         [ActivityType.MENTION]: ActivityDescription.MENTIONED,
@@ -162,7 +205,7 @@ const styles = StyleSheet.create({
     time: {
         fontFamily: "SF Pro",
         fontSize: 13,
-        color: "#7e7e7e",
+        color: "#7E7E7E",
     },
 
     descriptionBox: {
@@ -173,7 +216,7 @@ const styles = StyleSheet.create({
     description: {
         fontFamily: "SF Pro",
         fontSize: 14,
-        color: "#7e7e7e",
+        color: "#7E7E7E",
     },
 
     iconBox: {
@@ -202,7 +245,7 @@ const styles = StyleSheet.create({
     },
 
     followedText: {
-        color: '#7e7e7e'
+        color: '#7E7E7E'
     },
 
     followReqBox: {
@@ -224,7 +267,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
 
-    contentContainer: {},
+    contentContainer: {
+    },
 
     interaction: {
         display: "flex",
@@ -236,7 +280,7 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
-        color: "#7e7e7e",
+        color: "#7E7E7E",
         padding: 10,
         maxHeight: 40
     },
@@ -244,7 +288,7 @@ const styles = StyleSheet.create({
     interactCount: {
         fontFamily: "SF Pro",
         fontSize: 14,
-        color: "#7e7e7e",
+        color: "#7E7E7E",
         marginLeft: 5
     },
 });
