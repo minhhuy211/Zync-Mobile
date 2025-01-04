@@ -1,17 +1,22 @@
 import {StyleSheet, View} from 'react-native';
-import React from "react";
+import React, {useEffect} from "react";
 
 interface ProfilesFragProps {
 
 }
 
-const ProfilesSearchFragment = () => (
-    <View style={styles.content}>
-        <View>
+const ProfilesSearchFragment = () => {
+    useEffect(() => {
 
-        </View>
-    </View>
-);
+    }, []);
+
+    return (
+        <View style={styles.content}>
+            <View>
+
+            </View>
+        </View>);
+};
 
 const styles = StyleSheet.create({
     content: {

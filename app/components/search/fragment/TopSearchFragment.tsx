@@ -3,7 +3,7 @@ import React from "react";
 
 const TopSearchFragment = () => (
     <View style={styles.content}>
-        <Text style={styles.contentText}>Đây là nội dung của tab Top (Bài viết)</Text>
+        <Text style={styles.contentText}>Đây là nội dung của tab Top (Thêm các bài viết vào đây)</Text>
     </View>
 );
 

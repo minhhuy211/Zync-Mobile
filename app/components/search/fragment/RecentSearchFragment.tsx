@@ -3,7 +3,7 @@ import React from "react";
 
 const RecentSearchFragment = () => (
     <View style={styles.content}>
-    <Text style={styles.contentText}>Đây là nội dung của tab Recent (Bài viết)</Text>
+    <Text style={styles.contentText}>Đây là nội dung của tab Recent (Thêm các bài viết vào đây)</Text>
 </View>
 );
 
