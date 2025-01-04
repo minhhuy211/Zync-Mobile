@@ -7,7 +7,7 @@ import Search from "../screens/Search";
 import Post from "../screens/Post";
 import Follow from "../screens/Follow";
 import User, { UserProfile } from "../screens/UserProfile";
-import ProfileView from "../screens/ProfileView";
+
 import SelfProfile from "../screens/SelfProfile";
 
 const AuthenticatedNavigator = () => {
@@ -70,7 +70,7 @@ const AuthenticatedNavigator = () => {
             headerShown: false,
           }}
         />
-        {/* <Tab.Screen
+        <Tab.Screen
           name="USER"
           component={UserProfile}
           options={{
@@ -82,8 +82,8 @@ const AuthenticatedNavigator = () => {
             headerLeft: UserProfile.HeaderLeft,
             headerRight: UserProfile.HeaderRight,
           }}
-        /> */}
-        <Tab.Screen
+        />
+        {/* <Tab.Screen
           name="SELF"
           component={SelfProfile}
           options={{
@@ -95,7 +95,7 @@ const AuthenticatedNavigator = () => {
             headerLeft: SelfProfile.HeaderLeft,
             headerRight: SelfProfile.HeaderRight,
           }}
-        />
+        /> */}
       </Tab.Navigator>
     </NavigationContainer>
   );

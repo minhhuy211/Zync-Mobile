@@ -9,7 +9,7 @@ import { SafeAreaView } from "react-native";
 import Search from "../screens/Search";
 import Post from "../screens/Post";
 import Follow from "../screens/Follow";
-import ProfileView from "../screens/ProfileView";
+
 import SelfProfile from "../screens/SelfProfile";
 
 

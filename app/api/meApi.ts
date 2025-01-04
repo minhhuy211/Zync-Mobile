@@ -3,6 +3,8 @@ import { UserModel } from "../models/UserModel";
 import {ProfileRequest}  from "../models/ProfileRequest";
 import { ProfileModel } from "../models/ProfileModel";
 import { PostModel, PostType } from "../models/PostModel";
+import { ImagePickerAsset } from "expo-image-picker";
+import { Platform } from "react-native";
 
 
 export default {
@@ -17,11 +19,27 @@ export default {
     api.put('/api/v1/me/avatar',null, {params: {id: id}})
   },
 
-  //load avatar
-  uploadAvatar: (file: File) => {
-    let f = new FormData();
-    f.append('file', file);
-    api.post('/api/v1/me/avatar', f)
+  uploadAvatar: async (f : ImagePickerAsset) => {
+    let formData = new FormData();
+    console.log("upload");
+    
+    let uri = Platform.OS === 'ios' ? f.uri.replace('file://', '') : f.uri;
+    const fileName = f.fileName || "avatar.jpg";
+    const fileType = f.type || "image/jpeg";
+
+    //@ts-expect-error
+    formData.append('file', { uri, name: fileName, type: fileType });
+    try {
+      const response = await api.post('/api/v1/me/avatars', formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      return response; // Trả về dữ liệu từ server nếu cần
+    } catch (error) {
+      console.error('Lỗi khi tải lên avatar:', error);
+      throw error; // Ném lỗi nếu gặp vấn đề
+    }
   },
 
   getProfile: () => api.get<ProfileModel>('/api/v1/me/profiles'),

@@ -39,6 +39,8 @@ export const ProfileEditor = ({
   const [isPrivateProfile, setPrivateProfile] = useState(false);
   const bottomSheetRef = useRef<BottomSheet>(null); // Bottom sheet reference
   const snapPoints = ["50%"];
+  
+  
 
   useEffect(() => {
     if (visible) {
@@ -53,15 +55,22 @@ export const ProfileEditor = ({
   }, [visible]);
 
   const handleSave = async () => {
+    console.log("Saving profile...");
     const updatedProfile = {
       name: name,
-      bio: bio.trim(),
-      links: [link.trim()],
+      bio: bio?.trim(),
+      links: [link?.trim()],
     };
-    await meApi.postProfile(updatedProfile).then(() => {
+    console.log("Sending updated profile to API:", updatedProfile);
+    try {
+      const response = await meApi.postProfile(updatedProfile);
+      console.log("API response:", response);
+  
       onUpdated();
       onclose();
-    });
+    } catch (error) {
+      console.error("Error while saving profile:", error);
+    }
   };
 
   const changePrivacyProfile = () => {
@@ -82,24 +91,23 @@ export const ProfileEditor = ({
     bottomSheetRef.current?.close();
   };
 
-  const uploadAvatar = (file: File) => {
-    meApi.uploadAvatar(file);
-  };
+  
 
   const selectFromLibrary = async () => {
     try {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ['images', 'videos'],
         allowsEditing: true,
+        aspect: [1, 1],
         quality: 1,
       });
-      if (!result.canceled && result.assets?.[0]?.uri) {
-        const file = {
-          uri: result.assets[0].uri,
-          type: "image/jpeg",
-          name: "avatar.jpg",
-        };
-        // uploadAvatar(file);
+      
+      
+      if (!result.canceled && result.assets) {  
+        console.log(result);
+        await meApi.uploadAvatar(result.assets[0]);
+        onUpdated();
+        setAvatar(result.assets[0].uri);
         bottomSheetRef.current?.close();
       }
     } catch (error) {
@@ -107,8 +115,45 @@ export const ProfileEditor = ({
     }
   };
 
-  const captureFromCamera = () => {
-    //    
+  const captureFromCamera = async () => {
+    // Yêu cầu quyền truy cập camera
+    const { status: cameraStatus } = await ImagePicker.requestCameraPermissionsAsync();
+    // Yêu cầu quyền truy cập thư viện ảnh
+    const { status: mediaLibraryStatus } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  
+    // Kiểm tra quyền truy cập camera
+    if (cameraStatus !== 'granted') {
+      alert('Bạn cần cấp quyền sử dụng camera');
+      return;
+    }
+  
+    // Kiểm tra quyền truy cập thư viện ảnh
+    if (mediaLibraryStatus !== 'granted') {
+      alert('Bạn cần cấp quyền truy cập thư viện ảnh');
+      return;
+    }
+  
+    try {
+      // Mở camera để chụp ảnh
+      let result = await ImagePicker.launchCameraAsync({
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+      });
+  
+      if (!result.canceled && result.assets) {
+        console.log(result);
+        // Tiến hành upload ảnh đại diện lên server
+        await meApi.uploadAvatar(result.assets[0]);
+        // Cập nhật ảnh đại diện trong state
+        setAvatar(result.assets[0].uri);
+        // Đóng bottom sheet
+        bottomSheetRef.current?.close();
+        onUpdated();
+      }
+    } catch (error) {
+      console.error('Lỗi khi chụp ảnh:', error);
+    }
   };
 
   return (
