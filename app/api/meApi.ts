@@ -48,7 +48,7 @@ export default {
   postProfile: (data: ProfileRequest) => api.post('/api/v1/me/profiles', data),
 
 
-  getRecommendUsers: (limit: number, offset: number) => api.get<UserModel[]>('/api/v1/me/users/recommend', { params: { limit, offset } }),
+  getRecommendUsers: (limit: number, offset: number) => api.get<UserModel[]>('/api/v1/me/users/recommended', { params: { limit, offset } }),
 
   getFollowing: (limit: number, offset: number) => api.get<UserModel[]>('/api/v1/me/users/following', { params: { limit, offset } }),
 

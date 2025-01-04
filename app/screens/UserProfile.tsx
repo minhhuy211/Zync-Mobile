@@ -16,6 +16,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import PostTab from "../components/Profile/PostTab";
 import userApi from "../api/userApi";
 import { Relationship } from "../constants/FollowStatus";
+import RecommendUser from "../components/RecommendUser";
 
 type UserProfileProps = {
   userId: string;
@@ -47,11 +48,14 @@ export const UserProfile = ({ userId }: UserProfileProps) => {
 
   const handleFollowToggle = async () => {
      userApi.followUser(userId)
-     setprofile({ ...profile, relationship: profile.isPrivate ? Relationship.PENDING : Relationship.FOLLOWING });
+     setprofile({ ...profile, relationship: profile.isPrivate ? Relationship.REQUESTED : Relationship.FOLLOWING });
 
   };
 
-  const handleAcceptFollowToggle = async () => {};
+  const handleAcceptFollowToggle = async () => {
+    userApi.acceptFollow(userId)
+    setprofile({ ...profile, relationship: Relationship.FOLLOWING });
+  };
 
   const handleFollowedToggle = async () => {
     userApi.followUser(userId)
@@ -59,7 +63,10 @@ export const UserProfile = ({ userId }: UserProfileProps) => {
 
   };
 
-  const handleRequestedFollowToggle = async () => {};
+  const handleRequestedFollowToggle = async () => {
+    userApi.removeRequest(userId)
+    setprofile({ ...profile, relationship: Relationship.NONE });
+  };
 
   if (loading) {
     return (
@@ -147,6 +154,7 @@ export const UserProfile = ({ userId }: UserProfileProps) => {
           </TouchableOpacity>
         </>
       </View>
+      <RecommendUser />
       <PostTab
         onChangeType={() => {}}
         onLoadMore={() => {}}

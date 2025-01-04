@@ -1,24 +1,35 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { UserModel } from '../models/UserModel';
-
+import meApi from '../api/meApi';
 
 const RecommendUser = () => {
-    const [user, setUser] = useState({} as UserModel);
-    
+    const [user, setUser] = useState({} as UserModel[]);
+
+    const loadUser = () => {
+        meApi.getRecommendUsers(5,1).then((data) => {
+            console.log(data);
+            return setUser(data);
+        });
+    };
+
+    useEffect(() => {
+        loadUser();
+    }, [])
+
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Gợi ý cho bạn</Text>
       <FlatList
-        data={suggestions}
+        data={user}
         keyExtractor={(item) => item.id}
         horizontal
         renderItem={({ item }) => (
             <View style={styles.card}>
-            <Image source={{ uri: image }} style={styles.avatar} />
+            <Image source={{ uri: item.avatar }} style={styles.avatar} />
             <View style={styles.info}>
-              <Text style={styles.name}>{name}</Text>
-              <Text style={styles.username}>{username}</Text>
+              <Text style={styles.name}>{item.name}</Text>
+              <Text style={styles.username}>{item.username}</Text>
             </View>
             <TouchableOpacity style={styles.followButton}>
               <Text style={styles.followText}>Theo dõi</Text>
