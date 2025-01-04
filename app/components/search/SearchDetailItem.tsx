@@ -7,13 +7,15 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 interface SearchDetailItemProps {
     history: History,
     onDeleteHistory: (id: number) => void;
+    onSearch: (text: string) => void
+    onSearchUser: (user: UserModel) => void
 }
 
 function isUserModel(data: UserModel | string): data is UserModel {
     return (data as UserModel).id !== undefined && (data as UserModel).username !== undefined;
 }
 
-const SearchDetailItem = ({history, onDeleteHistory}: SearchDetailItemProps) => {
+const SearchDetailItem = ({history, onDeleteHistory, onSearch, onSearchUser}: SearchDetailItemProps) => {
     const handleClear = () => {
         onDeleteHistory(history.id);
     };
@@ -29,10 +31,14 @@ const SearchDetailItem = ({history, onDeleteHistory}: SearchDetailItemProps) => 
                     </View>
                     <View style={styles.contentComponent}>
                         <View style={styles.wrapper}>
-                            <View style={styles.info}>
+                            <TouchableOpacity style={styles.info} onPress={() => {
+                                if (typeof history.data === 'object' && 'id' in history.data) {
+                                    onSearchUser(history.data);
+                                }
+                            }}>
                                 <Text style={styles.username}>{history.data.username}</Text>
                                 <Text style={styles.name}>{history.data.name}</Text>
-                            </View>
+                            </TouchableOpacity>
 
                             <TouchableOpacity style={{}} onPress={handleClear}>
                                 <Ionicons name="close-outline" size={24} color="black"/>
@@ -48,9 +54,13 @@ const SearchDetailItem = ({history, onDeleteHistory}: SearchDetailItemProps) => 
                     </View>
                     <View style={styles.contentComponent}>
                         <View style={styles.wrapper}>
-                            <View style={styles.info}>
+                            <TouchableOpacity style={styles.info} onPress={() => {
+                                if (typeof history.data === 'string') {
+                                    onSearch(history.data)
+                                }
+                            }}>
                                 <Text style={styles.username}>{history.data.toString()}</Text>
-                            </View>
+                            </TouchableOpacity>
 
                             <TouchableOpacity style={{}} onPress={handleClear}>
                                 <Ionicons name="close-outline" size={24} color="black"/>

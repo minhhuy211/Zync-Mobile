@@ -175,6 +175,17 @@ const SearchDetail = ({navigation}: { navigation: NavigationProp<any> }) => {
         setHistories(prevHistories => prevHistories.filter(history => history.id !== id));
     };
 
+    const handleSearch = (text: string) => {
+        // Điều hướng đến màn hình SEARCH_RESULT và truyền tham số query
+        navigation.navigate('SEARCH_RESULT', { query: text });
+    };
+
+    const handleSearchUser = (user: UserModel) => {
+        // Navigate thẳng đến profile của user đó. Có thể chỉ cần truyền id người dùng.
+        // navigation.navigate('USER', {user: user});
+        console.log("Search profile user clicked.");
+    }
+
     // Giả sử luôn có history
     useEffect(() => {
         setHistories(historyList);
@@ -193,6 +204,7 @@ const SearchDetail = ({navigation}: { navigation: NavigationProp<any> }) => {
                         onChangeText={setSearch}
                         value={search}
                         style={styles.searchBar}
+                        onSubmitEditing={({ nativeEvent }) => handleSearch(nativeEvent.text)}
                     />
                 </TouchableOpacity>
             </View>
@@ -204,7 +216,12 @@ const SearchDetail = ({navigation}: { navigation: NavigationProp<any> }) => {
                     style={styles.followSuggest}
                     data={histories}
                     keyExtractor={(item: History): string => item.id.toString()}
-                    renderItem={({item}) => <SearchDetailItem history={item} onDeleteHistory={handleClearHistory}/>}
+                    renderItem={({item}) =>
+                        <SearchDetailItem history={item}
+                                          onDeleteHistory={handleClearHistory}
+                                          onSearch={handleSearch}
+                                          onSearchUser={handleSearchUser}
+                        />}
                 />
             </View>
         </View>
