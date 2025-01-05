@@ -19,6 +19,6 @@ export default {
 
     likePost: (id: string) => api.post(`/api/v1/posts/${id}/likes`),
     
-    // getPosts: () => api.get<PostModel[]>('/api/v1/posts'),   
+    getPosts: () => api.get<PostModel[]>('/api/v1/posts'),   
 
 }
