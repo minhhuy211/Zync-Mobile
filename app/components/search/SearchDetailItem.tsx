@@ -2,7 +2,7 @@ import React from "react";
 import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {UserModel} from "../../models/UserModel";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import {History, HistoryType} from "./Fragment/General/SearchDetailFragment";
+import {History, HistoryType} from "./fragment/General/SearchDetailFragment";
 
 interface SearchDetailItemProps {
     history: History,

@@ -20,7 +20,6 @@ import Splash from "../screens/Splash";
 import { SafeAreaView } from "react-native-safe-area-context";
 import meApi from "../api/meApi";
 
-
 const Layout = () => {
   const [loading, setLoading] = useState(false);
   const { isAuthenticated, accessToken, user } = useAuthSelector();
@@ -43,28 +42,34 @@ const Layout = () => {
         })
         .then((res) => {
           if (!!res) dispatch(authenticate(res.accessToken));
-
+          else setLoading(false);
         })
-        .catch((e: ApiError) => handleError(e))
+        .catch((e: ApiError) => {
+          handleError(e);
+          setLoading(false);
+        });
     }
   }, []);
 
   useEffect(() => {
-    if (isAuthenticated){
-      meApi.getMe().then(user => dispatch(setPrincipal(user))).catch((e: ApiError) => handleError(e)).finally(() => setLoading(false))
+    console.log("load profile:" + isAuthenticated);
+    if (isAuthenticated) {
+      meApi
+        .getMe()
+        .then((user) => {
+          dispatch(setPrincipal(user));
+        })
+        .catch((e: ApiError) => handleError(e))
+        .finally(() => setLoading(false));
     }
   }, [isAuthenticated]);
 
   if (loading) return <Splash />;
-  if (isAuthenticated)
-    return (
-        <AuthenticatedNavigator />
-    );
+  if (isAuthenticated) return <AuthenticatedNavigator />;
   return (
-    
-      <SafeAreaView style={{ flex: 1 }}>
-        <AnonymousNavigator />
-      </SafeAreaView>
+    <SafeAreaView style={{ flex: 1 }}>
+      <AnonymousNavigator />
+    </SafeAreaView>
   );
 };
 
