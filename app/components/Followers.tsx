@@ -7,12 +7,14 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
+  Dimensions,
 } from "react-native";
 import { UserModel } from "../models/UserModel";
 import meApi from "../api/meApi";
 import Tabs from "./Tabs";
-import { Modalize } from 'react-native-modalize';
-
+import { Modalize } from "react-native-modalize";
+import { useNavigation } from "expo-router";
+import FollowButton from "./FollowButton";
 
 interface FollowersProps {
   users: UserModel[];
@@ -20,7 +22,7 @@ interface FollowersProps {
   onClose: () => void;
   onLoadMore: () => void;
   onRefresh: () => void;
-  onUserPress: (user: UserModel) => void;
+  onUserPress: (userId: string) => void;
   onChangeType: (type: FollowersType) => void;
 }
 
@@ -36,7 +38,14 @@ const items = [
   { value: FollowersType.REQUESTED, label: "Đang chờ" },
 ];
 
-const Followers = ({ onChangeType, onUserPress, visible, onClose }: FollowersProps) => {
+const { height } = Dimensions.get("window");
+
+const Followers = ({
+  onChangeType,
+  onUserPress,
+  visible,
+  onClose,
+}: FollowersProps) => {
   const [users, setUsers] = useState<UserModel[]>([]);
   const [tabValue, setTabValue] = useState(FollowersType.FOLLOWERS);
   const modalizeRef = useRef<Modalize>(null);
@@ -63,7 +72,6 @@ const Followers = ({ onChangeType, onUserPress, visible, onClose }: FollowersPro
       loadUsers();
     }
   }, [visible, tabValue]);
-  
 
   const handleTabChange = (value: any): void => {
     setTabValue(value.value);
@@ -73,19 +81,38 @@ const Followers = ({ onChangeType, onUserPress, visible, onClose }: FollowersPro
 
   const renderItem = ({ item }: { item: UserModel }) => {
     return (
-      <TouchableOpacity onPress={() => onUserPress(item)}>
-        <View style={styles.itemContainer}>
-          <Image source={{ uri: item.avatar }} style={styles.profileImage} />
-          <View style={styles.textContainer}>
-            <Text style={styles.username}>{item.username}</Text>
-            <Text style={styles.name}>{item.name}</Text>
-          </View>
-          <TouchableOpacity style={styles.followButton}>
-            <Text style={styles.followButtonText}>Theo dõi lại</Text>
+      <>
+        <View style={styles.container}>
+          <TouchableOpacity onPress={() => onUserPress(item.id)}>
+            <View style={styles.itemContainer}>
+              <Image
+                source={{ uri: item.avatar }}
+                style={styles.profileImage}
+              />
+              <View style={styles.infoContainer}>
+                <View style={styles.textContainer}>
+                  <Text style={styles.username}>{item.username}</Text>
+                  <Text style={styles.name}>{item.name}</Text>
+                </View>
+                <TouchableOpacity style={styles.followButton}>
+                  <FollowButton
+                    userId={item.id}
+                    isPrivate={!!item.isPrivate}
+                    relationship={item.relationship}
+                    onRelationshipChange={(newRelationship) => {
+                      let newUsers = [...users];
+                      newUsers.find((u) => u.id === item.id)!.relationship =
+                        newRelationship;
+                      setUsers(newUsers);
+                    }}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
           </TouchableOpacity>
         </View>
-      </TouchableOpacity>
-    
+        <View style={styles.line}></View>
+      </>
     );
   };
 
@@ -93,22 +120,18 @@ const Followers = ({ onChangeType, onUserPress, visible, onClose }: FollowersPro
     <Modalize
       ref={modalizeRef}
       onClose={onClose}
-      modalHeight={500}>
-      <View>
-      <Tabs value={tabValue} onTabChange={handleTabChange} items={items} />
-      <View>
-        {/* <TextInput placeholder="Tìm kiếm" style={styles.searchBar} /> */}
-        <FlatList
-          data={users}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-          onEndReachedThreshold={0.5}
-          showsVerticalScrollIndicator={false}
-        />
-      </View>
-    </View>
-    </Modalize>
-    
+      modalHeight={500}
+      flatListProps={{
+        data: users,
+        renderItem: renderItem,
+        keyExtractor: (item) => item.id,
+        onEndReachedThreshold: 0.5,
+        showsVerticalScrollIndicator: false,
+        ListHeaderComponent: () => (
+          <Tabs value={tabValue} onTabChange={handleTabChange} items={items} />
+        ),
+      }}
+    />
   );
 };
 
@@ -130,7 +153,6 @@ const styles = StyleSheet.create({
   itemContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 15,
   },
   profileImage: {
     width: 50,
@@ -145,15 +167,30 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
+  infoContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    flex: 1,
+  },
+
   name: {
     fontSize: 14,
     color: "#666",
   },
+  line: {
+    flex: 1,
+    position: "relative", // Đặt vị trí tương đối cho container
+    borderBottomWidth: 2,
+    borderBottomColor: "#ddd", // Màu sắc cho border
+    marginTop: 10,
+    marginLeft: 70,
+    marginBottom: 10,
+  },
   followButton: {
-    backgroundColor: "#007bff",
     borderRadius: 5,
-    paddingHorizontal: 15,
-    paddingVertical: 5,
+    width: 130,
+    height: 35,
   },
   followButtonText: {
     color: "#fff",

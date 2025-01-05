@@ -19,7 +19,7 @@ const FollowButton: React.FC<FollowButtonProps> = ({
   isPrivate,
   relationship,
   onRelationshipChange,
-  onFollowChange
+  onFollowChange,
 }) => {
   const [actioning, setActioning] = useState(false);
 
@@ -31,10 +31,9 @@ const FollowButton: React.FC<FollowButtonProps> = ({
         isPrivate ? Relationship.REQUESTED : Relationship.FOLLOWING
       );
       if (onFollowChange) {
-        const updatedProfile = await meApi.getFollowers(5,1);
+        const updatedProfile = await meApi.getFollowers(5, 1);
         onFollowChange(updatedProfile);
       }
-
     } finally {
       setActioning(false);
     }
@@ -46,7 +45,7 @@ const FollowButton: React.FC<FollowButtonProps> = ({
       const updatedRelationship = await userApi.unfollowUser(userId);
       onRelationshipChange(updatedRelationship);
       if (onFollowChange) {
-        const updatedProfile = await meApi.getFollowers(5,1);
+        const updatedProfile = await meApi.getFollowers(5, 1);
         onFollowChange(updatedProfile);
       }
     } finally {
@@ -59,6 +58,10 @@ const FollowButton: React.FC<FollowButtonProps> = ({
     try {
       await userApi.acceptFollow(userId);
       onRelationshipChange(Relationship.FOLLOWING);
+      if (onFollowChange) {
+        const updatedProfile = await meApi.getFollowers(5, 1);
+        onFollowChange(updatedProfile);
+      }
     } finally {
       setActioning(false);
     }
@@ -72,7 +75,7 @@ const FollowButton: React.FC<FollowButtonProps> = ({
         isPrivate ? Relationship.REQUESTED : Relationship.FOLLOWING
       );
       if (onFollowChange) {
-        const updatedProfile = await meApi.getFollowers(5,1);
+        const updatedProfile = await meApi.getFollowers(5, 1);
         onFollowChange(updatedProfile);
       }
     } finally {
@@ -85,62 +88,57 @@ const FollowButton: React.FC<FollowButtonProps> = ({
     try {
       await userApi.removeRequest(userId);
       onRelationshipChange(Relationship.NONE);
+      if (onFollowChange) {
+        const updatedProfile = await meApi.getFollowers(5, 1);
+        onFollowChange(updatedProfile);
+      }
     } finally {
       setActioning(false);
     }
   };
 
   return (
-    <View style={styles.buttonRow}>
-        <>
-          {relationship == Relationship.FOLLOWING && (
-            <TouchableOpacity
-              style={styles.button}
-              onPress={handleUnFollowToggle}
-            >
-              <Text style={styles.buttonText}>
-                {actioning ? "Unfollowing..." : "Unfollow"}
-              </Text>
-            </TouchableOpacity>
-          )}
-          {relationship == Relationship.NONE && (
-            <TouchableOpacity
-              style={styles.fullButton}
-              onPress={handleFollowToggle}
-            >
-              <Text style={styles.fullButtonText}>Follow</Text>
-            </TouchableOpacity>
-          )}
-          {relationship == Relationship.PENDING && (
-            <TouchableOpacity
-              style={styles.fullButton}
-              onPress={handleAcceptFollowToggle}
-            >
-              <Text style={styles.fullButtonText}>Accept Follow</Text>
-            </TouchableOpacity>
-          )}
-          {relationship == Relationship.FOLLOWED && (
-            <TouchableOpacity
-              style={styles.fullButton}
-              onPress={handleFollowedToggle}
-            >
-              <Text style={styles.fullButtonText}>Follow Back</Text>
-            </TouchableOpacity>
-          )}
-          {relationship == Relationship.REQUESTED && (
-            <TouchableOpacity
-              style={styles.fullButton}
-              onPress={handleRequestedFollowToggle}
-            >
-              <Text style={styles.fullButtonText}>Requested</Text>
-            </TouchableOpacity>
-          )}
-
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Mention</Text>
-          </TouchableOpacity>
-        </>
-      </View>
+    <>
+      {relationship == Relationship.FOLLOWING && (
+        <TouchableOpacity style={styles.button} onPress={handleUnFollowToggle}>
+          <Text style={styles.buttonText}>
+            {actioning ? "Unfollowing..." : "Unfollow"}
+          </Text>
+        </TouchableOpacity>
+      )}
+      {relationship == Relationship.NONE && (
+        <TouchableOpacity
+          style={styles.fullButton}
+          onPress={handleFollowToggle}
+        >
+          <Text style={styles.fullButtonText}>Follow</Text>
+        </TouchableOpacity>
+      )}
+      {relationship == Relationship.PENDING && (
+        <TouchableOpacity
+          style={styles.fullButton}
+          onPress={handleAcceptFollowToggle}
+        >
+          <Text style={styles.fullButtonText}>Accept Follow</Text>
+        </TouchableOpacity>
+      )}
+      {relationship == Relationship.FOLLOWED && (
+        <TouchableOpacity
+          style={styles.fullButton}
+          onPress={handleFollowedToggle}
+        >
+          <Text style={styles.fullButtonText}>Follow Back</Text>
+        </TouchableOpacity>
+      )}
+      {relationship == Relationship.REQUESTED && (
+        <TouchableOpacity
+          style={styles.fullButton}
+          onPress={handleRequestedFollowToggle}
+        >
+          <Text style={styles.fullButtonText}>Requested</Text>
+        </TouchableOpacity>
+      )}
+    </>
   );
 };
 

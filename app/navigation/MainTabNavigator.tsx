@@ -6,6 +6,7 @@ import {StyleSheet, TouchableOpacity, View} from "react-native";
 import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {AuthenticatedStackParams} from "./AuthenticatedNavigator";
 import OctIcon from "@expo/vector-icons/Octicons";
+import SelfProfile from "../screens/SelfProfile";
 
 const MainTabNavigator = () => {
     const Tab = createBottomTabNavigator();
@@ -59,10 +60,13 @@ const MainTabNavigator = () => {
             />
             <Tab.Screen
                 name="Users"
-                component={() => null} // Empty component for the button
+                component={SelfProfile} // Empty component for the button
                 options={{
                     tabBarIcon: (props) => <OctIcon name={props.focused ? "person-fill" : "person"} {...props}/>,
-
+                    headerShown: true,
+                    headerTitle: "",
+                    headerLeft: SelfProfile.HeaderLeft,
+                    headerRight: SelfProfile.HeaderRight,
                 }}
             />
 

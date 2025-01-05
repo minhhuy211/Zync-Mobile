@@ -17,19 +17,17 @@
   import { GestureHandlerRootView } from "react-native-gesture-handler";
   import * as ImagePicker from "expo-image-picker";
   import { ProfileModel } from "../../models/ProfileModel";
+  import { NavigationProp, RouteProp } from "@react-navigation/native";
+  import { AuthenticatedStackParams } from "../../navigation/AuthenticatedNavigator";
+  import Ionicons from "react-native-vector-icons/Ionicons";
 
   interface ProfileEditorProps {
-    profile: ProfileModel;
-    visible: boolean;
-    onUpdated: () => void;
-    onclose: () => void;
+    route: RouteProp<AuthenticatedStackParams, "ProfileEditor">;
+    navigation: NavigationProp<any>;
   }
-  export const ProfileEditor = ({
-    profile,
-    visible,
-    onclose,
-    onUpdated,
-  }: ProfileEditorProps) => {
+  export const ProfileEditor = ({ route, navigation }: ProfileEditorProps) => {
+    const { profile } = route.params;
+    console.log("Profile:", profile);
     const [name, setName] = useState("");
     const [bio, setBio] = useState("");
     const [link, setLink] = useState("");
@@ -39,35 +37,41 @@
     const [isPrivateProfile, setPrivateProfile] = useState(false);
     const bottomSheetRef = useRef<BottomSheet>(null); // Bottom sheet reference
     const snapPoints = ["50%"];
-    
-    
+
 
     useEffect(() => {
-      if (visible) {
-        setName(profile.name);
-        setBio(profile.bio);
-        setLink(profile.links[0]);
-        setAvatar(profile.avatar);
-        setPrivateProfile(profile.isPrivate);
-        setShowBioInput(!!profile.bio);
-        setShowLinkInput(!!profile.links[0]);
-      }
-    }, [visible]);
+      setName(profile.name);
+      setBio(profile.bio);
+      setLink(profile.links[0]);
+      setAvatar(profile.avatar);
+      setPrivateProfile(profile.isPrivate);
+      setShowBioInput(!!profile.bio);
+      setShowLinkInput(!!profile.links[0]);
+    }, [profile]);
 
-    const handleSave = async () => {
+    useEffect(() => {
+      navigation.setOptions({
+        headerRight: () => ( <TouchableOpacity onPress={handleSave}><Text style={styles.finished}>Xong</Text></TouchableOpacity>),
+        headerLeft: () => ( <TouchableOpacity onPress={() => navigation.pop()}><Ionicons name="close-outline" size={32}/></TouchableOpacity>),
+        animation: "slide_from_bottom",
+
+      });
+    }, [navigation, handleSave]);
+
+    async function  handleSave ()  {
       console.log("Saving profile...");
       const updatedProfile = {
         name: name,
-        bio: bio?.trim(),
-        links: [link?.trim()],
+        bio: bio.trim(),
+        links: [link.trim()],
       };
       console.log("Sending updated profile to API:", updatedProfile);
       try {
         const response = await meApi.postProfile(updatedProfile);
         console.log("API response:", response);
-    
-        onUpdated();
-        onclose();
+        navigation.pop();
+        // onUpdated();
+        // onclose();
       } catch (error) {
         console.error("Error while saving profile:", error);
       }
@@ -91,22 +95,19 @@
       bottomSheetRef.current?.close();
     };
 
-    
-
     const selectFromLibrary = async () => {
       try {
         let result = await ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ['images', 'videos'],
+          mediaTypes: ["images", "videos"],
           allowsEditing: true,
           aspect: [1, 1],
           quality: 1,
         });
-        
-        
-        if (!result.canceled && result.assets) {  
+
+        if (!result.canceled && result.assets) {
           console.log(result);
           await meApi.uploadAvatar(result.assets[0]);
-          onUpdated();
+          // onUpdated();
           setAvatar(result.assets[0].uri);
           bottomSheetRef.current?.close();
         }
@@ -117,22 +118,24 @@
 
     const captureFromCamera = async () => {
       // Yêu cầu quyền truy cập camera
-      const { status: cameraStatus } = await ImagePicker.requestCameraPermissionsAsync();
+      const { status: cameraStatus } =
+        await ImagePicker.requestCameraPermissionsAsync();
       // Yêu cầu quyền truy cập thư viện ảnh
-      const { status: mediaLibraryStatus } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    
+      const { status: mediaLibraryStatus } =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+
       // Kiểm tra quyền truy cập camera
-      if (cameraStatus !== 'granted') {
-        alert('Bạn cần cấp quyền sử dụng camera');
+      if (cameraStatus !== "granted") {
+        alert("Bạn cần cấp quyền sử dụng camera");
         return;
       }
-    
+
       // Kiểm tra quyền truy cập thư viện ảnh
-      if (mediaLibraryStatus !== 'granted') {
-        alert('Bạn cần cấp quyền truy cập thư viện ảnh');
+      if (mediaLibraryStatus !== "granted") {
+        alert("Bạn cần cấp quyền truy cập thư viện ảnh");
         return;
       }
-    
+
       try {
         // Mở camera để chụp ảnh
         let result = await ImagePicker.launchCameraAsync({
@@ -140,7 +143,7 @@
           aspect: [1, 1],
           quality: 1,
         });
-    
+
         if (!result.canceled && result.assets) {
           console.log(result);
           // Tiến hành upload ảnh đại diện lên server
@@ -149,138 +152,125 @@
           setAvatar(result.assets[0].uri);
           // Đóng bottom sheet
           bottomSheetRef.current?.close();
-          onUpdated();
+          // onUpdated();
         }
       } catch (error) {
-        console.error('Lỗi khi chụp ảnh:', error);
+        console.error("Lỗi khi chụp ảnh:", error);
       }
     };
 
     return (
-          <View style={[styles.container]}>
-            {/* Header */}
-            <View style={styles.overlay}>
-              <View style={styles.header}>
-                <Button title="Hủy" onPress={() => onclose()} />
-                <Text style={styles.headerTitle}>Chỉnh sửa trang cá nhân</Text>
-                <Button title="Xong" onPress={() => handleSave()} />
-              </View>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={[styles.container]}>
+          {/* Body */}
+          <View style={styles.body}>
+            {/* Avatar Section */}
+            <View style={styles.avatarSection}>
+              <Image
+                source={{
+                  uri: avatar,
+                }}
+                style={styles.avatar}
+              />
+              <TouchableOpacity onPress={handleAvatarEdit}>
+                <Text style={styles.editAvatarText}>Chỉnh sửa ảnh đại diện</Text>
+              </TouchableOpacity>
+            </View>
 
-              {/* Body */}
-              <View style={styles.body}>
-                {/* Avatar Section */}
-                <View style={styles.avatarSection}>
-                  <Image
-                    source={{
-                      uri: avatar,
-                    }}
-                    style={styles.avatar}
-                  />
-                  <TouchableOpacity onPress={handleAvatarEdit}>
-                    <Text style={styles.editAvatarText}>
-                      Chỉnh sửa ảnh đại diện
-                    </Text>
-                  </TouchableOpacity>
-                </View>
+            <View style={styles.section}>
+              <Text style={styles.label}>Tên</Text>
+              <TextInput
+                style={styles.input}
+                value={name}
+                onChangeText={setName}
+              />
+            </View>
 
-                <View style={styles.section}>
-                  <Text style={styles.label}>Tên</Text>
+            <View style={styles.section}>
+              <Text style={styles.label}>Tiểu sử</Text>
+              {showBioInput ? (
+                // Nếu đã có tiểu sử, hiển thị văn bản và cho phép chỉnh sửa
+                <TextInput
+                  style={[styles.input, { height: 100 }]}
+                  multiline={true}
+                  numberOfLines={4}
+                  value={bio}
+                  onChangeText={setBio}
+                  textAlignVertical="top" // Căn văn bản theo chiều dọc (trên cùng)
+                />
+              ) : (
+                // Nếu chưa có tiểu sử, hiển thị nút "Thêm tiểu sử"
+                <TouchableOpacity onPress={() => setShowBioInput(true)}>
+                  <Text style={styles.addBioText}>Thêm tiểu sử</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+
+            <View style={styles.section}>
+              <Text style={styles.label}>Liên kết</Text>
+              {showLinkInput ? (
+                // Nếu đã có liên kết, hiển thị TextInput
+                <View style={styles.linkContainer}>
                   <TextInput
                     style={styles.input}
-                    value={name}
-                    onChangeText={setName}
+                    multiline={true}
+                    value={link}
+                    onChangeText={setLink}
                   />
                 </View>
-
-                <View style={styles.section}>
-                  <Text style={styles.label}>Tiểu sử</Text>
-                  {showBioInput ? (
-                    // Nếu đã có tiểu sử, hiển thị văn bản và cho phép chỉnh sửa
-                    <TextInput
-                      style={[styles.input, { height: 100 }]}
-                      multiline={true}
-                      numberOfLines={4}
-                      value={bio}
-                      onChangeText={setBio}
-                      textAlignVertical="top" // Căn văn bản theo chiều dọc (trên cùng)
-                    />
-                  ) : (
-                    // Nếu chưa có tiểu sử, hiển thị nút "Thêm tiểu sử"
-                    <TouchableOpacity onPress={() => setShowBioInput(true)}>
-                      <Text style={styles.addBioText}>Thêm tiểu sử</Text>
-                    </TouchableOpacity>
-                  )}
-                </View>
-
-                <View style={styles.section}>
-                  <Text style={styles.label}>Liên kết</Text>
-                  {showLinkInput ? (
-                    // Nếu đã có liên kết, hiển thị TextInput
-                    <View style={styles.linkContainer}>
-                      <TextInput
-                        style={styles.input}
-                        multiline={true}
-                        value={link}
-                        onChangeText={setLink}
-                      />
-                    </View>
-                  ) : (
-                    // Nếu chưa có liên kết, hiển thị nút "Thêm liên kết"
-                    <TouchableOpacity onPress={() => setShowLinkInput(true)}>
-                      <Text style={styles.addLinkText}>Thêm liên kết</Text>
-                    </TouchableOpacity>
-                  )}
-                </View>
-                <View style={styles.toggleContainer}>
-                  <Text style={styles.toggleLabel}>Trang cá nhân riêng tư</Text>
-                  <Switch
-                    value={isPrivateProfile}
-                    onValueChange={changePrivacyProfile}
-                  />
-                </View>
-                {isPrivateProfile ? (
-                  <Text style={styles.note}>
-                    Chỉ những người bạn theo dõi mới xem được trang cá nhân của
-                    bạn
-                  </Text>
-                ) : (
-                  <Text style={styles.note}>
-                    Mọi người đều có thể xem trang cá nhân của bạn
-                  </Text>
-                )}
-              </View>
-              <BottomSheet
-                ref={bottomSheetRef}
-                index={-1}
-                snapPoints={snapPoints}
-                backgroundStyle={{ backgroundColor: "#fff" }}
-              >
-                <BottomSheetView style={styles.contentContainer}>
-                  <View style={styles.bottomSheetContainer}>
-                    <TouchableOpacity onPress={selectFromLibrary}>
-                      <Text style={styles.bottomSheetOption}>
-                        Chọn từ thư viện
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={captureFromCamera}>
-                      <Text style={styles.bottomSheetOption}>Chụp ảnh</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => handleCancel()}>
-                      <Text style={[styles.bottomSheetOption, { color: "red" }]}>
-                        Hủy
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                </BottomSheetView>
-              </BottomSheet>
+              ) : (
+                // Nếu chưa có liên kết, hiển thị nút "Thêm liên kết"
+                <TouchableOpacity onPress={() => setShowLinkInput(true)}>
+                  <Text style={styles.addLinkText}>Thêm liên kết</Text>
+                </TouchableOpacity>
+              )}
             </View>
+            <View style={styles.toggleContainer}>
+              <Text style={styles.toggleLabel}>Trang cá nhân riêng tư</Text>
+              <Switch
+                value={isPrivateProfile}
+                onValueChange={changePrivacyProfile}
+              />
+            </View>
+            {isPrivateProfile ? (
+              <Text style={styles.note}>
+                Chỉ những người bạn theo dõi mới xem được trang cá nhân của bạn
+              </Text>
+            ) : (
+              <Text style={styles.note}>
+                Mọi người đều có thể xem trang cá nhân của bạn
+              </Text>
+            )}
           </View>
+          <BottomSheet
+            ref={bottomSheetRef}
+            index={-1}
+            snapPoints={snapPoints}
+            backgroundStyle={{ backgroundColor: "#fff" }}
+          >
+            <BottomSheetView style={styles.contentContainer}>
+              <View style={styles.bottomSheetContainer}>
+                <TouchableOpacity onPress={selectFromLibrary}>
+                  <Text style={styles.bottomSheetOption}>Chọn từ thư viện</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={captureFromCamera}>
+                  <Text style={styles.bottomSheetOption}>Chụp ảnh</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => handleCancel()}>
+                  <Text style={[styles.bottomSheetOption, { color: "red" }]}>
+                    Hủy
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </BottomSheetView>
+          </BottomSheet>
+      </View>
+      </TouchableWithoutFeedback>
     );
   };
 
   const styles = StyleSheet.create({
     container: {
-      marginTop: 35,
       flex: 1,
       backgroundColor: "white",
     },
@@ -318,6 +308,9 @@
       height: 100,
       borderRadius: 50,
       marginBottom: 10,
+    },
+    finished: {
+      fontSize: 18,
     },
     editAvatarText: {
       fontSize: 14,
@@ -389,5 +382,7 @@
       color: "#007bff",
     },
   });
+
+
 
   export default ProfileEditor;

@@ -1,9 +1,8 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import meApi from "../api/meApi";
 // import { Colors } from '@/constants/Colors';
-import { Link } from "expo-router";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Modal from "react-native-modal"; // Import thư viện modal
 import PostTab from "../components/Profile/PostTab";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -19,16 +18,14 @@ import { TextInput } from "react-native-paper";
 import ProfileEditor from "../components/Profile/ProfileEditor";
 import { ProfileModel } from "../models/ProfileModel";
 import Followers from "../components/Followers";
+import { NavigationProp, RouteProp, useFocusEffect, useNavigation } from "@react-navigation/native";
+import { AuthenticatedStackParams } from "../navigation/AuthenticatedNavigator";
 
 export const SelfProfile = () => {
   const [profile, setprofile] = useState({} as ProfileModel);
   const [followers, setFollowers] = useState<UserModel[]>([]);
-  const [editProfileVisible, setEditProfileVisible] = useState(false);
   const [followVisible, setFollowVisible] = useState(false);
-
-  useEffect(() => {
-    loadProfile();
-  }, []);
+  const navigation = useNavigation<any>(); // Sử dụng navigation hook
 
   function loadProfile(): void {
     meApi
@@ -40,12 +37,23 @@ export const SelfProfile = () => {
       .then(() => meApi.getFollowers(3, 1))
       .then((data) => {
         setFollowers(data);
-        console.log(data);
+        // console.log(data);
       });
   }
+  
+  useFocusEffect(
+    useCallback(() => {
+      loadProfile(); // Tải lại dữ liệu khi màn hình focus
+    }, [])
+  );
 
   const handleOpenFollow = () => setFollowVisible(true);
   const handleCloseFollow = () => setFollowVisible(false);
+
+  const navigateToEditProfile = () => {
+    navigation.navigate("ProfileEditor", { profile });
+  };
+  
 
   return (
     <View style={styles.container}>
@@ -73,7 +81,7 @@ export const SelfProfile = () => {
         <>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => setEditProfileVisible(true)}
+            onPress={() => navigateToEditProfile()}
           >
             <Text style={styles.buttonText}>Edit profile</Text>
           </TouchableOpacity>
@@ -83,12 +91,12 @@ export const SelfProfile = () => {
         </>
       </View>
 
-      <ProfileEditor
+      {/* <ProfileEditor
         profile={profile}
         visible={editProfileVisible}
         onclose={() => setEditProfileVisible(false)}
         onUpdated={loadProfile}
-      />
+      /> */}
       <PostTab
         onChangeType={() => {}}
         onLoadMore={() => {}}
@@ -101,7 +109,7 @@ export const SelfProfile = () => {
         onClose={handleCloseFollow}
         onChangeType={() => {}}
         onLoadMore={() => {}}
-        onUserPress={() => {}}
+        onUserPress={(id) => {navigation.navigate("UserProfile", { id })}}
         onRefresh={() => {}}
         users={[]}
       />
@@ -263,11 +271,8 @@ SelfProfile.HeaderRight = () => {
   return (
     <View style={styles.headerIconsRight}>
       <TouchableOpacity style={styles.iconButton} onPress={handleLogout}>
-        <Ionicons name="logo-instagram" size={28} color="black" />
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.iconButton} onPress={handleLogout}>
         {/* <Ionicons name="log-out-outline" size={28} color="black" /> */}
-        <Ionicons name="options-outline" size={28} color="black"></Ionicons>
+        <Ionicons name="log-out-outline" size={28} color="black"></Ionicons>
       </TouchableOpacity>
     </View>
   );
