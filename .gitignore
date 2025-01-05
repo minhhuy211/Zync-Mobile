@@ -35,4 +35,5 @@ yarn-error.*
 *.tsbuildinfo
 
 # Idea
-.idea
+.idea/
+Zync-Mobile.iml
