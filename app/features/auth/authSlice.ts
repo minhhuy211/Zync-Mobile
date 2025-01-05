@@ -1,6 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import {Principal} from "../../models/Authentication";
-import {Key} from "../../constants/Key";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 export interface AuthSate {
     accessToken: string | null,

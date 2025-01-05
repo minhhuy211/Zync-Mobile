@@ -72,7 +72,7 @@ const ActivityPiece = (piece: ActivityPieceProps) => {
         <TouchableOpacity style={styles.piece} onPress={handleClick}>
             <View style={styles.avatarContainer}>
                 <View style={styles.avatarBox}>
-                    <Image source={require('../../../assets/logo.png')} style={styles.avatar}/>
+                    <Image source={{uri: piece.data.actor.avatar}} style={styles.avatar}/>
                 </View>
                 {iconName !== '' ?
                     (<View style={[styles.iconBox,

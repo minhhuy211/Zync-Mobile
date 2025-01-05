@@ -14,13 +14,11 @@ export default {
     repost: (postId: string, data: PostRequest) => api.post(`/api/v1/posts/${postId}/repost`, data.id),
 
     relyPost: (postId: string, data: PostRequest) => api.post(`/api/v1/posts/${postId}/relies`, data.id),
-    getPostReply: (postId: string) => api.post(`/api/v1/posts/${postId}/relies`),
 
     unlikePost: (id: string) => api.post(`/api/v1/posts/${id}/unlike`),
 
     likePost: (id: string) => api.post(`/api/v1/posts/${id}/likes`),
     
-    getPosts: () => api.get<PostModel[]>('/api/v1/posts'),   
-    getPostById: (id: string) => api.get<PostModel>(`/api/v1/posts/${id}`),
+    // getPosts: () => api.get<PostModel[]>('/api/v1/posts'),   
 
 }

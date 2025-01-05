@@ -1,19 +1,18 @@
-import React, {useState} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
-import {NavigationProp, RouteProp} from "@react-navigation/native";
+import {View, Text, StyleSheet, TouchableOpacity} from "react-native";
+import React, {useState} from "react";
 import {StatusBar} from "expo-status-bar";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import {Searchbar} from "react-native-paper";
-import TopSearchFragment from "../components/search/fragment/TopSearchFragment";
-import RecentSearchFragment from "../components/search/fragment/RecentSearchFragment";
-import ProfilesSearchFragment from "../components/search/fragment/ProfilesSearchFragment";
+import TopSearchFragment from "../Result/TopSearchFragment";
+import RecentSearchFragment from "../Result/RecentSearchFragment";
+import ProfilesSearchFragment from "../Result/ProfilesSearchFragment";
 
-const SearchResult = ({navigation, route}: { navigation: NavigationProp<any>, route: RouteProp<any> }) => {
-    const params = route.params;
-    let query: string = '';
-    if (params) {
-        query = params.query;
-    }
+interface SearchResultFragProps {
+    query: string
+    onBack: () => void
+}
+
+const SearchResultFragment = ({query, onBack}: SearchResultFragProps) => {
     const [activeTab, setActiveTab] = useState('Top'); // Quản lý tab hiện tại
     const [search, setSearch] = useState<string>(query);
 
@@ -26,7 +25,7 @@ const SearchResult = ({navigation, route}: { navigation: NavigationProp<any>, ro
         <View style={styles.container}>
             <StatusBar backgroundColor="transparent" translucent={true}/>
             <View style={styles.searchArea}>
-                <TouchableOpacity style={{paddingRight: 10}} onPress={() => navigation.goBack()}>
+                <TouchableOpacity style={{paddingRight: 10}} onPress={onBack}>
                     <Ionicons name="chevron-back-outline" size={28} color="black"/>
                 </TouchableOpacity>
                 <TouchableOpacity style={{flex: 1}}>
@@ -119,4 +118,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default SearchResult;
+export default SearchResultFragment;
