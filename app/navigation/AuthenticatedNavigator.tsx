@@ -9,6 +9,7 @@ import Follow from "../screens/Follow";
 import User, { UserProfile } from "../screens/UserProfile";
 
 import SelfProfile from "../screens/SelfProfile";
+import Followers from "../components/Followers";
 
 const AuthenticatedNavigator = () => {
   const Tab = createBottomTabNavigator();
@@ -50,7 +51,7 @@ const AuthenticatedNavigator = () => {
         />
         <Tab.Screen
           name="SEARCH"
-          component={Search}
+          component={Followers}
           options={{
             tabBarIcon: (props) => <TabIcon name="search" {...props} />,
           }}
@@ -70,7 +71,7 @@ const AuthenticatedNavigator = () => {
             headerShown: false,
           }}
         />
-        <Tab.Screen
+        {/* <Tab.Screen
           name="USER"
           component={UserProfile}
           options={{
@@ -82,8 +83,8 @@ const AuthenticatedNavigator = () => {
             headerLeft: UserProfile.HeaderLeft,
             headerRight: UserProfile.HeaderRight,
           }}
-        />
-        {/* <Tab.Screen
+        /> */}
+        <Tab.Screen
           name="SELF"
           component={SelfProfile}
           options={{
@@ -95,7 +96,7 @@ const AuthenticatedNavigator = () => {
             headerLeft: SelfProfile.HeaderLeft,
             headerRight: SelfProfile.HeaderRight,
           }}
-        /> */}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );
