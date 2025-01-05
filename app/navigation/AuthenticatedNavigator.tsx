@@ -12,8 +12,6 @@ export interface AuthenticatedStackParams extends ParamListBase {
 }
 
 
-
-
 const AuthenticatedNavigator = () => {
     const Stack = createNativeStackNavigator();
 

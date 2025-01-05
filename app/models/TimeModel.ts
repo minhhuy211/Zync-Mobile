@@ -1,4 +1,4 @@
-export interface Time{
+export interface TimeModel {
     value: number;
     unit: TimeUnit;
 }

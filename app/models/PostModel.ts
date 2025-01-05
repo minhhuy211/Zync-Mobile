@@ -1,5 +1,5 @@
 import { MediaModel } from "./MediaModel";
-import { Time } from "./TimeModel";
+import { TimeModel } from "./TimeModel";
 import { UserModel } from "./UserModel";
 
 export interface PostModel{
@@ -12,7 +12,7 @@ export interface PostModel{
     relies: number,
     reposts: number,
     media: MediaModel[],
-    time: Time[],
+    time: TimeModel[],
     liked: boolean,
     parent: PostModel | null,
     reposted: boolean;
