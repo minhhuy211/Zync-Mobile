@@ -14,7 +14,7 @@ import PostDetail from "../../screens/PostDetails";
 import { Image } from "expo-image";
 import { Video, Audio, ResizeMode } from "expo-av";
 import { MediaModel, MediaType } from "../../models/MediaModel";
-import PostEditorGallery from "../PostEditorGallery";
+import PostEditorGallery, { GalleryItemModel } from "../PostEditorGallery";
 import Content from "../Content";
 
 interface PostHomeProps {
@@ -39,8 +39,10 @@ const PostItem = ({ post, onTouch }: PostHomeProps) => {
     navigation.navigate("PostDetails", { postId: post.id });
   };
 
-  const onTouchItem = (media: MediaModel) => {
-    navigation.push("MediaReview", { media: media });
+  const onTouchItem = (item: GalleryItemModel) => {
+    navigation.push("MediaReview", {
+      media: post.media.find((i) => i.id == item.id),
+    });
   };
 
   if (!post) {
@@ -74,18 +76,17 @@ const PostItem = ({ post, onTouch }: PostHomeProps) => {
           <Content value={post.content} />
           {/* <Text style={styles.contextPost}>{post.content}</Text> */}
 
-          <TouchableOpacity onPress={() => onTouchItem(post.media[0])}>
-            <PostEditorGallery
-              items={post.media.map((item, index) => ({
-                id: index.toString(), // Assuming that the media array does not have unique IDs
-                uri: item.url,
-                width: item.width,
-                height: item.height,
-              }))}
-              maxWidth={300}
-              maxHeight={300}
-            />
-          </TouchableOpacity>
+          <PostEditorGallery
+            items={post.media.map((item, index) => ({
+              id: index.toString(), // Assuming that the media array does not have unique IDs
+              uri: item.url,
+              width: item.width,
+              height: item.height,
+            }))}
+            onTouchItem={(item) => onTouchItem(item)}
+            maxWidth={300}
+            maxHeight={300}
+          />
 
           <View style={styles.actionPost}>
             <TouchableOpacity style={styles.iconButton} onPress={handleLike}>
