@@ -3,7 +3,8 @@ import { PostModel, PostType } from "../../models/PostModel";
 import meApi from "../../api/meApi";
 import { FlatList, TouchableOpacity, View } from "react-native";
 import Tabs from "../Tabs";
-import PostHome from "./PostHome";
+import PostHome from "./PostItem";
+import postApi from "../../api/postApi";
 
 interface PostsTabProps {
   posts: PostModel[];
@@ -14,7 +15,7 @@ interface PostsTabProps {
 }
 
 const items = [
-  { value: PostType.POST, label: "Xu hướng" },
+  { value: PostType.POST, label: "Đã theo dõi" },
   { value: PostType.REPLY, label: "Dành cho bạn" },
 ];
 
@@ -26,7 +27,7 @@ const HomeTab = ({ onChangeType, onPostPress }: PostsTabProps) => {
   useEffect(() => {
     const fectchPosts = async () => {
       try {
-        const data = await meApi.getPostsFollowing(10, 0, tabValue);
+        const data = await postApi.getPostsRecommended(10, 0, tabValue);
         console.log("Data fetched: ", data);
         setPosts(data);
         setFilterPosts(data.filter((post) => post.type === tabValue));
@@ -55,7 +56,7 @@ const HomeTab = ({ onChangeType, onPostPress }: PostsTabProps) => {
         data={posts}
         renderItem={({ item }) => (
           <TouchableOpacity onPress={() => onPostPress(item)}>
-            <PostHome post={item} maxWidth={0} maxHeight={0} item={undefined} />
+            <PostHome post={item} />
           </TouchableOpacity>
         )}
         keyExtractor={(item) => item.id}
