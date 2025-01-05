@@ -13,7 +13,7 @@ import { Key } from "../constants/Key";
 import { useAppDispatch } from "../store";
 import { useAuthAction } from "../features/auth";
 import { accountApi } from "../api/accountApi";
-import PostHome from "../components/Home/PostHome";
+import PostHome from "../components/Home/PostItem";
 // @ts-ignore
 import ProfileView from "./ProfileView";
 import HomeTab from "../components/Home/HomeTab";
@@ -46,6 +46,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     padding: 10,
+    paddingTop: 40,
+    paddingBottom: 80,
   },
   headerLogo: {
     display: "flex",

@@ -1,70 +1,68 @@
-
-
-import React from 'react';
-import { Text, StyleSheet } from 'react-native';
+import React from "react";
+import { Text, StyleSheet } from "react-native";
 
 interface Content {
-    value: string;
+  value: string;
 }
 
 const Content: React.FC<Content> = ({ value }) => {
-    const handleMentionPress = () => {
-        // Handle mention, truyền thêm id người dùng vào để có thể chuyển sang trang profile
+  const handleMentionPress = () => {
+    // Handle mention, truyền thêm id người dùng vào để có thể chuyển sang trang profile
+  };
+  // Function to parse text and separate mentions and plain text
+  const parseText = (text: string) => {
+    const mentionRegex = /@\[(.+?)\]\((.+?)\)/g;
+    const parts: { type: "mention" | "text"; content: string }[] = [];
+    let lastIndex = 0;
+
+    // Match all mentions
+    text.replace(mentionRegex, (match, name, id, index) => {
+      if (lastIndex < index) {
+        parts.push({ type: "text", content: text.slice(lastIndex, index) });
+      }
+      parts.push({ type: "mention", content: `@${name}` });
+      lastIndex = index + match.length;
+      return match;
+    });
+
+    // Add remaining text
+    if (lastIndex < text.length) {
+      parts.push({ type: "text", content: text.slice(lastIndex) });
     }
-    // Function to parse text and separate mentions and plain text
-    const parseText = (text: string) => {
-        const mentionRegex = /@\[(.+?)\]\((.+?)\)/g;
-        const parts: { type: 'mention' | 'text'; content: string }[] = [];
-        let lastIndex = 0;
 
-        // Match all mentions
-        text.replace(mentionRegex, (match, name, id, index) => {
-            if (lastIndex < index) {
-                parts.push({ type: 'text', content: text.slice(lastIndex, index) });
-            }
-            parts.push({ type: 'mention', content: `@${name}` });
-            lastIndex = index + match.length;
-            return match;
-        });
+    return parts;
+  };
 
-        // Add remaining text
-        if (lastIndex < text.length) {
-            parts.push({ type: 'text', content: text.slice(lastIndex) });
-        }
+  const parsedText = parseText(value);
 
-        return parts;
-    };
-
-    const parsedText = parseText(value);
-
-    return (
-        <Text style={styles.text}>
-            {parsedText.map((part, index) =>
-                part.type === 'mention' ? (
-                    <Text key={index} style={styles.mention} onPress={handleMentionPress}>
-                        {part.content}
-                    </Text>
-                ) : (
-                    <Text key={index}>{part.content}</Text>
-                )
-            )}
-        </Text>
-    );
+  return (
+    <Text style={styles.text}>
+      {parsedText.map((part, index) =>
+        part.type === "mention" ? (
+          <Text key={index} style={styles.mention} onPress={handleMentionPress}>
+            {part.content}
+          </Text>
+        ) : (
+          <Text key={index}>{part.content}</Text>
+        )
+      )}
+    </Text>
+  );
 };
 
 const styles = StyleSheet.create({
-    text: {
-        fontSize: 14,
-        color: '#000',
-    },
-    mention: {
-        color: '#1E90FF', // Different color for mentions
-        fontWeight: 'bold',
-    },
+  text: {
+    fontSize: 20,
+    color: "#000",
+    marginBottom: 10,
+  },
+  mention: {
+    color: "#1E90FF", // Different color for mentions
+    fontWeight: "bold",
+  },
 });
 
 export default Content;
 
 // Usage Example:
 // <MentionParser value="Hello @[john_doe](01H7V9XJ5FHDPNC9B1XG7XV8RV) @[jane_doe](01H7V9XJ5JYZT1DJY0VGMPQ5FR)! " />
-
