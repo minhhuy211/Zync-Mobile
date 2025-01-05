@@ -96,7 +96,7 @@ export const UserProfile = ({ userId }: UserProfileProps) => {
       </Text>
 
       <View style={styles.buttonRow}>
-        <>
+        <View>
           {profile.relationship == Relationship.FOLLOWING && (
             <TouchableOpacity
               style={styles.button}
@@ -152,7 +152,7 @@ export const UserProfile = ({ userId }: UserProfileProps) => {
           <TouchableOpacity style={styles.button}>
             <Text style={styles.buttonText}>Mention</Text>
           </TouchableOpacity>
-        </>
+        </View>
       </View>
       <RecommendUser />
       <PostTab

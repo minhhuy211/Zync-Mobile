@@ -1,6 +1,6 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, ParamListBase } from "@react-navigation/native";
 import Home from "../screens/Home";
 import Icon from "react-native-vector-icons/Ionicons"; // Import the icon set
 import Search from "../screens/Search";
@@ -9,6 +9,13 @@ import Follow from "../screens/Follow";
 import User, { UserProfile } from "../screens/UserProfile";
 
 import SelfProfile from "../screens/SelfProfile";
+import PostDetail from "../components/Home/PostDetail";
+
+export interface AuthenticatedScreenParams extends ParamListBase {
+  PostDetails: {
+    postId: string;
+  };
+}
 
 const AuthenticatedNavigator = () => {
   const Tab = createBottomTabNavigator();
@@ -20,6 +27,7 @@ const AuthenticatedNavigator = () => {
   }) => {
     return <Icon name={name} size={28} color={color} />;
   };
+
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -49,8 +57,8 @@ const AuthenticatedNavigator = () => {
           }}
         />
         <Tab.Screen
-          name="SEARCH"
-          component={Search}
+          name="PostDetails"
+          component={PostDetail}
           options={{
             tabBarIcon: (props) => <TabIcon name="search" {...props} />,
           }}
@@ -85,11 +93,9 @@ const AuthenticatedNavigator = () => {
         />
         {/* <Tab.Screen
           name="SELF"
-          component={SelfProfile}
+          component={PostDetail}
           options={{
-            tabBarIcon: (props) => (
-              <TabIcon name="person-circle-outline" {...props} />
-            ),
+            tabBarIcon: (props) => <TabIcon name="body-outline" {...props} />,
             headerShown: true,
             headerTitle: "",
             headerLeft: SelfProfile.HeaderLeft,
