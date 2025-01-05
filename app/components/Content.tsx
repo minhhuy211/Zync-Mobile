@@ -3,11 +3,14 @@
 import React from 'react';
 import { Text, StyleSheet } from 'react-native';
 
-interface MentionParserProps {
+interface Content {
     value: string;
 }
 
-const Content: React.FC<MentionParserProps> = ({ value }) => {
+const Content: React.FC<Content> = ({ value }) => {
+    const handleMentionPress = () => {
+        // Handle mention, truyền thêm id người dùng vào để có thể chuyển sang trang profile
+    }
     // Function to parse text and separate mentions and plain text
     const parseText = (text: string) => {
         const mentionRegex = /@\[(.+?)\]\((.+?)\)/g;
@@ -38,7 +41,7 @@ const Content: React.FC<MentionParserProps> = ({ value }) => {
         <Text style={styles.text}>
             {parsedText.map((part, index) =>
                 part.type === 'mention' ? (
-                    <Text key={index} style={styles.mention}>
+                    <Text key={index} style={styles.mention} onPress={handleMentionPress}>
                         {part.content}
                     </Text>
                 ) : (
@@ -51,7 +54,7 @@ const Content: React.FC<MentionParserProps> = ({ value }) => {
 
 const styles = StyleSheet.create({
     text: {
-        fontSize: 16,
+        fontSize: 14,
         color: '#000',
     },
     mention: {

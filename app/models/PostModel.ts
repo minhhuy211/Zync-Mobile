@@ -15,6 +15,7 @@ export interface PostModel{
     time: Time[],
     liked: boolean,
     parent: PostModel | null,
+    reposted: boolean;
 
 }
 

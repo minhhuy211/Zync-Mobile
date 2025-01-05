@@ -1,0 +1,11 @@
+export enum ActivityIconColor {
+    FIRST_POST = "#007AFF",
+    FOLLOWED = "#7441F5",
+    FOLLOW_REQUEST = "#FFC632",
+    FOLLOW_APPROVED = "#7441F5",
+    COMMENT = "#24C3FF",
+    LIKED = "#FF007A",
+    REPOSTED = "#C329BF",
+    MENTIONED = "#20C584",
+    POLL_RESULT_READY = "#007AFF",
+}
