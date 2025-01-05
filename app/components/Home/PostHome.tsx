@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {
   View,
   TouchableOpacity,
-  Image,
   Text,
   StyleSheet,
   FlatList,
@@ -10,6 +9,7 @@ import {
 import Icon from "react-native-vector-icons/Ionicons";
 import CommentHome from "../../components/Home/CommentHome";
 import { PostModel } from "../../models/PostModel";
+import { Image } from 'expo-image';
 
 interface PostHomeProps {
   post: PostModel

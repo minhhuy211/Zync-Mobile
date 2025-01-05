@@ -1,4 +1,12 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  FlatList,
+} from "react-native";
 
 import meApi from "../api/meApi";
 // import { Colors } from '@/constants/Colors';
@@ -17,6 +25,8 @@ import PostTab from "../components/Profile/PostTab";
 import userApi from "../api/userApi";
 import { Relationship } from "../constants/FollowStatus";
 import RecommendUser from "../components/RecommendUser";
+import FollowButton from "../components/FollowButton";
+import { UserModel } from "../models/UserModel";
 
 type UserProfileProps = {
   userId: string;
@@ -25,48 +35,18 @@ type UserProfileProps = {
 export const UserProfile = ({ userId }: UserProfileProps) => {
   const [profile, setprofile] = useState({} as ProfileModel);
   userId = "01JFY426B3DDKY4S1NVJ8JZ9Y2";
-  const [loading, setloading] = useState(false)
-  const [actioning, setActioning] = useState(false)
-  useState(() => {
+  const [loading, setloading] = useState(false);
+
+  useEffect(() => {
     setloading(true);
-    userApi.getUser(userId).then((data) => {
-      setprofile(data);
-      console.log(data);
-    })
-    .finally(() => setloading(false));
-  });
-
-  const handleUnFollowToggle = () => {
-    setActioning(true);
-     userApi.unfollowUser(userId)
-    .then((relationship) => {
-      setprofile({ ...profile, relationship });
-    })
-    .finally(() => setActioning(false));
-   
-  };
-
-  const handleFollowToggle = async () => {
-     userApi.followUser(userId)
-     setprofile({ ...profile, relationship: profile.isPrivate ? Relationship.REQUESTED : Relationship.FOLLOWING });
-
-  };
-
-  const handleAcceptFollowToggle = async () => {
-    userApi.acceptFollow(userId)
-    setprofile({ ...profile, relationship: Relationship.FOLLOWING });
-  };
-
-  const handleFollowedToggle = async () => {
-    userApi.followUser(userId)
-    setprofile({ ...profile, relationship: profile.isPrivate ? Relationship.REQUESTED : Relationship.FOLLOWING });
-
-  };
-
-  const handleRequestedFollowToggle = async () => {
-    userApi.removeRequest(userId)
-    setprofile({ ...profile, relationship: Relationship.NONE });
-  };
+    userApi
+      .getUser(userId)
+      .then((data) => {
+        setprofile(data);
+        console.log(data);
+      })
+      .finally(() => setloading(false));
+  }, [userId]);
 
   if (loading) {
     return (
@@ -76,10 +56,13 @@ export const UserProfile = ({ userId }: UserProfileProps) => {
     );
   }
 
-  return (
+  // const handleFollowChange = (updatedProfile: UserModel) => {
+  //   // This will be called after a follow/unfollow action
+  //   setprofile(updatedProfile); // Update profile with new follower count
+  // };
 
-
-    <View style={styles.container}>
+  const renderHeader = () => (
+    <View>
       <View style={styles.profileContainer}>
         <View style={styles.profileTextContainer}>
           <Text style={styles.name}>{profile?.name}</Text>
@@ -95,74 +78,38 @@ export const UserProfile = ({ userId }: UserProfileProps) => {
         {profile?.numberOfFollowers} followers · {profile?.links} links
       </Text>
 
-      <View style={styles.buttonRow}>
-        <>
-          {profile.relationship == Relationship.FOLLOWING && (
-            <TouchableOpacity
-              style={styles.button}
-              onPress={handleUnFollowToggle}
-            >
-              <Text style={styles.buttonText}>
-                {actioning ? "Unfollowing..." : "Unfollow"}
-              </Text>
-            </TouchableOpacity>
-          )}
-          {profile.relationship == Relationship.NONE && (
-            <TouchableOpacity
-              style={styles.fullButton}
-              onPress={handleFollowToggle}
-            >
-              <Text style={styles.fullButtonText}>
-                Follow
-              </Text>
-            </TouchableOpacity>
-          )}
-          {profile.relationship == Relationship.PENDING && (
-            <TouchableOpacity
-              style={styles.fullButton}
-              onPress={handleAcceptFollowToggle}
-            >
-              <Text style={styles.fullButtonText}>
-                Accept Follow
-              </Text>
-            </TouchableOpacity>
-          )}
-          {profile.relationship == Relationship.FOLLOWED && (
-            <TouchableOpacity
-              style={styles.fullButton}
-              onPress={handleFollowedToggle}
-            >
-              <Text style={styles.fullButtonText}>
-                Follow Back
-              </Text>
-            </TouchableOpacity>
-          )}
-          {profile.relationship == Relationship.REQUESTED && (
-            <TouchableOpacity
-              style={styles.fullButton}
-              onPress={handleRequestedFollowToggle}
-            >
-              <Text style={styles.fullButtonText}>
-                Requested
-              </Text>
-            </TouchableOpacity>
-          )}
-
-          
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Mention</Text>
-          </TouchableOpacity>
-        </>
-      </View>
-      <RecommendUser />
-      <PostTab
-        onChangeType={() => {}}
-        onLoadMore={() => {}}
-        onPostPress={() => {}}
-        onRefresh={() => {}}
-        posts={[]}
+      <FollowButton
+        userId={userId}
+        isPrivate={!!profile.isPrivate}
+        relationship={profile.relationship}
+        onRelationshipChange={(newRelationship) =>
+          setprofile({ ...profile, relationship: newRelationship })
+        }
       />
     </View>
+  );
+
+  return (
+    <FlatList
+      style={styles.container}
+      ListHeaderComponent={renderHeader}
+      data={[]} // Danh sách bài viết có thể được lấy từ PostTab nếu cần
+      renderItem={null} // PostTab xử lý render bài viết riêng
+      ListFooterComponent={
+        <>
+          <View style={styles.recommendUser}>
+            <RecommendUser />
+          </View>
+          <PostTab
+            onChangeType={() => {}}
+            onLoadMore={() => {}}
+            onPostPress={() => {}}
+            onRefresh={() => {}}
+            posts={[]} // Truyền danh sách bài viết nếu cần
+          />
+        </>
+      }
+    />
   );
 };
 const styles = StyleSheet.create({
@@ -217,10 +164,9 @@ const styles = StyleSheet.create({
   },
   button: {
     flex: 1,
-    padding: 6,
+    padding: 8,
     borderRadius: 5,
     borderWidth: 1,
-    // borderColor: Colors.border,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -229,7 +175,7 @@ const styles = StyleSheet.create({
   },
   fullButton: {
     flex: 1,
-    padding: 10,
+    padding: 8,
     borderRadius: 5,
     borderWidth: 1,
     backgroundColor: "#000",
@@ -253,6 +199,14 @@ const styles = StyleSheet.create({
     padding: 20,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
+  },
+  recommendUser: {
+    marginTop: 25,
+    flex: 1,
+  },
+  postTab: {
+    marginTop: 16,
+    flex: 1,
   },
 });
 

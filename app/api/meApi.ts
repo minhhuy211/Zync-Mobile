@@ -50,13 +50,17 @@ export default {
 
   getRecommendUsers: (limit: number, offset: number) => api.get<UserModel[]>('/api/v1/me/users/recommended', { params: { limit, offset } }),
 
-  getFollowing: (limit: number, offset: number) => api.get<UserModel[]>('/api/v1/me/users/following', { params: { limit, offset } }),
+  getFollowings: (limit: number, offset: number) => api.get<UserModel[]>('/api/v1/me/users/followings', { params: { limit, offset } }),
 
   getFollowers: (limit: number, offset: number) => api.get<UserModel[]>('/api/v1/me/users/followers', { params: { limit, offset } }),
+
+  getRequested: (limit: number, offset: number) => api.get<UserModel[]>('/api/v1/me/users/requested', { params: { limit, offset } }),
 
   getPosts: (limit: number, offset: number, types: PostType) => api.get<PostModel[]>('/api/v1/me/posts', { params: { limit, offset , types} }),
 
   getPostsFollowing: (limit: number, offset: number, types: PostType) => api.get<PostModel[]>('/api/v1/me/posts/following', { params: { limit, offset , types} }),
+
+  
 
   // getActivities: (limit: number, offset: number, types: ) => api.get<PostModel[]>('/api/v1/me/activities', { params: { limit, offset } }),
 };

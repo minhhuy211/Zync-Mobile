@@ -28,7 +28,7 @@ const RecommendUser = () => {
             <View style={styles.card}>
             <Image source={{ uri: item.avatar }} style={styles.avatar} />
             <View style={styles.info}>
-              <Text style={styles.name}>{item.name}</Text>
+              <Text style={styles.name} numberOfLines={1} ellipsizeMode="tail">{item.name}</Text>
               <Text style={styles.username}>{item.username}</Text>
             </View>
             <TouchableOpacity style={styles.followButton}>
@@ -45,7 +45,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    padding: 16,
   },
   header: {
     fontSize: 18,
@@ -56,15 +55,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#f9f9f9',
     borderRadius: 8,
     padding: 10,
-    marginRight: 12,
+    marginRight: 8,
     alignItems: 'center',
-    width: 120,
+    width: 150,
+    height: 200,
   },
   avatar: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    marginBottom: 8,
+    width: 80,
+    height: 80,
+    borderRadius: 50,
+    marginBottom: 15,
   },
   info: {
     alignItems: 'center',
@@ -81,13 +81,16 @@ const styles = StyleSheet.create({
   },
   followButton: {
     backgroundColor: '#000',
-    paddingVertical: 6,
-    paddingHorizontal: 12,
+    paddingVertical: 8,
+    paddingHorizontal: 30,
     borderRadius: 4,
+    position: 'absolute',
+    bottom: 10,
   },
   followText: {
     color: '#fff',
-    fontSize: 12,
+    fontSize: 14,
+    fontWeight: 'bold',
   },
 });
 

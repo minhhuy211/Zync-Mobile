@@ -14,7 +14,6 @@ import { useAppDispatch } from "../store";
 import { useAuthAction } from "../features/auth";
 import { accountApi } from "../api/accountApi";
 import PostHome from "../components/Home/PostHome";
-import ProfileView from "./ProfileView";
 
 const initialPosts = [
   {
