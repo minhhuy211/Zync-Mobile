@@ -18,29 +18,34 @@ import AvatarGroup from "../components/AvatarGroup";
 import { TextInput } from "react-native-paper";
 import ProfileEditor from "../components/Profile/ProfileEditor";
 import { ProfileModel } from "../models/ProfileModel";
+import Followers from "../components/Followers";
 
 export const SelfProfile = () => {
   const [profile, setprofile] = useState({} as ProfileModel);
   const [followers, setFollowers] = useState<UserModel[]>([]);
   const [editProfileVisible, setEditProfileVisible] = useState(false);
+  const [followVisible, setFollowVisible] = useState(false);
 
   useEffect(() => {
-   loadProfile();
+    loadProfile();
   }, []);
 
   function loadProfile(): void {
     meApi
-    .getProfile()
-    .then((data) => {
-      setprofile(data);
-      console.log(data);
-    })
-    .then(() => meApi.getFollowers(5, 1))
-    .then((data) => {
-      setFollowers(data);
-      console.log(data);
-    });
+      .getProfile()
+      .then((data) => {
+        setprofile(data);
+        console.log(data);
+      })
+      .then(() => meApi.getFollowers(3, 1))
+      .then((data) => {
+        setFollowers(data);
+        console.log(data);
+      });
   }
+
+  const handleOpenFollow = () => setFollowVisible(true);
+  const handleCloseFollow = () => setFollowVisible(false);
 
   return (
     <View style={styles.container}>
@@ -55,16 +60,21 @@ export const SelfProfile = () => {
       <Text style={styles.bio}>
         {profile?.bio ? profile?.bio : "No bio yet"}
       </Text>
-      <View style={styles.avatarFollowers}>
-        <AvatarGroup users={followers} />
-        <Text style={{ color: "gray" }}>
-          {profile?.numberOfFollowers} người theo dõi · {profile?.links} 
-        </Text>
-      </View>
+      <TouchableOpacity onPress={() => handleOpenFollow()}>
+        <View style={styles.avatarFollowers}>
+          <AvatarGroup users={followers} />
+          <Text style={{ color: "gray" }}>
+            {profile?.numberOfFollowers} người theo dõi · {profile?.links}
+          </Text>
+        </View>
+      </TouchableOpacity>
 
       <View style={styles.buttonRow}>
         <>
-          <TouchableOpacity style={styles.button} onPress={() => setEditProfileVisible(true)}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => setEditProfileVisible(true)}
+          >
             <Text style={styles.buttonText}>Edit profile</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button}>
@@ -73,13 +83,27 @@ export const SelfProfile = () => {
         </>
       </View>
 
-      <ProfileEditor profile={profile} visible ={editProfileVisible} onclose={() => setEditProfileVisible(false)} onUpdated={loadProfile}/>
+      <ProfileEditor
+        profile={profile}
+        visible={editProfileVisible}
+        onclose={() => setEditProfileVisible(false)}
+        onUpdated={loadProfile}
+      />
       <PostTab
         onChangeType={() => {}}
         onLoadMore={() => {}}
         onPostPress={() => {}}
         onRefresh={() => {}}
         posts={[]}
+      />
+      <Followers
+        visible={followVisible}
+        onClose={handleCloseFollow}
+        onChangeType={() => {}}
+        onLoadMore={() => {}}
+        onUserPress={() => {}}
+        onRefresh={() => {}}
+        users={[]}
       />
     </View>
   );
@@ -153,7 +177,7 @@ const styles = StyleSheet.create({
   },
   fullButton: {
     flex: 1,
-    padding: 10,
+    padding: 6,
     borderRadius: 5,
     borderWidth: 1,
     backgroundColor: "#000",
