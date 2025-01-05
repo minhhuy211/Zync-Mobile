@@ -16,22 +16,137 @@ import { accountApi } from "../api/accountApi";
 import PostHome from "../components/Home/PostItem";
 // @ts-ignore
 import ProfileView from "./ProfileView";
-import HomeTab from "../components/Home/HomeTab";
+
+const initialPosts = [
+  {
+    id: 1,
+    username: "Ruchi_shah",
+    avatar: require("../../assets/logo.png"),
+    content: "Failures are stepping stones to success...",
+    likes: 1,
+    time: "49m",
+    comments: [
+      {
+        id: 2,
+        username: "Payal_shah",
+        avatar: require("../../assets/logo.png"),
+        content: "Yes",
+        likes: 1,
+        time: "44m",
+        comments: [
+          {
+            id: 3,
+            username: "User_2",
+            avatar: require("../../assets/logo.png"),
+            content: "Thanks for sharing!",
+            likes: 2,
+            time: "42m",
+            comments: [],
+          },
+          {
+            id: 4,
+            username: "User_2",
+            avatar: require("../../assets/logo.png"),
+            content: "Thanks for sharing!",
+            likes: 2,
+            time: "42m",
+            comments: [],
+          },
+        ],
+      },
+      {
+        id: 5,
+        username: "User_2",
+        avatar: require("../../assets/logo.png"),
+        content: "Thanks for sharing!",
+        likes: 2,
+        time: "42m",
+        comments: [],
+      },
+    ],
+  },
+  {
+    id: 6,
+    username: "Krunal Modi",
+    avatar: require("../../assets/logo.png"),
+    content: "Hey @zuck where is my verified?",
+    likes: 0,
+    time: "50m",
+    comments: [
+      {
+        id: 7,
+        username: "zuck",
+        avatar: require("../../assets/logo.png"),
+        content: "Just a sec...😂",
+        likes: 1,
+        time: "50m",
+        comments: [],
+      },
+    ],
+  },
+  {
+    id: 8,
+    username: "figma",
+    avatar: require("../../assets/logo.png"),
+    content: "Hello new (old) friends✌️",
+    likes: 4,
+    time: "6m",
+    comments: [],
+  },
+];
 
 const Home = () => {
+  const [selectTab, setSelectTab] = useState("trending");
+  const forYouPost = initialPosts;
+  const trendingPost = initialPosts;
+
+  const currentPosts = selectTab === "for you" ? forYouPost : trendingPost;
+
   return (
     <View style={styles.container}>
       <View style={styles.headerLogo}>
         <Image source={require("../../assets/logo.png")} style={styles.logo} />
       </View>
+      {/* Tab bar */}
+      <View style={styles.tabBar}>
+        <TouchableOpacity
+          style={[styles.tabButton, selectTab === "forYou" && styles.activeTab]}
+          onPress={() => setSelectTab("forYou")}
+        >
+          <Text
+            style={[
+              styles.tabText,
+              selectTab === "forYou" && styles.activeTabText,
+            ]}
+          >
+            Dành cho bạn
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            styles.tabButton,
+            selectTab === "trending" && styles.activeTab,
+          ]}
+          onPress={() => setSelectTab("trending")}
+        >
+          <Text
+            style={[
+              styles.tabText,
+              selectTab === "trending" && styles.activeTabText,
+            ]}
+          >
+            Nổi bật
+          </Text>
+        </TouchableOpacity>
+      </View>
+
       {/* Danh sách bài viết */}
-      <HomeTab
-        onChangeType={() => {}}
-        onLoadMore={() => {}}
-        onPostPress={() => {}}
-        onRefresh={() => {}}
-        posts={[]}
-      />
+      {/* <FlatList
+        data={currentPosts}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => <ProfileView />}
+        showsVerticalScrollIndicator={false} // Ẩn thanh cuộn
+      /> */}
     </View>
   );
 };

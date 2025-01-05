@@ -6,6 +6,7 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { AuthenticatedStackParams } from "./AuthenticatedNavigator";
 import OctIcon from "@expo/vector-icons/Octicons";
+import Activity from "../screens/Activity";
 
 const MainTabNavigator = () => {
   const Tab = createBottomTabNavigator();

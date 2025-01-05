@@ -18,16 +18,17 @@ import AuthenticatedNavigator from "./AuthenticatedNavigator";
 import Loader from "../screens/Loader";
 import Splash from "../screens/Splash";
 import { SafeAreaView } from "react-native-safe-area-context";
+import meApi from "../api/meApi";
 
 
 const Layout = () => {
   const [loading, setLoading] = useState(false);
-  const { isAuthenticated, accessToken } = useAuthSelector();
-  const { authenticate } = useAuthAction();
+  const { isAuthenticated, accessToken, user } = useAuthSelector();
+  const { authenticate, setPrincipal } = useAuthAction();
   const dispatch = useAppDispatch();
 
   async function handleError(e: ApiError) {
-    await AsyncStorage.getItem(Key.REFRESH_TOKEN);
+    await AsyncStorage.removeItem(Key.REFRESH_TOKEN);
   }
 
   useEffect(() => {
@@ -42,11 +43,17 @@ const Layout = () => {
         })
         .then((res) => {
           if (!!res) dispatch(authenticate(res.accessToken));
+
         })
         .catch((e: ApiError) => handleError(e))
-        .finally(() => setLoading(false));
     }
   }, []);
+
+  useEffect(() => {
+    if (isAuthenticated){
+      meApi.getMe().then(user => dispatch(setPrincipal(user))).catch((e: ApiError) => handleError(e)).finally(() => setLoading(false))
+    }
+  }, [isAuthenticated]);
 
   if (loading) return <Splash />;
   if (isAuthenticated)
