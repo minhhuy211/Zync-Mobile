@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import {FlatList, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {StatusBar} from "expo-status-bar";
 import {Searchbar} from "react-native-paper";
@@ -11,7 +11,7 @@ const data: UserModel[] = [
     {
         "id": "01JEDNK58VN4MZ624EBB8NXR9P",
         "username": "robert_brown",
-        "avatar": "../../../assets/logo.png",  // Đổi ảnh đại diện
+        "avatar": "https://via.placeholder.com/100",
         "name": "Ja Khang",
         "relationship": Relationship.FOLLOWING,
         "isPrivate": false,
@@ -20,7 +20,7 @@ const data: UserModel[] = [
     {
         "id": "01JEDNK58VN4MZ624EBB8NXR9S",
         "username": "robert_brown",
-        "avatar": "../../../assets/logo.png",  // Đổi ảnh đại diện
+        "avatar": "https://via.placeholder.com/100",
         "name": "Ja Khang",
         "relationship": Relationship.FOLLOWING,
         "isPrivate": false,
@@ -29,7 +29,7 @@ const data: UserModel[] = [
     {
         "id": "01JEDNK58VN4MZ624EBB8NXR9A",
         "username": "robert_brown",
-        "avatar": "../../../assets/logo.png",  // Đổi ảnh đại diện
+        "avatar": "https://via.placeholder.com/100",
         "name": "Ja Khang",
         "relationship": Relationship.FOLLOWING,
         "isPrivate": false,
@@ -38,7 +38,7 @@ const data: UserModel[] = [
     {
         "id": "01JEDNK58VN4MZ624EBB8NXR95",
         "username": "robert_brown",
-        "avatar": "../../../assets/logo.png",  // Đổi ảnh đại diện
+        "avatar": "https://via.placeholder.com/100",
         "name": "Ja Khang",
         "relationship": Relationship.FOLLOWING,
         "isPrivate": false,
@@ -47,7 +47,7 @@ const data: UserModel[] = [
     {
         "id": "01JEDNK58VN4MZ624EBB8NXR9O",
         "username": "robert_brown",
-        "avatar": "../../../assets/logo.png",  // Đổi ảnh đại diện
+        "avatar": "https://via.placeholder.com/100",
         "name": "Ja Khang",
         "relationship": Relationship.FOLLOWING,
         "isPrivate": false,
@@ -56,7 +56,7 @@ const data: UserModel[] = [
     {
         "id": "01JEDNK58VN4MZ624EBB8NXR9Y",
         "username": "robert_brown",
-        "avatar": "../../../assets/logo.png",  // Đổi ảnh đại diện
+        "avatar": "https://via.placeholder.com/100",
         "name": "Ja Khang",
         "relationship": Relationship.FOLLOWING,
         "isPrivate": false,
@@ -65,7 +65,7 @@ const data: UserModel[] = [
     {
         "id": "01JEDNK58VN4MZ624EBB8NXR9R",
         "username": "robert_brown",
-        "avatar": "../../../assets/logo.png",  // Đổi ảnh đại diện
+        "avatar": "https://via.placeholder.com/100",
         "name": "Ja Khang",
         "relationship": Relationship.FOLLOWING,
         "isPrivate": false,
@@ -74,7 +74,7 @@ const data: UserModel[] = [
     {
         "id": "01JEDNK58VN4MZ624EBB8NXR96",
         "username": "robert_brown",
-        "avatar": "../../../assets/logo.png",  // Đổi ảnh đại diện
+        "avatar": "https://via.placeholder.com/100",
         "name": "Ja Khang",
         "relationship": Relationship.FOLLOWING,
         "isPrivate": false,
@@ -83,7 +83,7 @@ const data: UserModel[] = [
     {
         "id": "01JEDNK58VN4MZ624EBB8NXR98",
         "username": "robert_brown",
-        "avatar": "../../../assets/logo.png",  // Đổi ảnh đại diện
+        "avatar": "https://via.placeholder.com/100",
         "name": "Ja Khang",
         "relationship": Relationship.FOLLOWING,
         "isPrivate": false,
@@ -92,7 +92,7 @@ const data: UserModel[] = [
     {
         "id": "01JEDNK58VN4MZ624EBB8NXR93",
         "username": "robert_brown",
-        "avatar": "../../../assets/logo.png",  // Đổi ảnh đại diện
+        "avatar": "https://via.placeholder.com/100",
         "name": "Ja Khang",
         "relationship": Relationship.FOLLOWING,
         "isPrivate": false,
@@ -101,7 +101,7 @@ const data: UserModel[] = [
     {
         "id": "01JEDNK58VN4MZ624EBB8NXR9N",
         "username": "robert_brown",
-        "avatar": "../../../assets/logo.png",  // Đổi ảnh đại diện
+        "avatar": "https://via.placeholder.com/100",
         "name": "Ja Khang",
         "relationship": Relationship.FOLLOWING,
         "isPrivate": false,
@@ -110,7 +110,7 @@ const data: UserModel[] = [
     {
         "id": "01JEDNK58VN4MZ624EBB8NXR9X",
         "username": "robert_brown",
-        "avatar": "../../../assets/logo.png",  // Đổi ảnh đại diện
+        "avatar": "https://via.placeholder.com/100",
         "name": "Ja Khang",
         "relationship": Relationship.FOLLOWING,
         "isPrivate": false,
@@ -119,7 +119,7 @@ const data: UserModel[] = [
     {
         "id": "01JEDNK58VN4MZ624EBB8NXR9V",
         "username": "robert_brown",
-        "avatar": "../../../assets/logo.png",  // Đổi ảnh đại diện
+        "avatar": "https://via.placeholder.com/100",
         "name": "Ja Khang",
         "relationship": Relationship.FOLLOWING,
         "isPrivate": false,
@@ -128,14 +128,13 @@ const data: UserModel[] = [
     {
         "id": "01JEDNK58VN4MZ624EBB8NXR9T",
         "username": "robert_brown14",
-        "avatar": "../../../assets/logo.png",  // Đổi ảnh đại diện
+        "avatar": "https://via.placeholder.com/100",
         "name": "Ja Khang",
         "relationship": Relationship.FOLLOWING,
         "isPrivate": false,
         "isVerified": false
-    },
+    }
 ];
-
 
 const Search = ({navigation}: { navigation: NavigationProp<any> }) => {
     return (

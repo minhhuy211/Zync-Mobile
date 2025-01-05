@@ -24,7 +24,7 @@ const SearchItem = (user: SearchItemProps) => {
         <View style={styles.item}>
             <View style={styles.avatarContainer}>
                 <View style={styles.avatarBox}>
-                    <Image source={require('../../../assets/logo.png')} style={styles.avatar}/>
+                    <Image source={{uri: user.data.avatar}} style={styles.avatar}/>
                 </View>
             </View>
             <View style={styles.contentComponent}>
@@ -59,9 +59,9 @@ const styles = StyleSheet.create({
     },
 
     avatarBox: {
-        width: 37,
-        height: 37,
-        borderRadius: 20, // Đảm bảo hình avatar là hình tròn
+        width: 40,
+        height: 40,
+        borderRadius: 50, // Đảm bảo hình avatar là hình tròn
         marginRight: 10,
         overflow: 'hidden',  // Ẩn phần thừa nếu ảnh không đúng tỷ lệ
     },
