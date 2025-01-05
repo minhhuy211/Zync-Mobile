@@ -1,5 +1,14 @@
-import React, {useEffect, useState} from 'react';
-import {KeyboardAvoidingView, StyleSheet, Text, TouchableOpacity, View, ToastAndroid} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {
+    KeyboardAvoidingView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+    ToastAndroid,
+    Platform,
+    useWindowDimensions, Keyboard
+} from 'react-native';
 import Icon from '@expo/vector-icons/Ionicons';
 import {UserModel} from "../models/UserModel";
 import {Relationship} from "../constants/FollowStatus";
@@ -17,6 +26,8 @@ import {useAuthSelector} from "../features/auth";
 import {RouteProp, useNavigation} from "@react-navigation/native";
 import Toast from "react-native-toast-message";
 import {AuthenticatedStackParams} from "../navigation/AuthenticatedNavigator";
+import Content from "../components/Content";
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 interface PostEditorProps {
     route: RouteProp<AuthenticatedStackParams>
@@ -24,13 +35,17 @@ interface PostEditorProps {
 
 const PostEditor = ({route}: PostEditorProps) => {
     const {user} = useAuthSelector()
-    const {post} = route.params;
+    let {post: reply} = route.params;
+
     const [content, setContent] = useState("")
     const [visibility, setVisibility] = useState(Visibility.ANY)
     const [images, setImages] = useState<ImagePickerAsset[]>([])
     const {t} = useTranslation()
     const [type, setType] = useState(PostType.POST)
     const navigation = useNavigation()
+    const {height} = useWindowDimensions();
+    const scrollViewRef = useRef(null);
+
     async function handleTouchCamera() {
         let result = await ImagePicker.launchCameraAsync({
             mediaTypes: ['images', 'videos'],
@@ -70,94 +85,170 @@ const PostEditor = ({route}: PostEditorProps) => {
     }
 
     function handleSubmit() {
-        Toast.show({
-            type: 'postToast',
-            text1: t('posting'),
-            autoHide: false,
-        });
-        let files = images.map(m => mediaApi.convertToFile(m));
-        mediaApi.upload(files)
-            .then((mediaIds) => postApi.newPost({mediaIds, content, visibility}))
-            .then(() =>  Toast.show({
-                type: 'postSuccessToast',
-                text1: t('post success'),
-                autoHide: true,
-                visibilityTime: 600
-            }))
-            .catch(e => Toast.show({
-                type: 'postErrorToast',
-                text1: t('post success'),
-                autoHide: true,
-                visibilityTime: 600
-            }))
+
+
+
+        if (reply){
+            Toast.show({
+                type: 'postToast',
+                text1: t('posting'),
+                autoHide: false,
+            });
+            let files = images.map(m => mediaApi.convertToFile(m));
+            mediaApi.upload(files)
+                .then((mediaIds) => postApi.relyPost(reply.id,{mediaIds, content, visibility}))
+                .then(() => Toast.show({
+                    type: 'postSuccessToast',
+                    text1: t('post success'),
+                    autoHide: true,
+                    visibilityTime: 600
+                }))
+                .catch(e => Toast.show({
+                    type: 'postErrorToast',
+                    text1: t('post success'),
+                    autoHide: true,
+                    visibilityTime: 600
+                }))
+        }else {
+            Toast.show({
+                type: 'postToast',
+                text1: t('posting'),
+                autoHide: false,
+            });
+            let files = images.map(m => mediaApi.convertToFile(m));
+            mediaApi.upload(files)
+                .then((mediaIds) => postApi.newPost({mediaIds, content, visibility}))
+                .then(() => Toast.show({
+                    type: 'postSuccessToast',
+                    text1: t('post success'),
+                    autoHide: true,
+                    visibilityTime: 600
+                }))
+                .catch(e => Toast.show({
+                    type: 'postErrorToast',
+                    text1: t('post success'),
+                    autoHide: true,
+                    visibilityTime: 600
+                }))
+        }
+
 
         navigation.pop()
     }
 
+
+
     return (
-        <KeyboardAvoidingView style={styles.container}>
-            <View style={styles.editorLayout}>
-                <View style={styles.avtarCol}>
-                    <Image source={{uri: user?.avatar}}
-                           style={styles.primaryAvatar}
-                    />
-                    <View style={styles.line}></View>
-                    <Image source={{uri: user?.avatar}}
-                           style={styles.secondAvatar}
-                    />
-                </View>
-                <View style={styles.rightCol}>
-                    <Text style={styles.username}>
-                        {user?.username}
-                    </Text>
-                    <MentionEditor placeholder={t('what is new')} onChangeValue={(text) => setContent(text)}/>
-                    <PostEditorGallery onRemove={handleRemoveItem} maxHeight={300} maxWidth={270}
-                                       items={images.map(value => value as GalleryItemModel)}/>
+        <KeyboardAwareScrollView
+            contentOffset={{x: 0, y: 200}}
+            style={{height: height, backgroundColor: "#fff"}}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            bouncesZoom
 
-                    <View style={styles.actions}>
-                        <TouchableOpacity onPress={handleTouchPhoto}>
-                            <Icon name="image-outline" size={26} color="#858282"/>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={handleTouchCamera}>
-                            <Icon name="camera-outline" size={26} color="#858282"/>
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                            <Icon name="mic-outline" size={26} color="#858282"/>
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                            <Icon name="pricetag-outline" size={26} color="#858282"/>
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                            <Icon name="location-outline" size={26} color="#858282"/>
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                            <Icon name="cellular-outline" size={26} color="#858282"/>
-                        </TouchableOpacity>
-                    </View>
-                    <Text style={styles.subtitle}>
-                        {t("add to thread")}
-                    </Text>
-                </View>
-            </View>
-            <View style={{flexGrow: 1}}>
+        >
+           <View style={[styles.container, {minHeight: height - 55}]}>
+               {
+                   reply && (
+                       <View style={styles.editorLayout}>
+                           <View style={styles.avtarCol}>
+                               <Image source={{uri: reply.author?.avatar}}
+                                      style={styles.primaryAvatar}
+                               />
+                               <View style={styles.line}></View>
+                               <View></View>
+                           </View>
+                           <View style={styles.rightCol}>
+                               <Text style={styles.username}>
+                                   {user?.username}
+                               </Text>
+                               <Content value={reply.content}/>
+                               <PostEditorGallery
+                                   maxHeight={300} maxWidth={270}
+                                   items={reply.media.map(value => {
+                                       return {
+                                           type: value.type.toLowerCase(),
+                                           height: value.height,
+                                           width: value.width,
+                                           id: value.id,
+                                           uri: value.url
+                                       } as GalleryItemModel
+                                   })}/>
 
-            </View>
 
-            <View style={{display: "flex", flexDirection: "row", gap: 15, justifyContent: "space-between" ,alignItems: "center"}}>
-                <View>
-                    <Text style={{fontSize: 14, wordWrap: "wrap", color: "#B8B8B8"}}>
-                        {t(visibility.toString().toLowerCase())}
-                    </Text>
-                </View>
-                <View>
-                    <TouchableOpacity style={styles.submitBtn} onPress={handleSubmit}>
-                        <Text style={{color: "#fff", fontWeight: "500"}}>
-                            {t("post")}
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-        </KeyboardAvoidingView>
+                           </View>
+                       </View>
+
+                   )
+               }
+               <View style={styles.editorLayout}>
+                   <View style={styles.avtarCol}>
+                       <Image source={{uri: user?.avatar}}
+                              style={styles.primaryAvatar}
+                       />
+                       <View style={styles.line}></View>
+                       <Image source={{uri: user?.avatar}}
+                              style={styles.secondAvatar}
+                       />
+                   </View>
+                   <View style={styles.rightCol}>
+                       <Text style={styles.username}>
+                           {user?.username}
+                       </Text>
+                       <MentionEditor placeholder={t('what is new')} onChangeValue={(text) => setContent(text)}/>
+                       <PostEditorGallery onRemove={handleRemoveItem} maxHeight={300} maxWidth={270}
+                                          items={images.map(value => value as GalleryItemModel)}/>
+
+                       <View style={styles.actions}>
+                           <TouchableOpacity onPress={handleTouchPhoto}>
+                               <Icon name="image-outline" size={26} color="#858282"/>
+                           </TouchableOpacity>
+                           <TouchableOpacity onPress={handleTouchCamera}>
+                               <Icon name="camera-outline" size={26} color="#858282"/>
+                           </TouchableOpacity>
+                           <TouchableOpacity>
+                               <Icon name="mic-outline" size={26} color="#858282"/>
+                           </TouchableOpacity>
+                           <TouchableOpacity>
+                               <Icon name="pricetag-outline" size={26} color="#858282"/>
+                           </TouchableOpacity>
+                           <TouchableOpacity>
+                               <Icon name="location-outline" size={26} color="#858282"/>
+                           </TouchableOpacity>
+                           <TouchableOpacity>
+                               <Icon name="cellular-outline" size={26} color="#858282"/>
+                           </TouchableOpacity>
+                       </View>
+                       <Text style={styles.subtitle}>
+                           {reply ?  `Reply to ${reply.author.username}` : t("add to thread")}
+                       </Text>
+                   </View>
+               </View>
+               <View style={{flex: 1}}>
+
+               </View>
+
+               <View style={{
+                   display: "flex",
+                   flexDirection: "row",
+                   gap: 15,
+                   justifyContent: "space-between",
+                   alignItems: "center",
+               }}>
+                   <Text style={{fontSize: 14, wordWrap: "wrap", color: "#B8B8B8"}}>
+                       {t(visibility.toString().toLowerCase())}
+                   </Text>
+                   <View>
+                       <TouchableOpacity style={styles.submitBtn} onPress={handleSubmit} disabled={(!content && images.length == 0 && !reply)}>
+                           <Text style={{color: "#fff", fontWeight: "500"}}>
+                               {
+                                    t("post")
+                               }
+                           </Text>
+                       </TouchableOpacity>
+                   </View>
+               </View>
+           </View>
+        </KeyboardAwareScrollView>
     );
 };
 
@@ -169,6 +260,8 @@ const styles = StyleSheet.create({
         padding: 16,
         borderTopColor: "#999",
         borderTopWidth: 0.5,
+        height: "100%",
+        position: "relative"
 
     },
     avtarCol: {

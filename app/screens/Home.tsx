@@ -141,12 +141,12 @@ const Home = () => {
       </View>
 
       {/* Danh sách bài viết */}
-      {/* <FlatList
+      {<FlatList
         data={currentPosts}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => <ProfileView />}
         showsVerticalScrollIndicator={false} // Ẩn thanh cuộn
-      /> */}
+      /> }
     </View>
   );
 };

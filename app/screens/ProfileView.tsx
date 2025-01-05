@@ -11,7 +11,6 @@ import { Ionicons } from "@expo/vector-icons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useEffect, useState } from "react";
 import { Link } from "expo-router";
-import { useRouter } from "expo-router";
 import postApi from "../api/postApi";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import UserProfile from "./UserProfile";
@@ -19,7 +18,6 @@ import meApi from "../api/meApi";
 import Post from "./Post";
 import { PostModel } from "../models/PostModel";
 import Tabs from "../components/Tabs";
-import PostHome from "../components/Home/PostHome";
 
 
 type ProfileProps = {
@@ -34,7 +32,6 @@ export const ProfileView = ({
   const { top } = useSafeAreaInsets();
   const [activeTab, setActiveTab] = useState("Threads");
   const [profile, setProfile] = useState<ProfileModel | null>(null);
-  const router = useRouter();
   const [posts, setPosts] = useState<PostModel[]>([]);
 
   const isSelf = userId == null;

@@ -8,7 +8,6 @@ const RecommendUser = () => {
 
     const loadUser = () => {
         meApi.getRecommendUsers(5,1).then((data) => {
-            console.log(data);
             return setUser(data);
         });
     };

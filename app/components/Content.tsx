@@ -52,13 +52,14 @@ const Content: React.FC<Content> = ({ value }) => {
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: 20,
+    fontSize: 16,
     color: "#000",
-    marginBottom: 10,
+    marginBottom: 8,
+
   },
   mention: {
     color: "#1E90FF", // Different color for mentions
-    fontWeight: "bold",
+    fontWeight: "medium",
   },
 });
 

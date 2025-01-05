@@ -2,11 +2,11 @@ import {FlatList, StyleSheet, TouchableOpacity, View} from "react-native";
 import React, {useEffect, useState} from "react";
 import {StatusBar} from "expo-status-bar";
 import {Searchbar} from "react-native-paper";
-import UserModel from "../models/UserModel";
 import {NavigationProp} from "@react-navigation/native";
 import {Relationship} from "../constants/Relationship";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import SearchDetailItem from "../components/search/SearchDetailItem";
+import {UserModel} from "../models/UserModel";
 
 export enum HistoryType {
     PEOPLE,
