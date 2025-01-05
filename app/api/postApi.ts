@@ -9,11 +9,11 @@ export default {
 
     editVivisibility: (id: string, visibility: Visibility) => api.put(`/api/v1/posts/${id}/visibility`, { param: { visibility } }),
 
-    newPost: (data: PostRequest) => api.post('/api/v1/posts', data.id),
+    newPost: (data: PostRequest) => api.post('/api/v1/posts', data),
 
-    repost: (postId: string, data: PostRequest) => api.post(`/api/v1/posts/${postId}/repost`, data.id),
+    repost: (postId: string, data: PostRequest) => api.post(`/api/v1/posts/${postId}/repost`, data),
 
-    relyPost: (postId: string, data: PostRequest) => api.post(`/api/v1/posts/${postId}/relies`, data.id),
+    relyPost: (postId: string, data: PostRequest) => api.post(`/api/v1/posts/${postId}/relies`, data),
     getPostReply: (postId: string) => api.post(`/api/v1/posts/${postId}/relies`),
 
     unlikePost: (id: string) => api.post(`/api/v1/posts/${id}/unlike`),

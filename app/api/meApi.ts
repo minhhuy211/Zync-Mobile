@@ -1,10 +1,10 @@
 import api from "./api";
-import { UserModel } from "../models/UserModel";
-import {ProfileRequest}  from "../models/ProfileRequest";
-import { ProfileModel } from "../models/ProfileModel";
-import { PostModel, PostType } from "../models/PostModel";
-import { ImagePickerAsset } from "expo-image-picker";
-import { Platform } from "react-native";
+import {UserModel} from "../models/UserModel";
+import {ProfileRequest} from "../models/ProfileRequest";
+import {ProfileModel} from "../models/ProfileModel";
+import {PostModel, PostType} from "../models/PostModel";
+import {ImagePickerAsset} from "expo-image-picker";
+import {Platform} from "react-native";
 
 
 export default {
@@ -30,12 +30,11 @@ export default {
     //@ts-expect-error
     formData.append('file', { uri, name: fileName, type: fileType });
     try {
-      const response = await api.post('/api/v1/me/avatars', formData, {
+      return await api.post('/api/v1/me/avatars', formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
-      });
-      return response; // Trả về dữ liệu từ server nếu cần
+      }); // Trả về dữ liệu từ server nếu cần
     } catch (error) {
       console.error('Lỗi khi tải lên avatar:', error);
       throw error; // Ném lỗi nếu gặp vấn đề
@@ -63,4 +62,7 @@ export default {
   
 
   // getActivities: (limit: number, offset: number, types: ) => api.get<PostModel[]>('/api/v1/me/activities', { params: { limit, offset } }),
+  getMe() {
+    return api.get<UserModel>("/me");
+  }
 };

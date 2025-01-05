@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {KeyboardAvoidingView, StyleSheet, Text, TouchableOpacity, View,} from 'react-native';
+import {KeyboardAvoidingView, StyleSheet, Text, TouchableOpacity, View, ToastAndroid} from 'react-native';
 import Icon from '@expo/vector-icons/Ionicons';
 import {UserModel} from "../models/UserModel";
 import {Relationship} from "../constants/FollowStatus";
@@ -10,24 +10,21 @@ import {Image} from "expo-image"
 import PostEditorGallery, {GalleryItemModel} from "../components/PostEditorGallery";
 import MentionEditor from "../components/MentionEditor";
 import {Visibility} from "../models/PostRequest";
+import {PostType} from "../models/PostModel";
+import mediaApi from "../api/mediaApi";
+import postApi from "../api/postApi";
+import {useAuthSelector} from "../features/auth";
 
 
 
 const PostEditor = () => {
-    const [user, setUser] = useState<UserModel>({
-        avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPwR6tIEfnompxuUzDWwfa8k0vdecg2wLLsg&s",
-        id: "01JGPMFCT7VC5MHV49BPK5RQRE",
-        isPrivate: false,
-        name: "Ja Khang",
-        relationship: Relationship.NONE,
-        username: "__callmeja",
-        verified: false
-    })
+    const {user} = useAuthSelector()
 
     const [content, setContent] = useState("")
     const [visibility, setVisibility] = useState(Visibility.ANY)
     const [images, setImages] = useState<ImagePickerAsset[]>([])
     const {t} = useTranslation()
+    const [type, setType] = useState(PostType.POST)
 
     async function handleTouchCamera() {
         let result = await ImagePicker.launchCameraAsync({
@@ -67,21 +64,31 @@ const PostEditor = () => {
         }
     }
 
+    function handleSubmit() {
+        let files = images.map(m => mediaApi.convertToFile(m));
+        mediaApi.upload(files)
+            .then((mediaIds) => {
+                console.log(mediaIds)
+                postApi.newPost({mediaIds, content, visibility})
+            }).catch(e => console.log(e))
+            .finally(() =>     ToastAndroid.show('A pikachu appeared nearby !', ToastAndroid.SHORT))
+    }
+
     return (
         <KeyboardAvoidingView style={styles.container}>
             <View style={styles.editorLayout}>
                 <View style={styles.avtarCol}>
-                    <Image source={{uri: user.avatar}}
+                    <Image source={{uri: user?.avatar}}
                            style={styles.primaryAvatar}
                     />
                     <View style={styles.line}></View>
-                    <Image source={{uri: user.avatar}}
+                    <Image source={{uri: user?.avatar}}
                            style={styles.secondAvatar}
                     />
                 </View>
                 <View style={styles.rightCol}>
                     <Text style={styles.username}>
-                        {user.username}
+                        {user?.username}
                     </Text>
                     <MentionEditor placeholder={t('what is new')} onChangeValue={(text) => setContent(text)}/>
                     <PostEditorGallery onRemove={handleRemoveItem} maxHeight={300} maxWidth={270}
@@ -123,7 +130,7 @@ const PostEditor = () => {
                     </Text>
                 </View>
                 <View>
-                    <TouchableOpacity style={styles.submitBtn}>
+                    <TouchableOpacity style={styles.submitBtn} onPress={handleSubmit}>
                         <Text style={{color: "#fff", fontWeight: "500"}}>
                             {t("post")}
                         </Text>

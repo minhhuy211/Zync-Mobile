@@ -1,7 +1,7 @@
 export interface PostRequest {
     content: string;
-    id: string;
     visibility: Visibility;
+    mediaIds: string[]
 }
 
 export enum Visibility {
