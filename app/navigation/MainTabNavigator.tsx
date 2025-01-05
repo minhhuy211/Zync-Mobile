@@ -66,18 +66,6 @@ const MainTabNavigator = () => {
                 }}
             />
 
-
-            {/*<Tab.Screen*/}
-            {/*    name="SELF"*/}
-            {/*    component={SelfProfile}*/}
-            {/*    options={{*/}
-            {/*        tabBarIcon: (props) => (*/}
-            {/*            <NavigatorTabIcon name="person-circle-outline" {...props} />*/}
-            {/*        ),*/}
-            {/*        headerLeft: SelfProfile.HeaderLeft,*/}
-            {/*        headerRight: SelfProfile.HeaderRight,*/}
-            {/*    }}*/}
-            {/*/>*/}
         </Tab.Navigator>
     );
 };
