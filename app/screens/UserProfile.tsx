@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import meApi from "../api/meApi";
 // import { Colors } from '@/constants/Colors';
 import { Link } from "expo-router";
-import { Profile } from "../models/ProfileModel";
+import { ProfileModel } from "../models/ProfileModel";
 import { useEffect, useState } from "react";
 import Modal from "react-native-modal"; // Import thư viện modal
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -14,6 +14,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Key } from "../constants/Key";
 import Icon from "react-native-vector-icons/Ionicons";
 import PostTab from "../components/Profile/PostTab";
+import userApi from "../api/userApi";
 
 
 type UserProfileProps = {
@@ -21,7 +22,7 @@ type UserProfileProps = {
 };
 
 export const UserProfile = ({ userId }: UserProfileProps) => {
-  const [profile, setprofile] = useState({} as Profile);
+  const [profile, setprofile] = useState({} as ProfileModel);
   const [isFollowed, setFollowed] = useState(false);
   
 
@@ -40,10 +41,10 @@ export const UserProfile = ({ userId }: UserProfileProps) => {
   const handleFollowToggle = async () => {
     try {
       if (isFollowed) {
-        await meApi.unfollow(userId!);
+        // await userApi.unfollow(userId!);
         setFollowed(false);
       } else {
-        await meApi.follow(userId!);
+        // await meApi.follow(userId!);
         setFollowed(true);
       }
     } catch (error) {
@@ -70,7 +71,6 @@ export const UserProfile = ({ userId }: UserProfileProps) => {
       </Text>
 
       <View style={styles.buttonRow}>
-        <>
           <TouchableOpacity
             style={styles.fullButton}
             onPress={handleFollowToggle}
@@ -82,7 +82,6 @@ export const UserProfile = ({ userId }: UserProfileProps) => {
           <TouchableOpacity style={styles.button}>
             <Text style={styles.buttonText}>Mention</Text>
           </TouchableOpacity>
-        </>
       </View>
       <PostTab
         onChangeType={() => {}}

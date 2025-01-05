@@ -1,0 +1,27 @@
+
+import i18next from "i18next";
+import { initReactI18next } from "react-i18next";
+import en from "../../languages/en.json"
+import vi from "../../languages/vi.json"
+
+export const resources ={
+    en: {translation: en},
+    vi: {translation: vi}
+}
+
+
+console.log(resources)
+i18next
+    .use(initReactI18next) // passes i18n down to react-i18next
+    .init({
+        compatibilityJSON: "v4",
+        resources: resources,
+        lng: "vi",
+        fallbackLng: "en",
+        debug: true,
+        interpolation: {
+            escapeValue: false // r
+        }
+    });
+
+export default i18next

@@ -4,7 +4,7 @@ import api from "./api";
 export default {
     getMedia: (ids: string[]) => api.get<MediaModel[]>(`/api/v1/media`, { params: { ids } }),
 
-    loadMedia: (files: File[]) => {
+    upload: (files: File[]) => {
         let f = new FormData();
         files.forEach((file) => {
             f.append('files', file);

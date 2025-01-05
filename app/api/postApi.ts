@@ -1,5 +1,5 @@
 
-import { PostRequest, VisibilityEnum } from "../models/PostRequest";
+import { PostRequest, Visibility } from "../models/PostRequest";
 import { PostModel }  from "../models/PostModel";
 import api from "./api";
 
@@ -7,7 +7,7 @@ import api from "./api";
 export default {
     editPost: (id: string, data: PostRequest) => api.put(`/api/v1/posts/${id}`, data),
 
-    editVivisibility: (id: string, visibility: VisibilityEnum) => api.put(`/api/v1/posts/${id}/visibility`, { param: { visibility } }),
+    editVivisibility: (id: string, visibility: Visibility) => api.put(`/api/v1/posts/${id}/visibility`, { param: { visibility } }),
 
     newPost: (data: PostRequest) => api.post('/api/v1/posts', data.id),
 

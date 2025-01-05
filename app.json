@@ -6,9 +6,9 @@
     "orientation": "portrait",
     "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
-    
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "CFBundleAllowMixedLocalizations": true
     },
     "android": {
       "adaptiveIcon": {
@@ -19,13 +19,18 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
+    "locales": {
+      "vi": "./languages/vi.json"
+    },
     "plugins": [
       [
         "expo-image-picker",
         {
-          "photosPermission": "Allow this app to access your photos."
+          "photosPermission": "Allow this app to access your photos.",
+          "cameraPermission": "Allow this app to access your camera."
         }
-      ]
+      ],
+      "expo-localization"
     ]
   }
 }

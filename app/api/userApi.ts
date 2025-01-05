@@ -19,6 +19,8 @@ export default {
 
     getUser: (id: string) => api.get<ProfileModel>(`api/v1/user/${id}`),
 
-    getSearchUsers: (keyword: string, relationship: Relationship, limit: number, offset: number) => api.get<UserModel[]>(`api/v1/user/search`, { params: { keyword, relationship, limit, offset } }),
+    searchUsers: (keyword: string, relationship: Relationship, limit: number, offset: number) => api.get<UserModel[]>(`api/v1/user/search`, { params: { keyword, relationship, limit, offset } }),
+
+    searchFollowingsUsers: (keyword: string, limit: number, offset: number) => api.get<UserModel[]>(`/api/v1/users/search`, { params: { keyword, relationships: [Relationship.FOLLOWING.toString()].join(","), limit, offset } }),
 
 }

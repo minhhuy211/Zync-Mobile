@@ -1,10 +1,10 @@
 export interface PostRequest {
     content: string;
     id: string;
-    visibility: VisibilityEnum;
+    visibility: Visibility;
 }
 
-export enum VisibilityEnum {
+export enum Visibility {
     ANY = "ANY",
     FOLLOWING = "FOLLOWING",
     MENTIONED = "MENTIONED"
