@@ -1,6 +1,6 @@
 import {ActivityTitle} from "../../constants/notify/ActivityTitle";
 import React from "react";
-import {Alert, StyleSheet, Text, TouchableOpacity} from "react-native";
+import {StyleSheet, Text, TouchableOpacity} from "react-native";
 
 interface ButtonProps {
     title: ActivityTitle;

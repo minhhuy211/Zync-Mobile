@@ -68,14 +68,12 @@ export const SelfProfile = () => {
       <Text style={styles.bio}>
         {profile?.bio ? profile?.bio : "No bio yet"}
       </Text>
-      <TouchableOpacity onPress={() => handleOpenFollow()}>
-        <View style={styles.avatarFollowers}>
-          <AvatarGroup users={followers} />
-          <Text style={{ color: "gray" }}>
-            {profile?.numberOfFollowers} người theo dõi · {profile?.links}
-          </Text>
-        </View>
-      </TouchableOpacity>
+      <View style={styles.avatarFollowers}>
+        <AvatarGroup users={followers} />
+        <Text style={{ color: "gray" }}>
+          {profile?.numberOfFollowers} người theo dõi · {profile?.links} 
+        </Text>
+      </View>
 
       <View style={styles.buttonRow}>
         <>
@@ -185,7 +183,7 @@ const styles = StyleSheet.create({
   },
   fullButton: {
     flex: 1,
-    padding: 6,
+    padding: 10,
     borderRadius: 5,
     borderWidth: 1,
     backgroundColor: "#000",

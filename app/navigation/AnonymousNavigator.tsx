@@ -1,9 +1,11 @@
 import React from "react";
-import {NavigationContainer} from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import Login from "../screens/Login";
 import SignUp from "../screens/SignUp";
 import Verify from "../screens/Verify";
-import {createNativeStackNavigator} from "@react-navigation/native-stack";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Home from "../screens/Home";
+
 
 
 const AnonymousNavigator = () => {

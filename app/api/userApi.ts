@@ -9,7 +9,7 @@ export default {
 
     removeRequest: (targetId: string) => api.post(`api/v1/users/${targetId}/remove-request`),
 
-    rejectRequset: (targetId: string) => api.post(`api/v1/users/${targetId}/reject-request`),
+    rejectRequest: (targetId: string) => api.post(`api/v1/users/${targetId}/reject-request`),
 
     followUser: (targetId: string) => api.post(`api/v1/users/${targetId}/follow`),
 

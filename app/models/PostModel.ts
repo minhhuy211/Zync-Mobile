@@ -9,7 +9,7 @@ export interface PostModel{
     content: string,
     createdAt: string,
     likes: number,
-    relies: number,
+    replies: number,
     reposts: number,
     media: MediaModel[],
     time: TimeModel,

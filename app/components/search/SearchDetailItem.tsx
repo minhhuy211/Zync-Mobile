@@ -1,8 +1,8 @@
 import React from "react";
 import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import {History, HistoryType} from "../../screens/SearchDetail";
-import UserModel from "../../models/UserModel";
+import {UserModel} from "../../models/UserModel";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import {History, HistoryType} from "./Fragment/General/SearchDetailFragment";
 
 interface SearchDetailItemProps {
     history: History,
@@ -57,6 +57,7 @@ const SearchDetailItem = ({history, onDeleteHistory, onSearch, onSearchUser}: Se
                             <TouchableOpacity style={styles.info} onPress={() => {
                                 if (typeof history.data === 'string') {
                                     onSearch(history.data)
+
                                 }
                             }}>
                                 <Text style={styles.username}>{history.data.toString()}</Text>

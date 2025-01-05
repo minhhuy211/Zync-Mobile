@@ -1,17 +1,33 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {Key} from "../../constants/Key";
+import {UserModel} from "../../models/UserModel";
+import {Relationship} from "../../constants/Relationship";
 
 export interface AuthSate {
     accessToken: string | null,
     isAuthenticated: boolean,
+    user: UserModel | null
 
 }
 
 const initialState: AuthSate = {
+    user: {
+        id: "",
+        username: "",
+        avatar: "",
+        name: "",
+        relationship: Relationship.PENDING,
+        isPrivate: false,
+        verified: false
+    },
     accessToken: null,
     isAuthenticated: false
 };
 
+export interface AuthenticatePayloadAction{
+    token: string,
+    user: UserModel
+}
 
 const authSlice = createSlice({
     name: "auth",
@@ -24,6 +40,10 @@ const authSlice = createSlice({
         logout(state){
             state.accessToken = null;
             state.isAuthenticated = false;
+            state.user = null
+        },
+        setPrincipal(state,action : PayloadAction<UserModel> ){
+            state.user = action.payload
         }
     }
 });
