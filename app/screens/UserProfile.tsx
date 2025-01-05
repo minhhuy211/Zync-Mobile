@@ -23,7 +23,6 @@ import { Key } from "../constants/Key";
 import Icon from "react-native-vector-icons/Ionicons";
 import PostTab from "../components/Profile/PostTab";
 import userApi from "../api/userApi";
-<<<<<<< HEAD
 import { Relationship } from "../constants/FollowStatus";
 import RecommendUser from "../components/RecommendUser";
 import FollowButton from "../components/FollowButton";
@@ -36,17 +35,10 @@ import Followers from "../components/Followers";
 type UserProfileProps = {
   route: RouteProp<AuthenticatedStackParams, "UserProfile">;
   navigation: NavigationProp<any>;
-=======
-
-
-type UserProfileProps = {
-  userId?: string;
->>>>>>> 17bb2a6568bc5dbb98667b92bf97f1a4c845423c
 };
 
 export const UserProfile = ({ route, navigation }: UserProfileProps) => {
   const [profile, setprofile] = useState({} as ProfileModel);
-<<<<<<< HEAD
   let userId = route.params.id;
   const [loading, setloading] = useState(false);
   const [followers, setFollowers] = useState<UserModel[]>([]);
@@ -94,40 +86,6 @@ export const UserProfile = ({ route, navigation }: UserProfileProps) => {
 
   const renderHeader = () => (
     <View style={styles.profile}>
-=======
-  const [isFollowed, setFollowed] = useState(false);
-  
-
-  const isSelf = userId == null;
-
-  useState(() => {
-    if (isSelf) {
-      meApi.getProfile().then((data) => {
-        setprofile(data);
-        console.log(data);
-      });
-    } else {
-    }
-  });
-
-  const handleFollowToggle = async () => {
-    try {
-      if (isFollowed) {
-        // await userApi.unfollow(userId!);
-        setFollowed(false);
-      } else {
-        // await meApi.follow(userId!);
-        setFollowed(true);
-      }
-    } catch (error) {
-      console.error("Error toggling follow:", error);
-    }
-  };
-
-
-  return (
-    <View style={styles.container}>
->>>>>>> 17bb2a6568bc5dbb98667b92bf97f1a4c845423c
       <View style={styles.profileContainer}>
         <View style={styles.profileTextContainer}>
           <Text style={styles.name}>{profile?.name}</Text>
@@ -149,7 +107,6 @@ export const UserProfile = ({ route, navigation }: UserProfileProps) => {
       </TouchableOpacity>
 
       <View style={styles.buttonRow}>
-<<<<<<< HEAD
         <FollowButton
           userId={userId}
           isPrivate={!!profile.isPrivate}
@@ -190,21 +147,6 @@ export const UserProfile = ({ route, navigation }: UserProfileProps) => {
       <Followers
         visible={followVisible}
         onClose={handleCloseFollow}
-=======
-          <TouchableOpacity
-            style={styles.fullButton}
-            onPress={handleFollowToggle}
-          >
-            <Text style={styles.fullButtonText}>
-              {isFollowed ? "Followed" : "Follow"}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Mention</Text>
-          </TouchableOpacity>
-      </View>
-      <PostTab
->>>>>>> 17bb2a6568bc5dbb98667b92bf97f1a4c845423c
         onChangeType={() => {}}
         onLoadMore={() => {}}
         onUserPress={(id) => {

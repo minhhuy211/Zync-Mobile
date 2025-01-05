@@ -6,11 +6,8 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { AuthenticatedStackParams } from "./AuthenticatedNavigator";
 import OctIcon from "@expo/vector-icons/Octicons";
-<<<<<<< HEAD
 import SelfProfile from "../screens/SelfProfile";
-=======
 import Activity from "../screens/Activity";
->>>>>>> 17bb2a6568bc5dbb98667b92bf97f1a4c845423c
 
 const MainTabNavigator = () => {
   const Tab = createBottomTabNavigator();
@@ -67,36 +64,29 @@ const MainTabNavigator = () => {
         component={() => null} // Empty component for the button
         options={{
           tabBarIcon: (props) => (
-            <OctIcon
-              size={props.size}
-              color={props.focused ? "#EA333E" : props.color}
-              name={props.focused ? "heart-fill" : "heart"}
-            />
-<<<<<<< HEAD
-            <Tab.Screen
+            <>
+              <OctIcon
+                size={props.size}
+                color={props.focused ? "#EA333E" : props.color}
+                name={props.focused ? "heart-fill" : "heart"}
+              />
+              <Tab.Screen
                 name="Users"
                 component={SelfProfile} // Empty component for the button
                 options={{
-                    tabBarIcon: (props) => <OctIcon name={props.focused ? "person-fill" : "person"} {...props}/>,
-                    headerShown: true,
-                    headerTitle: "",
-                    headerLeft: SelfProfile.HeaderLeft,
-                    headerRight: SelfProfile.HeaderRight,
+                  tabBarIcon: (props) => (
+                    <OctIcon
+                      name={props.focused ? "person-fill" : "person"}
+                      {...props}
+                    />
+                  ),
+                  headerShown: true,
+                  headerTitle: "",
+                  headerLeft: SelfProfile.HeaderLeft,
+                  headerRight: SelfProfile.HeaderRight,
                 }}
-=======
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Users"
-        component={() => null} // Empty component for the button
-        options={{
-          tabBarIcon: (props) => (
-            <OctIcon
-              name={props.focused ? "person-fill" : "person"}
-              {...props}
->>>>>>> 17bb2a6568bc5dbb98667b92bf97f1a4c845423c
-            />
+              />
+            </>
           ),
         }}
       />
