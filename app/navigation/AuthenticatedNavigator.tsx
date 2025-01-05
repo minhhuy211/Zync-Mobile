@@ -3,11 +3,12 @@ import {NavigationContainer, ParamListBase} from "@react-navigation/native";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import PostEditor from "../screens/PostEditor";
 import MainTabNavigator from "./MainTabNavigator";
+import {PostModel} from "../models/PostModel";
 
 
 export interface AuthenticatedStackParams extends ParamListBase {
     PostEditor: {
-        id?: string
+        post?: PostModel
     }
 }
 

@@ -1,9 +1,10 @@
 import React, {useState} from "react";
 import {StyleSheet, View} from "react-native";
 import {StatusBar} from "expo-status-bar";
-import SearchFragment from "../components/Search/Fragment/General/SearchFragment";
-import SearchResultFragment from "../components/Search/Fragment/General/SearchResultFragment";
-import SearchDetailFragment from "../components/Search/Fragment/General/SearchDetailFragment";
+import SearchDetailFragment from "../components/search/fragment/General/SearchDetailFragment";
+import SearchFragment from "../components/search/fragment/General/SearchFragment";
+import SearchResultFragment from "../components/search/fragment/General/SearchResultFragment";
+
 
 const Search = () => {
     const [currentFragment, setCurrentFragment] = useState<'Search' | 'SearchDetail' | 'SearchResult'>('Search');

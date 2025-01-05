@@ -6,6 +6,7 @@ import {Provider} from "react-redux";
 import store from "./app/store";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import Toast from "react-native-toast-message";
+import toastConfig from "./app/components/ToastConfig";
 
 const App: React.FC = () => {
 
@@ -21,7 +22,7 @@ const App: React.FC = () => {
         <GestureHandlerRootView style={{ flex: 1 }}>
           <Layout />
         </GestureHandlerRootView>
-        <Toast position="bottom" />
+        <Toast position="bottom" config={toastConfig}  />
       </Provider>
   );
 };

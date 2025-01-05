@@ -5,5 +5,9 @@
   "add to thread" : "Thêm vào Zync",
   "post": "Đăng",
   "any": "Bất kỳ ai cũng có thể thấy và tương tác",
+  "posting": "Đang đăng",
+  "post success": "Đăng thành công",
+  "post failure": "Lỗi đăng bài"
+
 
 }

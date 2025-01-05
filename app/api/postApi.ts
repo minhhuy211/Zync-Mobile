@@ -13,8 +13,13 @@ export default {
 
     repost: (postId: string, data: PostRequest) => api.post(`/api/v1/posts/${postId}/repost`, data),
 
-    relyPost: (postId: string, data: PostRequest) => api.post(`/api/v1/posts/${postId}/relies`, data),
-    getPostReply: (postId: string) => api.post(`/api/v1/posts/${postId}/relies`),
+    replyPost: (postId: string, data: PostRequest) => api.post(`/api/v1/posts/${postId}/replies`, data),
+    getReplies: (postId: string, limit: number, offset: number) => api.get<PostModel[]>(`/api/v1/posts/${postId}/replies`, {
+        params:{
+            limit,
+            offset
+        }
+    }),
 
     unlikePost: (id: string) => api.post(`/api/v1/posts/${id}/unlike`),
 

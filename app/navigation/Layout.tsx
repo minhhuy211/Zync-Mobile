@@ -43,15 +43,24 @@ const Layout = () => {
         })
         .then((res) => {
           if (!!res) dispatch(authenticate(res.accessToken));
-
+          else setLoading(false)
         })
-        .catch((e: ApiError) => handleError(e))
+        .catch((e: ApiError) => {
+          handleError(e)
+          setLoading(false)
+        })
     }
   }, []);
 
   useEffect(() => {
+    console.log("load profile:" + isAuthenticated)
     if (isAuthenticated){
-      meApi.getMe().then(user => dispatch(setPrincipal(user))).catch((e: ApiError) => handleError(e)).finally(() => setLoading(false))
+      meApi.getMe()
+          .then(user => {
+            dispatch(setPrincipal(user))
+          })
+          .catch((e: ApiError) => handleError(e))
+          .finally(() => setLoading(false))
     }
   }, [isAuthenticated]);
 

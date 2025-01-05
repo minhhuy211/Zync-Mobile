@@ -28,6 +28,7 @@ api.interceptors.response.use(
         console.log("connection canceled..");
       }
       if (response) {
+        console.log(response.data)
         return Promise.reject(response.data);
       } else if (request) {
         //The request was made but no response was received, error.request is an instance of XMLHttpRequest in the browser and an instance of http.ClientRequest in Node.js

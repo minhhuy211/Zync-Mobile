@@ -59,10 +59,11 @@ export default {
 
   getPostsFollowing: (limit: number, offset: number, types: PostType) => api.get<PostModel[]>('/api/v1/me/posts/followings', { params: { limit, offset , types} }),
 
-  
+  getPostsRecommended: (limit: number, offset: number, types: PostType) => api.get<PostModel[]>('/api/v1/me/posts/recommended', { params: { limit, offset , types} }),
+
 
   // getActivities: (limit: number, offset: number, types: ) => api.get<PostModel[]>('/api/v1/me/activities', { params: { limit, offset } }),
-  getMe() {
-    return api.get<UserModel>("/me");
+  async getMe() {
+    return await api.get<UserModel>("/api/v1/me");
   }
 };

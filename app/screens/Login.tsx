@@ -15,7 +15,6 @@ import { Key } from "../constants/Key";
 import { useAppDispatch } from "../store";
 import { useAuthAction } from "../features/auth";
 import { ApiError, ErrorCode } from "../models/Error";
-import Toast from "react-native-toast-message";
 
 const Login = ({ navigation }: { navigation: NavigationProp<any> }) => {
   const [email, setEmail] = useState("");
@@ -68,10 +67,7 @@ const Login = ({ navigation }: { navigation: NavigationProp<any> }) => {
           return AsyncStorage.setItem(Key.REFRESH_TOKEN, data.refreshToken);
         })
         .then(() => {
-          Toast.show({
-            type: "success",
-            text2: "This is some something 👋",
-          });
+
         })
         .catch((e: ApiError) => handleError(e));
   }

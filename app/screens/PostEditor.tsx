@@ -14,17 +14,23 @@ import {PostType} from "../models/PostModel";
 import mediaApi from "../api/mediaApi";
 import postApi from "../api/postApi";
 import {useAuthSelector} from "../features/auth";
+import {RouteProp, useNavigation} from "@react-navigation/native";
+import Toast from "react-native-toast-message";
+import {AuthenticatedStackParams} from "../navigation/AuthenticatedNavigator";
 
+interface PostEditorProps {
+    route: RouteProp<AuthenticatedStackParams>
+}
 
-const PostEditor = () => {
+const PostEditor = ({route}: PostEditorProps) => {
     const {user} = useAuthSelector()
-
+    const {post} = route.params;
     const [content, setContent] = useState("")
     const [visibility, setVisibility] = useState(Visibility.ANY)
     const [images, setImages] = useState<ImagePickerAsset[]>([])
     const {t} = useTranslation()
     const [type, setType] = useState(PostType.POST)
-
+    const navigation = useNavigation()
     async function handleTouchCamera() {
         let result = await ImagePicker.launchCameraAsync({
             mediaTypes: ['images', 'videos'],
@@ -44,7 +50,7 @@ const PostEditor = () => {
     }
 
     useEffect(() => {
-        console.log(content)
+
     }, [content]);
 
     async function handleTouchPhoto() {
@@ -64,13 +70,28 @@ const PostEditor = () => {
     }
 
     function handleSubmit() {
+        Toast.show({
+            type: 'postToast',
+            text1: t('posting'),
+            autoHide: false,
+        });
         let files = images.map(m => mediaApi.convertToFile(m));
         mediaApi.upload(files)
-            .then((mediaIds) => {
-                console.log(mediaIds)
-                postApi.newPost({mediaIds, content, visibility})
-            }).catch(e => console.log(e))
-            .finally(() =>     ToastAndroid.show('A pikachu appeared nearby !', ToastAndroid.SHORT))
+            .then((mediaIds) => postApi.newPost({mediaIds, content, visibility}))
+            .then(() =>  Toast.show({
+                type: 'postSuccessToast',
+                text1: t('post success'),
+                autoHide: true,
+                visibilityTime: 600
+            }))
+            .catch(e => Toast.show({
+                type: 'postErrorToast',
+                text1: t('post success'),
+                autoHide: true,
+                visibilityTime: 600
+            }))
+
+        navigation.pop()
     }
 
     return (
