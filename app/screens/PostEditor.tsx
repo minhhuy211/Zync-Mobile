@@ -140,13 +140,10 @@ const PostEditor = ({route}: PostEditorProps) => {
 
     return (
         <KeyboardAwareScrollView
-            contentOffset={{x: 0, y: 200}}
-            style={{height: height, backgroundColor: "#fff"}}
+            style={[styles.container, {minHeight: height}]}
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            bouncesZoom
 
         >
-           <View style={[styles.container, {minHeight: height - 55}]}>
                {
                    reply && (
                        <View style={styles.editorLayout}>
@@ -247,7 +244,6 @@ const PostEditor = ({route}: PostEditorProps) => {
                        </TouchableOpacity>
                    </View>
                </View>
-           </View>
         </KeyboardAwareScrollView>
     );
 };
