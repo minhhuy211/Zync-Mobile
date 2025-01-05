@@ -1,7 +1,7 @@
 import {FlatList, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect} from "react";
-import ProfileAvatarItem from "../ProfileAvatarItem";
-import ProfileDetailItem from "../ProfileDetailItem";
+import ProfileAvatarItem from "../../ProfileAvatarItem";
+import ProfileDetailItem from "../../ProfileDetailItem";
 
 // Dữ liệu mẫu
 const avatarData = [

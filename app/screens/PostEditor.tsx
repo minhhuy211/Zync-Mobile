@@ -16,7 +16,6 @@ import postApi from "../api/postApi";
 import {useAuthSelector} from "../features/auth";
 
 
-
 const PostEditor = () => {
     const {user} = useAuthSelector()
 

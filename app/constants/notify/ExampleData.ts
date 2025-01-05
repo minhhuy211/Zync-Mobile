@@ -1,310 +1,688 @@
+import {TimeUnit} from "../../models/TimeModel";
+import ActivityModel from "../../models/ActivityModel";
 import {ActivityType} from "./ActivityType";
 import {Relationship} from "../Relationship";
-import ActivityModel from "../../models/ActivityModel";
+import {PostType} from "../../models/PostModel";
 
 export const data: ActivityModel[] = [
     {
-        "id": "01JGKYJ31EFNFPPJBK00981ZN3",
-        "type": ActivityType.MENTION,
-        "actor": {
-            "id": "01JEDNK58VN4MZ624EBB8NXR9P",
-            "username": "robert_brown",
-            "avatar": "../../../assets/logo.png",  // Đổi ảnh đại diện
-            "name": "Ja Khang",
-            "relationship": Relationship.FOLLOWING,
-            "isPrivate": false,
-            "isVerified": false
+        id: "01JGKYJ31EFNFPPJBK00981ZN3",
+        type: ActivityType.MENTION,
+        actor: {
+            id: "01JEDNK58VN4MZ624EBB8NXR9P",
+            username: "robert_brown",
+            avatar: "../../../assets/logo.png",
+            name: "Ja Khang",
+            relationship: Relationship.FOLLOWING,
+            isPrivate: false,
+            verified: false,
         },
-        "post": {
-            "id": "01JGKYJ2FVHMA29JV6SSMJG57C",
-            "author": {
-                "id": "01JEDNK58VN4MZ624EBB8NXR9P",
-                "username": "robert_brown",
-                "avatar": "../../../assets/logo.png",  // Đổi ảnh đại diện
-                "name": "Ja Khang",
-                "relationship": Relationship.FOLLOWING,
-                "isPrivate": false,
-                "isVerified": false
+        post: {
+            id: "01JGKYJ2FVHMA29JV6SSMJG57C",
+            author: {
+                id: "01JEDNK58VN4MZ624EBB8NXR9P",
+                username: "robert_brown",
+                avatar: "../../../assets/logo.png",
+                name: "Ja Khang",
+                relationship: Relationship.FOLLOWING,
+                isPrivate: false,
+                verified: false,
             },
-            "type": "REPLY",  // Giữ nguyên type ở đây
-            "content": "@[emily_johnson](01JFY426B3DDKY4S1NVJ8JZ9Y2) Happy new year !!!",
-            "createdAt": "2025-01-02T23:46:11.538809",
-            "likes": 0,
-            "replies": 0,
-            "reposts": 0,
-            "media": [],
-            "time": {
-                "value": 15,
-                "unit": "HOURS"
+            type: PostType.REPLY,
+            content: "@[emily_johnson](01JFY426B3DDKY4S1NVJ8JZ9Y2) Happy new year !!!",
+            createdAt: "2025-01-02T23:46:11.538809",
+            likes: 0,
+            replies: 0,
+            reposts: 0,
+            media: [],
+            time: {
+                value: 15,
+                unit: TimeUnit.HOURS,
             },
-            "liked": false,
-            "reposted": false,  // Trường reposted thêm vào
-            "parent": {
-                "id": "01JGH8P24C2RT36R24GQ4M3N0X",
-                "author": {
-                    "id": "01JFY426B3DDKY4S1NVJ8JZ9Y2",
-                    "username": "emily_johnson",
-                    "avatar": "../../../assets/logo.png",  // Đổi ảnh đại diện
-                    "name": "Rose Johnson Emily",
-                    "relationship": Relationship.NONE,
-                    "isPrivate": false,
-                    "isVerified": false
+            liked: false,
+            reposted: false,
+            parent: {
+                id: "01JGH8P24C2RT36R24GQ4M3N0X",
+                author: {
+                    id: "01JFY426B3DDKY4S1NVJ8JZ9Y2",
+                    username: "emily_johnson",
+                    avatar: "../../../assets/logo.png",
+                    name: "Rose Johnson Emily",
+                    relationship: Relationship.NONE,
+                    isPrivate: false,
+                    verified: false,
                 },
-                "type": "POST",  // Giữ nguyên type ở đây
-                "content": "Happy new year ",
-                "createdAt": "2025-01-01T22:45:24.665695",
-                "likes": 1,
-                "replies": 14,
-                "reposts": 0,
-                "media": [],
-                "time": {
-                    "value": 1,
-                    "unit": "DAYS"
+                type: PostType.POST,
+                content: "Happy new year ",
+                createdAt: "2025-01-01T22:45:24.665695",
+                likes: 1,
+                replies: 14,
+                reposts: 0,
+                media: [],
+                time: {
+                    value: 1,
+                    unit: TimeUnit.DAYS,
                 },
-                "liked": false,
-                "reposted": false  // Trường reposted thêm vào
-            }
+                liked: false,
+                reposted: false,
+                parent: null,
+            },
         },
-        "time": {
-            "value": 15,
-            "unit": "HOURS"
-        }
+        time: {
+            value: 15,
+            unit: TimeUnit.HOURS,
+        },
     },
     {
-        "id": "01JGKYGGQDQQS92Y4MN7450D04",
-        "type": ActivityType.MENTION,
-        "actor": {
-            "id": "01JEDNK58VN4MZ624EBB8NXR9P",
-            "username": "robert_brown",
-            "avatar": "../../../assets/logo.png",  // Đổi ảnh đại diện
-            "name": "Ja Khang",
-            "relationship": Relationship.FOLLOWING,
-            "isPrivate": false,
-            "isVerified": false
+        id: "01JGKYJ31EFNFPPJBK00981ZN4",
+        type: ActivityType.MENTION,
+        actor: {
+            id: "01JEDNK58VN4MZ624EBB8NXR9Q",
+            username: "susan_brown",
+            avatar: "../../../assets/logo.png",
+            name: "Susan Brown",
+            relationship: Relationship.FOLLOWING,
+            isPrivate: false,
+            verified: false,
         },
-        "post": {
-            "id": "01JGKYGEVMJSKS4BV03TSPKQVR",
-            "author": {
-                "id": "01JEDNK58VN4MZ624EBB8NXR9P",
-                "username": "robert_brown",
-                "avatar": "../../../assets/logo.png",  // Đổi ảnh đại diện
-                "name": "Ja Khang",
-                "relationship": Relationship.FOLLOWING,
-                "isPrivate": false,
-                "isVerified": false
+        post: {
+            id: "01JGKYJ2FVHMA29JV6SSMJG58D",
+            author: {
+                id: "01JEDNK58VN4MZ624EBB8NXR9Q",
+                username: "susan_brown",
+                avatar: "../../../assets/logo.png",
+                name: "Susan Brown",
+                relationship: Relationship.FOLLOWING,
+                isPrivate: false,
+                verified: false,
             },
-            "type": "REPLY",  // Giữ nguyên type ở đây
-            "content": "@[emily_johnson](01JFY426B3DDKY4S1NVJ8JZ9Y2) Happy new year !!!",
-            "createdAt": "2025-01-02T23:45:18.718543",
-            "likes": 0,
-            "replies": 0,
-            "reposts": 0,
-            "media": [],
-            "time": {
-                "value": 15,
-                "unit": "HOURS"
+            type: PostType.REPLY,
+            content: "@[john_doe](01JFY426B3DDKY4S1NVJ8JZ9Y3) Happy holidays!!!",
+            createdAt: "2025-01-02T23:50:00.123456",
+            likes: 2,
+            replies: 1,
+            reposts: 0,
+            media: [],
+            time: {
+                value: 2,
+                unit: TimeUnit.HOURS,
             },
-            "liked": false,
-            "reposted": false,  // Trường reposted thêm vào
-            "parent": {
-                "id": "01JGH8P24C2RT36R24GQ4M3N0X",
-                "author": {
-                    "id": "01JFY426B3DDKY4S1NVJ8JZ9Y2",
-                    "username": "emily_johnson",
-                    "avatar": "../../../assets/logo.png",  // Đổi ảnh đại diện
-                    "name": "Rose Johnson Emily",
-                    "relationship": Relationship.NONE,
-                    "isPrivate": false,
-                    "isVerified": false
+            liked: true,
+            reposted: false,
+            parent: {
+                id: "01JGH8P24C2RT36R24GQ4M3N0Y",
+                author: {
+                    id: "01JFY426B3DDKY4S1NVJ8JZ9Y3",
+                    username: "john_doe",
+                    avatar: "../../../assets/logo.png",
+                    name: "John Doe",
+                    relationship: Relationship.NONE,
+                    isPrivate: false,
+                    verified: false,
                 },
-                "type": "POST",  // Giữ nguyên type ở đây
-                "content": "Happy new year ",
-                "createdAt": "2025-01-01T22:45:24.665695",
-                "likes": 1,
-                "replies": 14,
-                "reposts": 0,
-                "media": [],
-                "time": {
-                    "value": 1,
-                    "unit": "DAYS"
+                type: PostType.POST,
+                content: "Happy holidays everyone!",
+                createdAt: "2025-01-01T22:45:24.665695",
+                likes: 5,
+                replies: 10,
+                reposts: 2,
+                media: [],
+                time: {
+                    value: 1,
+                    unit: TimeUnit.DAYS,
                 },
-                "liked": false,
-                "reposted": false  // Trường reposted thêm vào
-            }
+                liked: false,
+                reposted: true,
+                parent: null,
+            },
         },
-        "time": {
-            "value": 15,
-            "unit": "HOURS"
-        }
+        time: {
+            value: 2,
+            unit: TimeUnit.HOURS,
+        },
     },
     {
-        "id": "01JGKXAWFP54EWNB2QA063J1AT",
-        "type": ActivityType.MENTION,
-        "actor": {
-            "id": "01JEDNK58VN4MZ624EBB8NXR9P",
-            "username": "robert_brown",
-            "avatar": "../../../assets/logo.png",  // Đổi ảnh đại diện
-            "name": "Ja Khang",
-            "relationship": Relationship.FOLLOWING,
-            "isPrivate": false,
-            "isVerified": false
+        id: "01JGKYJ31EFNFPPJBK00981ZN5",
+        type: ActivityType.MENTION,
+        actor: {
+            id: "01JEDNK58VN4MZ624EBB8NXR9R",
+            username: "michael_smith",
+            avatar: "../../../assets/logo.png",
+            name: "Michael Smith",
+            relationship: Relationship.FOLLOWING,
+            isPrivate: false,
+            verified: false,
         },
-        "post": {
-            "id": "01JGKXAWA6ZVR6GREXW89R13GK",
-            "author": {
-                "id": "01JEDNK58VN4MZ624EBB8NXR9P",
-                "username": "robert_brown",
-                "avatar": "../../../assets/logo.png",  // Đổi ảnh đại diện
-                "name": "Ja Khang",
-                "relationship": Relationship.FOLLOWING,
-                "isPrivate": false,
-                "isVerified": false
+        post: {
+            id: "01JGKYJ2FVHMA29JV6SSMJG59C",
+            author: {
+                id: "01JEDNK58VN4MZ624EBB8NXR9R",
+                username: "michael_smith",
+                avatar: "../../../assets/logo.png",
+                name: "Michael Smith",
+                relationship: Relationship.FOLLOWING,
+                isPrivate: false,
+                verified: false,
             },
-            "type": "REPLY",  // Giữ nguyên type ở đây
-            "content": "@[emily_johnson](01JFY426B3DDKY4S1NVJ8JZ9Y2) Happy new year !!!",
-            "createdAt": "2025-01-02T23:24:47.187851",
-            "likes": 0,
-            "replies": 0,
-            "reposts": 0,
-            "media": [],
-            "time": {
-                "value": 15,
-                "unit": "HOURS"
+            type: PostType.REPLY,
+            content: "@[alice_wilson](01JFY426B3DDKY4S1NVJ8JZ9Y4) Cheers to the new year!!!",
+            createdAt: "2025-01-02T23:53:22.908074",
+            likes: 1,
+            replies: 0,
+            reposts: 0,
+            media: [],
+            time: {
+                value: 10,
+                unit: TimeUnit.MINUTES,
             },
-            "liked": false,
-            "reposted": false,  // Trường reposted thêm vào
-            "parent": {
-                "id": "01JGH8P24C2RT36R24GQ4M3N0X",
-                "author": {
-                    "id": "01JFY426B3DDKY4S1NVJ8JZ9Y2",
-                    "username": "emily_johnson",
-                    "avatar": "../../../assets/logo.png",  // Đổi ảnh đại diện
-                    "name": "Rose Johnson Emily",
-                    "relationship": Relationship.NONE,
-                    "isPrivate": false,
-                    "isVerified": false
+            liked: true,
+            reposted: false,
+            parent: {
+                id: "01JGH8P24C2RT36R24GQ4M3N0Z",
+                author: {
+                    id: "01JFY426B3DDKY4S1NVJ8JZ9Y4",
+                    username: "alice_wilson",
+                    avatar: "../../../assets/logo.png",
+                    name: "Alice Wilson",
+                    relationship: Relationship.NONE,
+                    isPrivate: false,
+                    verified: false,
                 },
-                "type": "POST",  // Giữ nguyên type ở đây
-                "content": "Happy new year ",
-                "createdAt": "2025-01-01T22:45:24.665695",
-                "likes": 1,
-                "replies": 14,
-                "reposts": 0,
-                "media": [],
-                "time": {
-                    "value": 1,
-                    "unit": "DAYS"
+                type: PostType.POST,
+                content: "Cheers to the new year!",
+                createdAt: "2025-01-01T22:45:24.665695",
+                likes: 3,
+                replies: 5,
+                reposts: 0,
+                media: [],
+                time: {
+                    value: 1,
+                    unit: TimeUnit.DAYS,
                 },
-                "liked": false,
-                "reposted": false  // Trường reposted thêm vào
-            }
+                liked: false,
+                reposted: true,
+                parent: null,
+            },
         },
-        "time": {
-            "value": 15,
-            "unit": "HOURS"
-        }
+        time: {
+            value: 10,
+            unit: TimeUnit.MINUTES,
+        },
     },
     {
-        "id": "01JGKYJ31EFNFPPJBK00981ZN4",
-        "type": ActivityType.FOLLOW,
-        "actor": {
-            "id": "01JEDNK58VN4MZ624EBB8NXR9P",
-            "username": "robert_brown",
-            "avatar": "../../../assets/logo.png",
-            "name": "Ja Khang",
-            "relationship": Relationship.FOLLOWING,
-            "isPrivate": false,
-            "isVerified": false
+        id: "01JGKYJ31EFNFPPJBK00981ZN6",
+        type: ActivityType.MENTION,
+        actor: {
+            id: "01JEDNK58VN4MZ624EBB8NXR9S",
+            username: "james_lee",
+            avatar: "../../../assets/logo.png",
+            name: "James Lee",
+            relationship: Relationship.FOLLOWING,
+            isPrivate: false,
+            verified: false,
         },
-        "post": undefined,  // Trường post là undefined vì type là FOLLOW
-        "time": {
-            "value": 10,
-            "unit": "HOURS"
-        }
+        post: {
+            id: "01JGKYJ2FVHMA29JV6SSMJG60D",
+            author: {
+                id: "01JEDNK58VN4MZ624EBB8NXR9S",
+                username: "james_lee",
+                avatar: "../../../assets/logo.png",
+                name: "James Lee",
+                relationship: Relationship.FOLLOWING,
+                isPrivate: false,
+                verified: false,
+            },
+            type: PostType.REPLY,
+            content: "@[lucy_wang](01JFY426B3DDKY4S1NVJ8JZ9Y5) Have a great year ahead!",
+            createdAt: "2025-01-02T23:59:15.998567",
+            likes: 0,
+            replies: 0,
+            reposts: 0,
+            media: [],
+            time: {
+                value: 5,
+                unit: TimeUnit.MINUTES,
+            },
+            liked: false,
+            reposted: false,
+            parent: {
+                id: "01JGH8P24C2RT36R24GQ4M3N1A",
+                author: {
+                    id: "01JFY426B3DDKY4S1NVJ8JZ9Y5",
+                    username: "lucy_wang",
+                    avatar: "../../../assets/logo.png",
+                    name: "Lucy Wang",
+                    relationship: Relationship.NONE,
+                    isPrivate: false,
+                    verified: false,
+                },
+                type: PostType.POST,
+                content: "Have a great year ahead!",
+                createdAt: "2025-01-01T22:45:24.665695",
+                likes: 2,
+                replies: 0,
+                reposts: 0,
+                media: [],
+                time: {
+                    value: 1,
+                    unit: TimeUnit.DAYS,
+                },
+                liked: false,
+                reposted: false,
+                parent: null,
+            },
+        },
+        time: {
+            value: 5,
+            unit: TimeUnit.MINUTES,
+        },
     },
     {
-        "id": "01JGKYJ31EFNFPPJBK00981ZN5",
-        "type": ActivityType.FOLLOW,
-        "actor": {
-            "id": "01JEDNK58VN4MZ624EBB8NXR90",
-            "username": "whoami",
-            "avatar": "../../../assets/logo.png",
-            "name": "Ja Khang",
-            "relationship": Relationship.FOLLOWING,
-            "isPrivate": false,
-            "isVerified": false
+        id: "01JGKYJ31EFNFPPJBK00981ZN7",
+        type: ActivityType.MENTION,
+        actor: {
+            id: "01JEDNK58VN4MZ624EBB8NXR9S",
+            username: "james_lee",
+            avatar: "../../../assets/logo.png",
+            name: "James Lee",
+            relationship: Relationship.FOLLOWING,
+            isPrivate: false,
+            verified: false,
         },
-        "post": undefined,  // Trường post là undefined vì type là FOLLOW
-        "time": {
-            "value": 2,
-            "unit": "DAYS"
-        }
+        post: {
+            id: "01JGKYJ2FVHMA29JV6SSMJG60D",
+            author: {
+                id: "01JEDNK58VN4MZ624EBB8NXR9S",
+                username: "james_lee",
+                avatar: "../../../assets/logo.png",
+                name: "James Lee",
+                relationship: Relationship.FOLLOWING,
+                isPrivate: false,
+                verified: false,
+            },
+            type: PostType.REPLY,
+            content: "@[lucy_wang](01JFY426B3DDKY4S1NVJ8JZ9Y5) Have a great year ahead!",
+            createdAt: "2025-01-02T23:59:15.998567",
+            likes: 0,
+            replies: 0,
+            reposts: 0,
+            media: [],
+            time: {
+                value: 5,
+                unit: TimeUnit.MINUTES,
+            },
+            liked: false,
+            reposted: false,
+            parent: {
+                id: "01JGH8P24C2RT36R24GQ4M3N1A",
+                author: {
+                    id: "01JFY426B3DDKY4S1NVJ8JZ9Y5",
+                    username: "lucy_wang",
+                    avatar: "../../../assets/logo.png",
+                    name: "Lucy Wang",
+                    relationship: Relationship.NONE,
+                    isPrivate: false,
+                    verified: false,
+                },
+                type: PostType.POST,
+                content: "Have a great year ahead!",
+                createdAt: "2025-01-01T22:45:24.665695",
+                likes: 2,
+                replies: 0,
+                reposts: 0,
+                media: [],
+                time: {
+                    value: 1,
+                    unit: TimeUnit.DAYS,
+                },
+                liked: false,
+                reposted: false,
+                parent: null,
+            },
+        },
+        time: {
+            value: 5,
+            unit: TimeUnit.MINUTES,
+        },
     },
     {
-        "id": "01JGKYJ31EFNFPPJBK00981ZN7",
-        "type": ActivityType.REPLY,
-        "actor": {
-            "id": "01JEDNK58VN4MZ624EBB8NXR9P",
-            "username": "robert_brown",
-            "avatar": "../../../assets/logo.png",  // Đổi ảnh đại diện
-            "name": "Ja Khang",
-            "relationship": Relationship.FOLLOWING,
-            "isPrivate": false,
-            "isVerified": false
+        id: "01JGKYJ31EFNFPPJBK00981ZN8",
+        type: ActivityType.MENTION,
+        actor: {
+            id: "01JEDNK58VN4MZ624EBB8NXR9S",
+            username: "james_lee",
+            avatar: "../../../assets/logo.png",
+            name: "James Lee",
+            relationship: Relationship.FOLLOWING,
+            isPrivate: false,
+            verified: false,
         },
-        "post": {
-            "id": "01JGKYJ2FVHMA29JV6SSMJG57G",
-            "author": {
-                "id": "01JEDNK58VN4MZ624EBB8NXR9P",
-                "username": "robert_brown",
-                "avatar": "../../../assets/logo.png",  // Đổi ảnh đại diện
-                "name": "Ja Khang",
-                "relationship": Relationship.FOLLOWING,
-                "isPrivate": false,
-                "isVerified": false
+        post: {
+            id: "01JGKYJ2FVHMA29JV6SSMJG60D",
+            author: {
+                id: "01JEDNK58VN4MZ624EBB8NXR9S",
+                username: "james_lee",
+                avatar: "../../../assets/logo.png",
+                name: "James Lee",
+                relationship: Relationship.FOLLOWING,
+                isPrivate: false,
+                verified: false,
             },
-            "type": "REPLY",  // Giữ nguyên type ở đây
-            "content": "Hello there !!!",
-            "createdAt": "2025-01-02T23:46:11.538809",
-            "likes": 0,
-            "replies": 0,
-            "reposts": 0,
-            "media": [],
-            "time": {
-                "value": 15,
-                "unit": "HOURS"
+            type: PostType.REPLY,
+            content: "@[lucy_wang](01JFY426B3DDKY4S1NVJ8JZ9Y5) Have a great year ahead!",
+            createdAt: "2025-01-02T23:59:15.998567",
+            likes: 0,
+            replies: 0,
+            reposts: 0,
+            media: [],
+            time: {
+                value: 5,
+                unit: TimeUnit.MINUTES,
             },
-            "liked": false,
-            "reposted": false,  // Trường reposted thêm vào
-            "parent": {
-                "id": "01JGH8P24C2RT36R24GQ4M3N0X",
-                "author": {
-                    "id": "01JFY426B3DDKY4S1NVJ8JZ9Y2",
-                    "username": "emily_johnson",
-                    "avatar": "../../../assets/logo.png",  // Đổi ảnh đại diện
-                    "name": "Rose Johnson Emily",
-                    "relationship": Relationship.NONE,
-                    "isPrivate": false,
-                    "isVerified": false
+            liked: false,
+            reposted: false,
+            parent: {
+                id: "01JGH8P24C2RT36R24GQ4M3N1A",
+                author: {
+                    id: "01JFY426B3DDKY4S1NVJ8JZ9Y5",
+                    username: "lucy_wang",
+                    avatar: "../../../assets/logo.png",
+                    name: "Lucy Wang",
+                    relationship: Relationship.NONE,
+                    isPrivate: false,
+                    verified: false,
                 },
-                "type": "POST",  // Giữ nguyên type ở đây
-                "content": "Happy new year ",
-                "createdAt": "2025-01-01T22:45:24.665695",
-                "likes": 1,
-                "replies": 14,
-                "reposts": 0,
-                "media": [],
-                "time": {
-                    "value": 1,
-                    "unit": "DAYS"
+                type: PostType.POST,
+                content: "Have a great year ahead!",
+                createdAt: "2025-01-01T22:45:24.665695",
+                likes: 2,
+                replies: 0,
+                reposts: 0,
+                media: [],
+                time: {
+                    value: 1,
+                    unit: TimeUnit.DAYS,
                 },
-                "liked": false,
-                "reposted": false  // Trường reposted thêm vào
-            }
+                liked: false,
+                reposted: false,
+                parent: null,
+            },
         },
-        "time": {
-            "value": 15,
-            "unit": "HOURS"
-        }
+        time: {
+            value: 5,
+            unit: TimeUnit.MINUTES,
+        },
     },
-];
+    {
+        id: "01JGKYJ31EFNFPPJBK00981ZN9",
+        type: ActivityType.MENTION,
+        actor: {
+            id: "01JEDNK58VN4MZ624EBB8NXR9S",
+            username: "james_lee",
+            avatar: "../../../assets/logo.png",
+            name: "James Lee",
+            relationship: Relationship.FOLLOWING,
+            isPrivate: false,
+            verified: false,
+        },
+        post: {
+            id: "01JGKYJ2FVHMA29JV6SSMJG60D",
+            author: {
+                id: "01JEDNK58VN4MZ624EBB8NXR9S",
+                username: "james_lee",
+                avatar: "../../../assets/logo.png",
+                name: "James Lee",
+                relationship: Relationship.FOLLOWING,
+                isPrivate: false,
+                verified: false,
+            },
+            type: PostType.REPLY,
+            content: "@[lucy_wang](01JFY426B3DDKY4S1NVJ8JZ9Y5) Have a great year ahead!",
+            createdAt: "2025-01-02T23:59:15.998567",
+            likes: 0,
+            replies: 0,
+            reposts: 0,
+            media: [],
+            time: {
+                value: 5,
+                unit: TimeUnit.MINUTES,
+            },
+            liked: false,
+            reposted: false,
+            parent: {
+                id: "01JGH8P24C2RT36R24GQ4M3N1A",
+                author: {
+                    id: "01JFY426B3DDKY4S1NVJ8JZ9Y5",
+                    username: "lucy_wang",
+                    avatar: "../../../assets/logo.png",
+                    name: "Lucy Wang",
+                    relationship: Relationship.NONE,
+                    isPrivate: false,
+                    verified: false,
+                },
+                type: PostType.POST,
+                content: "Have a great year ahead!",
+                createdAt: "2025-01-01T22:45:24.665695",
+                likes: 2,
+                replies: 0,
+                reposts: 0,
+                media: [],
+                time: {
+                    value: 1,
+                    unit: TimeUnit.DAYS,
+                },
+                liked: false,
+                reposted: false,
+                parent: null,
+            },
+        },
+        time: {
+            value: 5,
+            unit: TimeUnit.MINUTES,
+        },
+    },
+    {
+        id: "01JGKYJ31EFNFPPJBK00981ZN0",
+        type: ActivityType.MENTION,
+        actor: {
+            id: "01JEDNK58VN4MZ624EBB8NXR9S",
+            username: "james_lee",
+            avatar: "../../../assets/logo.png",
+            name: "James Lee",
+            relationship: Relationship.FOLLOWING,
+            isPrivate: false,
+            verified: false,
+        },
+        post: {
+            id: "01JGKYJ2FVHMA29JV6SSMJG60D",
+            author: {
+                id: "01JEDNK58VN4MZ624EBB8NXR9S",
+                username: "james_lee",
+                avatar: "../../../assets/logo.png",
+                name: "James Lee",
+                relationship: Relationship.FOLLOWING,
+                isPrivate: false,
+                verified: false,
+            },
+            type: PostType.REPLY,
+            content: "@[lucy_wang](01JFY426B3DDKY4S1NVJ8JZ9Y5) Have a great year ahead!",
+            createdAt: "2025-01-02T23:59:15.998567",
+            likes: 0,
+            replies: 0,
+            reposts: 0,
+            media: [],
+            time: {
+                value: 5,
+                unit: TimeUnit.MINUTES,
+            },
+            liked: false,
+            reposted: false,
+            parent: {
+                id: "01JGH8P24C2RT36R24GQ4M3N1A",
+                author: {
+                    id: "01JFY426B3DDKY4S1NVJ8JZ9Y5",
+                    username: "lucy_wang",
+                    avatar: "../../../assets/logo.png",
+                    name: "Lucy Wang",
+                    relationship: Relationship.NONE,
+                    isPrivate: false,
+                    verified: false,
+                },
+                type: PostType.POST,
+                content: "Have a great year ahead!",
+                createdAt: "2025-01-01T22:45:24.665695",
+                likes: 2,
+                replies: 0,
+                reposts: 0,
+                media: [],
+                time: {
+                    value: 1,
+                    unit: TimeUnit.DAYS,
+                },
+                liked: false,
+                reposted: false,
+                parent: null,
+            },
+        },
+        time: {
+            value: 5,
+            unit: TimeUnit.MINUTES,
+        },
+    },
+    {
+        id: "01JGKYJ31EFNFPPJBK00981ZN1",
+        type: ActivityType.MENTION,
+        actor: {
+            id: "01JEDNK58VN4MZ624EBB8NXR9S",
+            username: "james_lee",
+            avatar: "../../../assets/logo.png",
+            name: "James Lee",
+            relationship: Relationship.FOLLOWING,
+            isPrivate: false,
+            verified: false,
+        },
+        post: {
+            id: "01JGKYJ2FVHMA29JV6SSMJG60D",
+            author: {
+                id: "01JEDNK58VN4MZ624EBB8NXR9S",
+                username: "james_lee",
+                avatar: "../../../assets/logo.png",
+                name: "James Lee",
+                relationship: Relationship.FOLLOWING,
+                isPrivate: false,
+                verified: false,
+            },
+            type: PostType.REPLY,
+            content: "@[lucy_wang](01JFY426B3DDKY4S1NVJ8JZ9Y5) Have a great year ahead!",
+            createdAt: "2025-01-02T23:59:15.998567",
+            likes: 0,
+            replies: 0,
+            reposts: 0,
+            media: [],
+            time: {
+                value: 5,
+                unit: TimeUnit.MINUTES,
+            },
+            liked: false,
+            reposted: false,
+            parent: {
+                id: "01JGH8P24C2RT36R24GQ4M3N1A",
+                author: {
+                    id: "01JFY426B3DDKY4S1NVJ8JZ9Y5",
+                    username: "lucy_wang",
+                    avatar: "../../../assets/logo.png",
+                    name: "Lucy Wang",
+                    relationship: Relationship.NONE,
+                    isPrivate: false,
+                    verified: false,
+                },
+                type: PostType.POST,
+                content: "Have a great year ahead!",
+                createdAt: "2025-01-01T22:45:24.665695",
+                likes: 2,
+                replies: 0,
+                reposts: 0,
+                media: [],
+                time: {
+                    value: 1,
+                    unit: TimeUnit.DAYS,
+                },
+                liked: false,
+                reposted: false,
+                parent: null,
+            },
+        },
+        time: {
+            value: 5,
+            unit: TimeUnit.MINUTES,
+        },
+    },
+    {
+        id: "01JGKYJ31EFNFPPJBK00981ZN2",
+        type: ActivityType.MENTION,
+        actor: {
+            id: "01JEDNK58VN4MZ624EBB8NXR9S",
+            username: "james_lee",
+            avatar: "../../../assets/logo.png",
+            name: "James Lee",
+            relationship: Relationship.FOLLOWING,
+            isPrivate: false,
+            verified: false,
+        },
+        post: {
+            id: "01JGKYJ2FVHMA29JV6SSMJG60D",
+            author: {
+                id: "01JEDNK58VN4MZ624EBB8NXR9S",
+                username: "james_lee",
+                avatar: "../../../assets/logo.png",
+                name: "James Lee",
+                relationship: Relationship.FOLLOWING,
+                isPrivate: false,
+                verified: false,
+            },
+            type: PostType.REPLY,
+            content: "@[lucy_wang](01JFY426B3DDKY4S1NVJ8JZ9Y5) Have a great year ahead!",
+            createdAt: "2025-01-02T23:59:15.998567",
+            likes: 0,
+            replies: 0,
+            reposts: 0,
+            media: [],
+            time: {
+                value: 5,
+                unit: TimeUnit.MINUTES,
+            },
+            liked: false,
+            reposted: false,
+            parent: {
+                id: "01JGH8P24C2RT36R24GQ4M3N1A",
+                author: {
+                    id: "01JFY426B3DDKY4S1NVJ8JZ9Y5",
+                    username: "lucy_wang",
+                    avatar: "../../../assets/logo.png",
+                    name: "Lucy Wang",
+                    relationship: Relationship.NONE,
+                    isPrivate: false,
+                    verified: false,
+                },
+                type: PostType.POST,
+                content: "Have a great year ahead!",
+                createdAt: "2025-01-01T22:45:24.665695",
+                likes: 2,
+                replies: 0,
+                reposts: 0,
+                media: [],
+                time: {
+                    value: 1,
+                    unit: TimeUnit.DAYS,
+                },
+                liked: false,
+                reposted: false,
+                parent: null,
+            },
+        },
+        time: {
+            value: 5,
+            unit: TimeUnit.MINUTES,
+        },
+    },
+]

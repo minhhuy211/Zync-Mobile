@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import UserModel from "../../models/UserModel";
+import {UserModel} from "../../models/UserModel";
 
 interface FollowButton {
     title: string,

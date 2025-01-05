@@ -6,6 +6,7 @@ import {StyleSheet, TouchableOpacity, View} from "react-native";
 import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {AuthenticatedStackParams} from "./AuthenticatedNavigator";
 import OctIcon from "@expo/vector-icons/Octicons";
+import Activity from "../screens/Activity";
 
 const MainTabNavigator = () => {
     const Tab = createBottomTabNavigator();
@@ -20,6 +21,7 @@ const MainTabNavigator = () => {
                 tabBarActiveTintColor: "#000",
                 tabBarShowLabel: false,
                 headerShadowVisible: false,
+                headerShown: false
             }}
         >
             <Tab.Screen
@@ -50,7 +52,7 @@ const MainTabNavigator = () => {
 
             <Tab.Screen
                 name="Activity"
-                component={() => null} // Empty component for the button
+                component={Activity} // Empty component for the button
                 options={{
                     tabBarIcon: (props) => <OctIcon size={props.size} color={props.focused ? "#EA333E" : props.color}
                                                     name={props.focused ? "heart-fill" : "heart"}/>,
@@ -66,6 +68,18 @@ const MainTabNavigator = () => {
                 }}
             />
 
+
+            {/*<Tab.Screen*/}
+            {/*    name="SELF"*/}
+            {/*    component={SelfProfile}*/}
+            {/*    options={{*/}
+            {/*        tabBarIcon: (props) => (*/}
+            {/*            <NavigatorTabIcon name="person-circle-outline" {...props} />*/}
+            {/*        ),*/}
+            {/*        headerLeft: SelfProfile.HeaderLeft,*/}
+            {/*        headerRight: SelfProfile.HeaderRight,*/}
+            {/*    }}*/}
+            {/*/>*/}
         </Tab.Navigator>
     );
 };

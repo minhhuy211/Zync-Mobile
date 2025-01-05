@@ -15,70 +15,45 @@ import { Key } from "../constants/Key";
 import Icon from "react-native-vector-icons/Ionicons";
 import PostTab from "../components/Profile/PostTab";
 import userApi from "../api/userApi";
-import { Relationship } from "../constants/FollowStatus";
-import RecommendUser from "../components/RecommendUser";
+
 
 type UserProfileProps = {
-  userId: string;
+  userId?: string;
 };
 
 export const UserProfile = ({ userId }: UserProfileProps) => {
   const [profile, setprofile] = useState({} as ProfileModel);
-  userId = "01JFY426B3DDKY4S1NVJ8JZ9Y2";
-  const [loading, setloading] = useState(false)
-  const [actioning, setActioning] = useState(false)
+  const [isFollowed, setFollowed] = useState(false);
+  
+
+  const isSelf = userId == null;
+
   useState(() => {
-    setloading(true);
-    userApi.getUser(userId).then((data) => {
-      setprofile(data);
-      console.log(data);
-    })
-    .finally(() => setloading(false));
+    if (isSelf) {
+      meApi.getProfile().then((data) => {
+        setprofile(data);
+        console.log(data);
+      });
+    } else {
+    }
   });
 
-  const handleUnFollowToggle = () => {
-    setActioning(true);
-     userApi.unfollowUser(userId)
-    .then((relationship) => {
-      setprofile({ ...profile, relationship });
-    })
-    .finally(() => setActioning(false));
-   
-  };
-
   const handleFollowToggle = async () => {
-     userApi.followUser(userId)
-     setprofile({ ...profile, relationship: profile.isPrivate ? Relationship.REQUESTED : Relationship.FOLLOWING });
-
+    try {
+      if (isFollowed) {
+        // await userApi.unfollow(userId!);
+        setFollowed(false);
+      } else {
+        // await meApi.follow(userId!);
+        setFollowed(true);
+      }
+    } catch (error) {
+      console.error("Error toggling follow:", error);
+    }
   };
 
-  const handleAcceptFollowToggle = async () => {
-    userApi.acceptFollow(userId)
-    setprofile({ ...profile, relationship: Relationship.FOLLOWING });
-  };
-
-  const handleFollowedToggle = async () => {
-    userApi.followUser(userId)
-    setprofile({ ...profile, relationship: profile.isPrivate ? Relationship.REQUESTED : Relationship.FOLLOWING });
-
-  };
-
-  const handleRequestedFollowToggle = async () => {
-    userApi.removeRequest(userId)
-    setprofile({ ...profile, relationship: Relationship.NONE });
-  };
-
-  if (loading) {
-    return (
-      <View>
-        <Text>Loading...</Text>
-      </View>
-    );
-  }
 
   return (
-
-
     <View style={styles.container}>
       <View style={styles.profileContainer}>
         <View style={styles.profileTextContainer}>
@@ -96,65 +71,18 @@ export const UserProfile = ({ userId }: UserProfileProps) => {
       </Text>
 
       <View style={styles.buttonRow}>
-        <View>
-          {profile.relationship == Relationship.FOLLOWING && (
-            <TouchableOpacity
-              style={styles.button}
-              onPress={handleUnFollowToggle}
-            >
-              <Text style={styles.buttonText}>
-                {actioning ? "Unfollowing..." : "Unfollow"}
-              </Text>
-            </TouchableOpacity>
-          )}
-          {profile.relationship == Relationship.NONE && (
-            <TouchableOpacity
-              style={styles.fullButton}
-              onPress={handleFollowToggle}
-            >
-              <Text style={styles.fullButtonText}>
-                Follow
-              </Text>
-            </TouchableOpacity>
-          )}
-          {profile.relationship == Relationship.PENDING && (
-            <TouchableOpacity
-              style={styles.fullButton}
-              onPress={handleAcceptFollowToggle}
-            >
-              <Text style={styles.fullButtonText}>
-                Accept Follow
-              </Text>
-            </TouchableOpacity>
-          )}
-          {profile.relationship == Relationship.FOLLOWED && (
-            <TouchableOpacity
-              style={styles.fullButton}
-              onPress={handleFollowedToggle}
-            >
-              <Text style={styles.fullButtonText}>
-                Follow Back
-              </Text>
-            </TouchableOpacity>
-          )}
-          {profile.relationship == Relationship.REQUESTED && (
-            <TouchableOpacity
-              style={styles.fullButton}
-              onPress={handleRequestedFollowToggle}
-            >
-              <Text style={styles.fullButtonText}>
-                Requested
-              </Text>
-            </TouchableOpacity>
-          )}
-
-          
+          <TouchableOpacity
+            style={styles.fullButton}
+            onPress={handleFollowToggle}
+          >
+            <Text style={styles.fullButtonText}>
+              {isFollowed ? "Followed" : "Follow"}
+            </Text>
+          </TouchableOpacity>
           <TouchableOpacity style={styles.button}>
             <Text style={styles.buttonText}>Mention</Text>
           </TouchableOpacity>
-        </View>
       </View>
-      <RecommendUser />
       <PostTab
         onChangeType={() => {}}
         onLoadMore={() => {}}
