@@ -1,17 +1,25 @@
 import { View, Text } from "react-native";
 import postApi from "../../api/postApi";
-import { NavigationProp, RouteProp } from "@react-navigation/native";
-import { AuthenticatedScreenParams } from "../../navigation/AuthenticatedNavigator";
-import PostHome from "./PostHome";
+import {
+  NavigationProp,
+  ParamListBase,
+  RouteProp,
+} from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { PostModel } from "../../models/PostModel";
+
+interface ScreenParams extends ParamListBase {
+  PostDetails: {
+    postId: string;
+  };
+}
 
 const PostDetail = ({
   navigation,
   route,
 }: {
   navigation: NavigationProp<any>;
-  route: RouteProp<AuthenticatedScreenParams, "PostDetails">;
+  route: RouteProp<ScreenParams, "PostDetails">;
 }) => {
   const { postId } = route.params;
   console.log(postId);
