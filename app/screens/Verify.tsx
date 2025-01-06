@@ -9,7 +9,12 @@ interface ScreenParams extends ParamListBase{
     }
 }
 
-const Verify = ({ navigation, route }: { navigation: NavigationProp<any>, route: RouteProp<ScreenParams, "Verify" > }) => {
+interface VerifyProps{
+    navigation: NavigationProp<any>
+    route: RouteProp<ScreenParams, "Verify" >
+}
+
+const Verify = ({ navigation, route }: VerifyProps) => {
     const {email} = route.params
     const [code, setCode] = useState<string[]>(['', '', '', '', '', '']);
     const inputRefs = useRef<Array<TextInput | null>>([]); // Refs to input fields

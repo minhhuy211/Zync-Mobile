@@ -1,59 +1,69 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
-  FlatList,
-  TouchableOpacity,
   View,
-  StyleSheet,
-  Image,
+  TouchableOpacity,
   Text,
-  TextInput,
+  StyleSheet,
+  FlatList,
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
+import CommentHome from "./CommentPost";
+import { PostModel } from "../../models/PostModel";
+import { useNavigation } from "@react-navigation/native";
+import PostDetail from "../../screens/PostDetails";
+import { Image } from "expo-image";
+import { Video, Audio, ResizeMode } from "expo-av";
+import { MediaModel, MediaType } from "../../models/MediaModel";
+import PostEditorGallery, { GalleryItemModel } from "../PostEditorGallery";
+import Content from "../Content";
 
-const CommentHome = ({ item }: { item: any }) => {
+interface PostHomeProps {
+  post: PostModel;
+  onTouch?: (image: MediaModel) => void;
+}
+
+const PostItem = ({ post, onTouch }: PostHomeProps) => {
+  const [max, setMax] = useState(0);
   const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(item.likes);
+  const [likeCount, setLikeCount] = useState(post.likes);
+  const navigation = useNavigation<any>();
 
   const handleLike = () => {
     setLiked(!liked);
     setLikeCount(liked ? likeCount - 1 : likeCount + 1);
   };
 
-  const [showCommentInput, setShowCommentInput] = useState(false); // Quản lý trạng thái hiển thị khung nhập
-  const [newComment, setNewComment] = useState(""); // Lưu nội dung comment
-
-  const handleAddComment = () => {
-    if (newComment.trim() !== "") {
-      // Thêm comment mới vào danh sách comment
-      item.comments.push({
-        id: Math.random() * 1000000 + 1, // Generate a random number between 1 and 1,000,000
-        username: "CurrentUser", // Đổi theo tên người dùng hiện tại
-        avatar: require("../../../assets/logo.png"), // Avatar của người dùng
-        content: newComment,
-        likes: 0,
-        time: "just now",
-        comments: [],
-      });
-      setNewComment("");
-      setShowCommentInput(false); // Reset khung nhập
-    }
+  // Hàm chuyển hướng PostDetails
+  const handleNavigation = () => {
+    console.log("Navigating to PostDetail with postId:", post.id);
+    navigation.navigate("PostDetails", { postId: post.id });
   };
 
+  const onTouchItem = (item: GalleryItemModel) => {
+    navigation.push("MediaReview", {
+      media: post.media.find((i) => i.id == item.id),
+    });
+  };
+
+  if (!post) {
+    return <Text>No data available</Text>;
+  }
+
   return (
-    <View style={styles.comment}>
+    <TouchableOpacity onPress={handleNavigation}>
       <View style={styles.postContainer}>
         <View style={styles.headerPost}>
           <View style={styles.headerpost_left}>
-            <Image source={item.avatar} style={styles.avatarPost} />
+            <Image source={post.author.avatar} style={styles.avatarPost} />
 
             <TouchableOpacity style={styles.addFollow}>
               <Icon name="add-circle" size={20}></Icon>
             </TouchableOpacity>
 
-            <Text style={styles.usernamePost}>{item.username}</Text>
+            <Text style={styles.usernamePost}>{post.author.name}</Text>
           </View>
           <View style={styles.headerpost_right}>
-            <Text style={styles.timePost}>{item.time}</Text>
+            <Text style={styles.timePost}>{post.createdAt}</Text>
 
             <TouchableOpacity style={styles.otherButton}>
               <Icon name="ellipsis-horizontal" size={20}></Icon>
@@ -62,7 +72,21 @@ const CommentHome = ({ item }: { item: any }) => {
         </View>
 
         <View style={styles.post}>
-          <Text style={styles.contextPost}>{item.content}</Text>
+          {/* Content */}
+          <Content value={post.content} />
+          {/* <Text style={styles.contextPost}>{post.content}</Text> */}
+
+          <PostEditorGallery
+            items={post.media.map((item, index) => ({
+              id: index.toString(), // Assuming that the media array does not have unique IDs
+              uri: item.url,
+              width: item.width,
+              height: item.height,
+            }))}
+            onTouchItem={(item) => onTouchItem(item)}
+            maxWidth={300}
+            maxHeight={300}
+          />
 
           <View style={styles.actionPost}>
             <TouchableOpacity style={styles.iconButton} onPress={handleLike}>
@@ -72,12 +96,11 @@ const CommentHome = ({ item }: { item: any }) => {
                 color={liked ? "red" : "black"}
               />
             </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.iconButton}
-              onPress={() => setShowCommentInput(!showCommentInput)}
-            >
+            <Text style={styles.likes}>{post.likes}</Text>
+            <TouchableOpacity style={styles.iconButton}>
               <Icon name="chatbubble-outline" size={25}></Icon>
             </TouchableOpacity>
+            <Text style={styles.likes}>{post.likes}</Text>
             <TouchableOpacity style={styles.iconButton}>
               <Icon name="repeat-outline" size={25}></Icon>
             </TouchableOpacity>
@@ -85,42 +108,29 @@ const CommentHome = ({ item }: { item: any }) => {
               <Icon name="paper-plane-outline" size={25}></Icon>
             </TouchableOpacity>
           </View>
-          <Text style={styles.likes}>{item.likes} like</Text>
         </View>
       </View>
-
-      {/* Hiển thị khung nhập comment */}
-      {showCommentInput && (
-        <View style={styles.commentInputContainer}>
-          <TextInput
-            style={styles.commentInput}
-            placeholder="Thêm bình luận..."
-            value={newComment}
-            onChangeText={(text) => setNewComment(text)}
-          />
-          <TouchableOpacity
-            style={styles.sendButton}
-            onPress={handleAddComment}
-          >
-            <Icon name="send" size={20} color="#000" />
-          </TouchableOpacity>
-        </View>
-      )}
-
-      {item.comments && item.comments.length > 0 && (
+      {/* {post.comments && post.comments.length > 0 && (
         <View style={styles.verticalLine}></View>
-      )}
-
-      <FlatList
-        data={item.comments}
+      )} */}
+      {/* <FlatList
+        data={post.comments}
         keyExtractor={(comment) => comment.id.toString()}
         renderItem={({ item }) => <CommentHome item={item} />}
-      />
-    </View>
+      /> */}
+
+      <View style={styles.crossbar}></View>
+    </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
+  media: {
+    width: "100%",
+    height: 200,
+    borderRadius: 10,
+    marginTop: 10,
+  },
   headerContainer: {
     display: "flex",
     justifyContent: "space-between",
@@ -171,8 +181,7 @@ const styles = StyleSheet.create({
     borderColor: "#fff",
     aspectRatio: "1/1",
     position: "relative",
-    overflow: "hidden",
-    zIndex: 8,
+    zIndex: 1,
   },
   addFollow: {
     position: "absolute",
@@ -182,7 +191,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     padding: 0.1,
     overflow: "hidden",
-    zIndex: 10,
+    zIndex: 2,
   },
   usernamePost: {
     marginBottom: 10,
@@ -206,19 +215,21 @@ const styles = StyleSheet.create({
   actionPost: {
     display: "flex",
     flexDirection: "row",
+    alignItems: "center",
   },
   iconButton: {
     marginTop: 12,
     marginRight: 10,
   },
   likes: {
-    marginTop: 2,
-    marginLeft: 5,
-    marginBottom: 10,
-    color: "#7e7e7e",
+    fontSize: 20,
+    marginTop: 10,
+    marginLeft: -5,
+    marginRight: 10,
   },
   crossbar: {
     marginTop: 12,
+    marginBottom: 10,
     height: 1,
     backgroundColor: "#000",
     opacity: 0.2,
@@ -228,32 +239,12 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     left: 23,
-    height: "100%",
+    height: "80%",
     marginTop: 12,
     backgroundColor: "#000",
     opacity: 0.2,
     width: 2,
   },
-
-  commentInputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 10,
-    borderTopWidth: 1,
-    borderTopColor: "#ddd",
-  },
-  commentInput: {
-    flex: 1,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 20,
-    backgroundColor: "#f9f9f9",
-  },
-  sendButton: {
-    marginLeft: 10,
-    padding: 10,
-  },
 });
 
-export default CommentHome;
+export default PostItem;

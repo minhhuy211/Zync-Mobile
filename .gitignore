@@ -10,7 +10,7 @@ node_modules/
 .expo/
 dist/
 web-build/
-
+package-lock.json
 # Native
 *.orig.*
 *.jks
@@ -36,3 +36,6 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+# Idea
+.idea

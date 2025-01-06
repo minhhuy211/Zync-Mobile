@@ -13,7 +13,9 @@ import { Key } from "../constants/Key";
 import { useAppDispatch } from "../store";
 import { useAuthAction } from "../features/auth";
 import { accountApi } from "../api/accountApi";
-import PostHome from "../components/Home/PostHome";
+import PostHome from "../components/Home/PostItem";
+// @ts-ignore
+import ProfileView from "./ProfileView";
 
 const initialPosts = [
   {
@@ -139,12 +141,12 @@ const Home = () => {
       </View>
 
       {/* Danh sách bài viết */}
-      <FlatList
+      {/* <FlatList
         data={currentPosts}
         keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => <PostHome item={item} />}
+        renderItem={({ item }) => <ProfileView />}
         showsVerticalScrollIndicator={false} // Ẩn thanh cuộn
-      />
+      /> */}
     </View>
   );
 };
@@ -159,6 +161,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     padding: 10,
+    paddingTop: 40,
+    paddingBottom: 80,
   },
   headerLogo: {
     display: "flex",
